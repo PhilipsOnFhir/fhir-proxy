@@ -1,6 +1,7 @@
 package com.philips.research.philipsonfhir.fhirproxy.support.bulkdata.service;
 
 import ca.uhn.fhir.context.FhirContext;
+import com.philips.research.philipsonfhir.fhirproxy.support.NotImplementedException;
 import com.philips.research.philipsonfhir.fhirproxy.support.bulkdata.fhir.FhirServerBulkdata;
 import com.philips.research.philipsonfhir.fhirproxy.support.proxy.service.FhirServer;
 import com.philips.research.philipsonfhir.fhirproxy.support.proxy.service.IFhirServer;
@@ -44,7 +45,7 @@ public class FhirServerService implements IFhirServer {
     }
 
     @Override
-    public IBaseResource getResource(String resourceType, String id, String params, Map<String, String> queryParams) throws FHIRException {
+    public IBaseResource getResource(String resourceType, String id, String params, Map<String, String> queryParams) throws FHIRException, NotImplementedException {
         return fhirServer.getResource( resourceType, id, params, queryParams );
     }
 
@@ -64,7 +65,7 @@ public class FhirServerService implements IFhirServer {
     }
 
     @Override
-    public IBaseResource postResource(String resourceType, String id, IBaseResource parseResource, String params, Map<String, String> queryParams) throws FHIRException {
+    public IBaseResource postResource(String resourceType, String id, IBaseResource parseResource, String params, Map<String, String> queryParams) throws FHIRException, NotImplementedException {
         return fhirServer.postResource( resourceType, id, parseResource, params, queryParams );
     }
 

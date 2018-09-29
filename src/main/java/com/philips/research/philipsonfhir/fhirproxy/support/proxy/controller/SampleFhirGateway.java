@@ -2,16 +2,14 @@ package com.philips.research.philipsonfhir.fhirproxy.support.proxy.controller;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.parser.IParser;
-import com.philips.research.philipsonfhir.fhirproxy.support.bulkdata.service.FhirServerService;
+import com.philips.research.philipsonfhir.fhirproxy.support.proxy.service.FhirServer;
 import org.hl7.fhir.exceptions.FHIRException;
 import org.hl7.fhir.instance.model.api.IBaseOperationOutcome;
 import org.hl7.fhir.instance.model.api.IBaseResource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -20,13 +18,13 @@ import java.util.logging.Logger;
 @CrossOrigin(origins = "*")
 public class SampleFhirGateway {
     private static final String template = "Hello, %s!";
-    private final AtomicLong counter = new AtomicLong();
+    protected final FhirServer fhirServer;
     private Logger logger = Logger.getLogger(SampleFhirGateway.class.getName());
     private FhirContext myContext = FhirContext.forDstu3();
 
-    @Autowired
-    FhirServerService fhirServer;
-
+    public SampleFhirGateway(String fhirUrl) {
+        this.fhirServer = new FhirServer( fhirUrl );
+    }
 
     @RequestMapping (
             method = RequestMethod.GET,

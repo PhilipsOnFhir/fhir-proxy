@@ -1,5 +1,6 @@
 package com.philips.research.philipsonfhir.fhirproxy.support.bulkdata.async;
 
+import com.philips.research.philipsonfhir.fhirproxy.support.NotImplementedException;
 import com.philips.research.philipsonfhir.fhirproxy.support.proxy.operation.FhirOperationCall;
 import com.philips.research.philipsonfhir.fhirproxy.support.proxy.service.IFhirServer;
 import lombok.Getter;
@@ -34,7 +35,7 @@ public class FhirRequest {
         this.queryParams = queryParams;
     }
 
-    public IBaseResource getResource() throws FHIRException {
+    public IBaseResource getResource() throws FHIRException, NotImplementedException {
         if ( this.fhirOperationCall != null ) {
             return this.fhirOperationCall.getResult();
         } else {
@@ -42,7 +43,7 @@ public class FhirRequest {
         }
     }
 
-    private IBaseResource getResourceOld() throws FHIRException {
+    private IBaseResource getResourceOld() throws FHIRException, NotImplementedException {
         if ( resourceType == null ) {
             throw new FHIRException("resource type not set");
         }

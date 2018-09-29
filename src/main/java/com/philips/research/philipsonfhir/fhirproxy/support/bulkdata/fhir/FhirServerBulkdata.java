@@ -1,6 +1,7 @@
 package com.philips.research.philipsonfhir.fhirproxy.support.bulkdata.fhir;
 
 import ca.uhn.fhir.context.FhirContext;
+import com.philips.research.philipsonfhir.fhirproxy.support.NotImplementedException;
 import com.philips.research.philipsonfhir.fhirproxy.support.proxy.service.IFhirServer;
 import org.hl7.fhir.dstu3.model.Bundle;
 import org.hl7.fhir.dstu3.model.CapabilityStatement;
@@ -14,7 +15,7 @@ import java.util.logging.Logger;
 public class FhirServerBulkdata implements IFhirServer {
 
     private final IFhirServer fhirServer;
-    private final Logger logger = Logger.getLogger( FhirServerBulkdata.class.getName() );
+    private Logger logger = Logger.getLogger( this.getClass().getName());
     private final PatientExportServer fhirPatientExportServer;
 
     public FhirServerBulkdata(IFhirServer iFhirServer){
@@ -63,7 +64,7 @@ public class FhirServerBulkdata implements IFhirServer {
     }
 
     @Override
-    public IBaseResource getResource(String resourceType, String id, String params, Map<String, String> queryParams) throws FHIRException {
+    public IBaseResource getResource(String resourceType, String id, String params, Map<String, String> queryParams) throws FHIRException, NotImplementedException {
         if ( resourceType.equals("Patient") && params.equals("$export")){
             logger.info("Patient - "+ id+" - $export");
             String outputFormat = queryParams.get("outputFormat");
@@ -97,7 +98,7 @@ public class FhirServerBulkdata implements IFhirServer {
     }
 
     @Override
-    public IBaseResource postResource(String resourceType, String id, IBaseResource parseResource, String params, Map<String, String> queryParams) throws FHIRException {
+    public IBaseResource postResource(String resourceType, String id, IBaseResource parseResource, String params, Map<String, String> queryParams) throws FHIRException, NotImplementedException {
         return this.fhirServer.postResource( resourceType, id, parseResource, params, queryParams );
     }
 

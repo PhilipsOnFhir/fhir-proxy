@@ -1,4 +1,4 @@
-package com.philips.research.philipsonfhir.fhirproxy.support.bulkdata.controller;
+package com.philips.research.philipsonfhir.fhirproxy.support.clinicalreasoning;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.parser.IParser;
@@ -24,8 +24,8 @@ import java.util.logging.Logger;
 
 @Controller
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = {BulkDataFhirController.CONTENT_LOCATION}, exposedHeaders = {BulkDataFhirController.CONTENT_LOCATION})
-public class BulkDataFhirController {
+@CrossOrigin(origins = "*", allowedHeaders = {ClinicalReasoningFhirController.CONTENT_LOCATION}, exposedHeaders = {ClinicalReasoningFhirController.CONTENT_LOCATION})
+public class ClinicalReasoningFhirController {
     public static final String CONTENT_LOCATION = "Content-Location";
     private Logger logger = Logger.getLogger( this.getClass().getName());
     private FhirContext myContext = FhirContext.forDstu3();

@@ -1,5 +1,6 @@
 package com.philips.research.philipsonfhir.fhirproxy.support.bulkdata.fhir;
 
+import com.philips.research.philipsonfhir.fhirproxy.support.NotImplementedException;
 import com.philips.research.philipsonfhir.fhirproxy.support.proxy.service.IFhirServer;
 import org.hl7.fhir.dstu3.model.*;
 import org.hl7.fhir.exceptions.FHIRException;
@@ -63,7 +64,7 @@ public class PatientExportServer {
                         .filter( bundleEntryComponent -> (type == null || type.contains( bundleEntryComponent.getResource().fhirType() )) )
                         //TODO since
                         .forEach( bundleEntryComponent -> resultBundle.addEntry( bundleEntryComponent ) );
-                } catch ( FHIRException e ) {
+                } catch ( FHIRException | NotImplementedException e ) {
                     e.printStackTrace();
                 }
             }
@@ -72,7 +73,7 @@ public class PatientExportServer {
         return resultBundle;
     }
 
-    public Bundle exportPatientData(String id, String outputFormat, String since, String type) throws FHIRException {
+    public Bundle exportPatientData(String id, String outputFormat, String since, String type) throws FHIRException, NotImplementedException {
         Bundle bundle = (Bundle) this.fhirServer.getResource( "Patient", id, "$everything", null );
         BundleRetriever bulkDataHelper = new BundleRetriever( this.fhirServer, bundle );
         List<Resource> resources = bulkDataHelper.retrieveAllResources();

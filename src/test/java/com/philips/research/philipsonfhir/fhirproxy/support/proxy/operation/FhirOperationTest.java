@@ -1,5 +1,6 @@
 package com.philips.research.philipsonfhir.fhirproxy.support.proxy.operation;
 
+import com.philips.research.philipsonfhir.fhirproxy.support.NotImplementedException;
 import com.philips.research.philipsonfhir.fhirproxy.support.proxy.service.FhirServer;
 import org.hl7.fhir.dstu3.model.Patient;
 import org.hl7.fhir.exceptions.FHIRException;
@@ -16,7 +17,7 @@ import static org.mockito.Mockito.when;
 public class FhirOperationTest {
 
     @Test
-    public void testResourceOperation() throws FHIRException {
+    public void testResourceOperation() throws FHIRException, NotImplementedException {
 
         IBaseResource iBaseResource = new Patient();
         String operationName = "$myOperationName";
@@ -37,7 +38,7 @@ public class FhirOperationTest {
     }
 
     @Test
-    public void testResourceInstanceOperation() throws FHIRException {
+    public void testResourceInstanceOperation() throws FHIRException, NotImplementedException {
 
         IBaseResource iBaseResource = new Patient();
         String operationName = "$myInstanceOperationName";

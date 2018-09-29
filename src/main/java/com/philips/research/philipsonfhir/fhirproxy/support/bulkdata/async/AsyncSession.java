@@ -1,6 +1,7 @@
 package com.philips.research.philipsonfhir.fhirproxy.support.bulkdata.async;
 
 import ca.uhn.fhir.context.FhirContext;
+import com.philips.research.philipsonfhir.fhirproxy.support.NotImplementedException;
 import com.philips.research.philipsonfhir.fhirproxy.support.bulkdata.fhir.BundleRetriever;
 import org.hl7.fhir.dstu3.model.Bundle;
 import org.hl7.fhir.dstu3.model.OperationOutcome;
@@ -112,6 +113,8 @@ public class AsyncSession {
                 }
 
             } catch (FHIRException e ) {
+                e.printStackTrace();
+            } catch ( NotImplementedException e ) {
                 e.printStackTrace();
             }
 

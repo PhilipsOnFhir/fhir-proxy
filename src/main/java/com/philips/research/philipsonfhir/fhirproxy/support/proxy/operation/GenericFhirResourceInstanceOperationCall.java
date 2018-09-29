@@ -1,5 +1,6 @@
 package com.philips.research.philipsonfhir.fhirproxy.support.proxy.operation;
 
+import com.philips.research.philipsonfhir.fhirproxy.support.NotImplementedException;
 import com.philips.research.philipsonfhir.fhirproxy.support.proxy.service.IFhirServer;
 import org.hl7.fhir.dstu3.model.OperationOutcome;
 import org.hl7.fhir.exceptions.FHIRException;
@@ -24,7 +25,7 @@ public class GenericFhirResourceInstanceOperationCall implements FhirOperationCa
     }
 
     @Override
-    public IBaseResource getResult() throws FHIRException {
+    public IBaseResource getResult() throws FHIRException, NotImplementedException {
         if ( this.result == null ) {
             this.result = fhirServer.getResource( resourceType, resourceId, operationName, queryParams );
         }

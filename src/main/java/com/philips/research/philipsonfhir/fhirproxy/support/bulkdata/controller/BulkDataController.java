@@ -29,7 +29,7 @@ import java.util.logging.Logger;
 @CrossOrigin(origins = "*", allowedHeaders = {BulkDataController.X_PROGRESS}, exposedHeaders = {BulkDataController.X_PROGRESS})
 public class BulkDataController {
     public static final String X_PROGRESS = "X-Progress";
-    private Logger logger = Logger.getLogger( BulkDataController.class.getName());
+    private Logger logger = Logger.getLogger( this.getClass().getName());
     private FhirContext ourCtx = FhirContext.forDstu3();
 
     @Autowired

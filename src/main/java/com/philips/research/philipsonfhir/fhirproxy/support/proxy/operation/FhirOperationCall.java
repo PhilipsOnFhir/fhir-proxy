@@ -1,5 +1,6 @@
 package com.philips.research.philipsonfhir.fhirproxy.support.proxy.operation;
 
+import com.philips.research.philipsonfhir.fhirproxy.support.NotImplementedException;
 import org.hl7.fhir.dstu3.model.OperationOutcome;
 import org.hl7.fhir.exceptions.FHIRException;
 import org.hl7.fhir.instance.model.api.IBaseResource;
@@ -7,7 +8,7 @@ import org.hl7.fhir.instance.model.api.IBaseResource;
 import java.util.Map;
 
 public interface FhirOperationCall {
-    IBaseResource getResult() throws FHIRException;
+    IBaseResource getResult() throws FHIRException, NotImplementedException;
 
     String getDescription();
 

@@ -3,6 +3,7 @@ package com.philips.research.philipsonfhir.fhirproxy.support.proxy.service;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.model.primitive.IdDt;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
+import com.philips.research.philipsonfhir.fhirproxy.support.NotImplementedException;
 import com.philips.research.philipsonfhir.fhirproxy.support.proxy.operation.FhirOperationCall;
 import com.philips.research.philipsonfhir.fhirproxy.support.proxy.operation.FhirOperationRepository;
 import org.hl7.fhir.dstu3.model.*;
@@ -10,16 +11,18 @@ import org.hl7.fhir.exceptions.FHIRException;
 import org.hl7.fhir.instance.model.api.IBaseBundle;
 import org.hl7.fhir.instance.model.api.IBaseOperationOutcome;
 import org.hl7.fhir.instance.model.api.IBaseResource;
+import org.springframework.stereotype.Controller;
 
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+@Controller
 public class FhirServer implements IFhirServer {
     final FhirContext ourCtx;
     final IGenericClient ourClient;
-    private static Logger logger = Logger.getLogger(FhirServer.class.getName());
+    private Logger logger = Logger.getLogger( this.getClass().getName());
     private final String fhirUrl;
     private FhirOperationRepository fhirOperationRepository = new FhirOperationRepository();
 
@@ -36,7 +39,7 @@ public class FhirServer implements IFhirServer {
         return capabilityStatement;
     }
 
-    FhirOperationRepository getFhirOperationRepository(){return fhirOperationRepository;};
+    public FhirOperationRepository getFhirOperationRepository(){return fhirOperationRepository;};
 
     @Override
     public IBaseResource searchResource(String resourceType, Map<String, String> queryParams) {
@@ -101,7 +104,7 @@ public class FhirServer implements IFhirServer {
     }
 
     @Override
-    public IBaseResource getResource(String resourceType, String resourceId, String params, Map<String, String> queryParams) throws FHIRException {
+    public IBaseResource getResource(String resourceType, String resourceId, String params, Map<String, String> queryParams) throws FHIRException, NotImplementedException {
         String url = getUrl( resourceType, resourceId, params, queryParams );
         logger.info( "GET " + fhirUrl + url );
 
@@ -149,7 +152,7 @@ public class FhirServer implements IFhirServer {
             Iterator<Map.Entry<String, String>> iterator = queryParams.entrySet().iterator();
             if (iterator.hasNext()) {
                 Map.Entry<String, String> entry = iterator.next();
-                url += "/?" + entry.getKey() + "=" + entry.getValue();
+                url += "?" + entry.getKey() + "=" + entry.getValue();
             }
             while (iterator.hasNext()) {
                 Map.Entry<String, String> entry = iterator.next();
@@ -174,28 +177,38 @@ public class FhirServer implements IFhirServer {
     @Override
     public IBaseResource postResource(
             String resourceType,
-            String id,
+            String resourceId,
             IBaseResource parseResource,
             String params,
             Map<String, String> queryParams
-    ) {
-        String url = getUrl( resourceType, id, params, queryParams );
-        logger.info( "GET " + fhirUrl + "/"+ url );
+    ) throws FHIRException, NotImplementedException {
+        String url = getUrl( resourceType, resourceId, params, queryParams );
+        logger.info( "POST " + fhirUrl + "/"+ url );
 
-        String xml = ourCtx.newXmlParser().encodeResourceToString(parseResource);
-        Parameters outParams = ourClient
+        if ( params.startsWith("$") ){
+//            FhirOperationCall operation =
+//                fhirOperationRepository.getPostOperation( this, resourceType, resourceId, params, parseResource, queryParams );
+//
+//            if ( operation!=null ){
+//                return  operation.getResult();
+//            }
+            return getResourceOperation( resourceType, resourceId, queryParams );
+        } else {
+
+            String xml = ourCtx.newXmlParser().encodeResourceToString( parseResource );
+            Parameters outParams = ourClient
                 .operation()
-                .onInstance(new IdDt(resourceType, id ))
-                .named(params)
-                .withNoParameters(Parameters.class)
+                .onInstance( new IdDt( resourceType, resourceId ) )
+                .named( params )
+                .withNoParameters( Parameters.class )
                 .execute();
 
-        List<Parameters.ParametersParameterComponent> response = outParams.getParameter();
+            List<Parameters.ParametersParameterComponent> response = outParams.getParameter();
 
-        Resource resource = response.get(0).getResource();
+            Resource resource = response.get( 0 ).getResource();
 
-        return resource;
-
+            return resource;
+        }
     }
 
     @Override
