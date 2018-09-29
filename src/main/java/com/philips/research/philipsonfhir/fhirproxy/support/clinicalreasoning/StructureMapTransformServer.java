@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class StructureMapTransformServer {
 
     private final IGenericClient fhirClient;
-    private DefaultProfileValidationSupport defaultProfileValidationSupport = new DefaultProfileValidationSupport();
+    private static final DefaultProfileValidationSupport defaultProfileValidationSupport = new DefaultProfileValidationSupport();
 
     public StructureMapTransformServer(IGenericClient fhirClient){
         this.fhirClient = fhirClient;
@@ -56,7 +56,7 @@ public class StructureMapTransformServer {
             }
         }
         // 3 process structure map
-        MyWorkerContext hapiWorkerContext = new MyWorkerContext( fhirClient.getFhirContext(), new DefaultProfileValidationSupport());
+        MyWorkerContext hapiWorkerContext = new MyWorkerContext( fhirClient.getFhirContext(), defaultProfileValidationSupport );
 
         // TODO Map should contain all structure maps.
         Map<String, StructureMap> mapTreeMap = new TreeMap<>();
