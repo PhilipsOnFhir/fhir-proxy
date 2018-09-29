@@ -1,7 +1,9 @@
 package com.philips.research.philipsonfhir.fhirproxy.support.proxy.operation;
 
+import com.philips.research.philipsonfhir.fhirproxy.support.NotImplementedException;
 import com.philips.research.philipsonfhir.fhirproxy.support.proxy.service.FhirServer;
 import lombok.Getter;
+import org.hl7.fhir.instance.model.api.IBaseResource;
 
 import java.util.Map;
 
@@ -17,5 +19,11 @@ public abstract class FhirResourceInstanceOperation {
         this.operationName = operationName;
     }
 
-    public abstract FhirOperationCall createOperationCall(FhirServer fhirServer, String resourceId, Map<String, String> queryparams);
+    public FhirOperationCall createGetOperationCall(FhirServer fhirServer, String resourceId, Map<String, String> queryparams) throws NotImplementedException {
+        throw new NotImplementedException();
+    }
+
+    public FhirOperationCall createPostOperationCall(FhirServer fhirServer, String resourceId, IBaseResource parseResource, Map<String, String> queryParams) throws NotImplementedException {
+        throw new NotImplementedException();
+    }
 }

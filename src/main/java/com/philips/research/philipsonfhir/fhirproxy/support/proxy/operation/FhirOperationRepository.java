@@ -1,6 +1,8 @@
 package com.philips.research.philipsonfhir.fhirproxy.support.proxy.operation;
 
+import com.philips.research.philipsonfhir.fhirproxy.support.NotImplementedException;
 import com.philips.research.philipsonfhir.fhirproxy.support.proxy.service.FhirServer;
+import org.hl7.fhir.instance.model.api.IBaseResource;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -26,19 +28,19 @@ public class FhirOperationRepository {
         return null;
     }
 
-    public FhirOperationCall getGetOperation(FhirServer fhirServer, String resourceType, String resourceId, String operationName, Map<String, String> queryparams) {
+    public FhirOperationCall doGetOperation(FhirServer fhirServer, String resourceType, String resourceId, String operationName, Map<String, String> queryparams) throws NotImplementedException {
         FhirResourceInstanceOperation operation = getFhirResourceInstanceOperation( resourceType, operationName );
         if ( operation != null ) {
-            return operation.createOperationCall( fhirServer, resourceId, queryparams );
+            return operation.createGetOperationCall( fhirServer, resourceId, queryparams );
         }
         return null;
     }
 
-//    public FhirOperationCall getPostOperation(FhirServer fhirServer, String resourceType, String resourceId, String operationName, IBaseResource parseResource, Map<String, String> queryParams) {
-//        FhirResourceInstanceOperation operation = getFhirResourceInstanceOperation( resourceType, operationName );
-//        if ( operation != null ) {
-//            return operation.createOperationCall( fhirServer, resourceId, parseResource, queryParams );
-//        }
-//        return null;
-//    }
+    public FhirOperationCall doPostOperation(FhirServer fhirServer, String resourceType, String resourceId, String operationName, IBaseResource parseResource, Map<String, String> queryParams) throws NotImplementedException {
+        FhirResourceInstanceOperation operation = getFhirResourceInstanceOperation( resourceType, operationName );
+        if ( operation != null ) {
+            return operation.createPostOperationCall( fhirServer, resourceId, parseResource, queryParams );
+        }
+        return null;
+    }
 }

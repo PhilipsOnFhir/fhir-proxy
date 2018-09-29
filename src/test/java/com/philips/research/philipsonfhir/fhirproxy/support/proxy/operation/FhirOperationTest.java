@@ -50,7 +50,7 @@ public class FhirOperationTest {
         when( fhirServerMock.getResource( resourceType, resourceId, operationName, queryparams ) ).thenReturn( iBaseResource );
 
         GenericFhirResourceInstanceOperation operation = new GenericFhirResourceInstanceOperation( resourceType, operationName );
-        FhirOperationCall call = operation.createOperationCall( fhirServerMock, resourceId, queryparams );
+        FhirOperationCall call = operation.createGetOperationCall( fhirServerMock, resourceId, queryparams );
 
         assertNotEquals( null, call.getDescription() );
         IBaseResource result = call.getResult();
@@ -59,7 +59,7 @@ public class FhirOperationTest {
     }
 
     @Test
-    public void testOperationRegistration() throws FHIRException {
+    public void testOperationRegistration() throws FHIRException, NotImplementedException {
 
         String operationName = "$myInstanceOperationName1";
         String resourceId = "someId";
@@ -71,13 +71,13 @@ public class FhirOperationTest {
 
         when( fhirOperation.getOperationName()).thenReturn( operationName );
         when( fhirOperation.getResourceType()).thenReturn( resourceType );
-        when( fhirOperation.createOperationCall( fhirServerMock, resourceId, queryparams )).thenReturn( call );
+        when( fhirOperation.createGetOperationCall( fhirServerMock, resourceId, queryparams )).thenReturn( call );
 
         FhirOperationRepository fhirOperationService = new FhirOperationRepository();
 
         fhirOperationService.registerOperation( fhirOperation );
 
-        FhirOperationCall retOp = fhirOperationService.getGetOperation( fhirServerMock, resourceType, resourceId, operationName, queryparams );
+        FhirOperationCall retOp = fhirOperationService.doGetOperation( fhirServerMock, resourceType, resourceId, operationName, queryparams );
         assertEquals( call, retOp );
     }
 }

@@ -20,6 +20,7 @@ import org.opencds.cqf.cql.runtime.Interval;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 public class MyController extends SampleFhirGateway {
@@ -37,7 +38,7 @@ public class MyController extends SampleFhirGateway {
     private void addMeasureEvaluate(FhirContext ourCtx, IGenericClient client) throws FHIRException {
         FhirResourceInstanceOperation structuredMapTransform = new FhirResourceInstanceOperation( ResourceType.StructureMap.name(), "$evaluatee" ) {
             @Override
-            public FhirOperationCall createOperationCall(FhirServer fhirServer, String resourceId, Map<String, String> queryParams) {
+            public FhirOperationCall createGetOperationCall(FhirServer fhirServer, String resourceId, Map<String, String> queryParams) {
                 return new FhirOperationCall() {
                     @Override
                     public IBaseResource getResult() throws FHIRException, NotImplementedException {
@@ -84,7 +85,7 @@ public class MyController extends SampleFhirGateway {
     private void addStructureMapTransform(FhirContext ourCtx, IGenericClient client) throws FHIRException {
         FhirResourceInstanceOperation structuredMapTransform = new FhirResourceInstanceOperation( ResourceType.StructureMap.name(), "$transform" ) {
             @Override
-            public FhirOperationCall createOperationCall(FhirServer fhirServer, String resourceId, Map<String, String> queryParams) {
+            public FhirOperationCall createPostOperationCall(FhirServer fhirServer, String resourceId, IBaseResource parameters, Map<String, String> queryParams) {
                 return new FhirOperationCall() {
                     @Override
                     public IBaseResource getResult() throws FHIRException, NotImplementedException {
@@ -92,9 +93,16 @@ public class MyController extends SampleFhirGateway {
                         IdType idType = new IdType( ).setValue( resourceType+"/"+resourceId );
 
                         String source = queryParams.get( "source" );
-                        String content = queryParams.get( "content");
 
-                        Resource contentRsource = (Resource) ourCtx.newJsonParser().parseResource( content );
+                        Optional<Resource> optResource = ((Parameters) parameters).getParameter().stream()
+                            .filter( parameter -> parameter.getName().equals( "content" ) )
+                            .map( parameter -> parameter.getResource())
+                            .findFirst();
+
+                        if ( !optResource.isPresent()){
+                            throw new FHIRException( "missind content parameter" );
+                        }
+                        Resource contentRsource = optResource.get();
 
                         StructureMapTransformServer structureMapTransformServer = new StructureMapTransformServer( client );
 
@@ -120,7 +128,7 @@ public class MyController extends SampleFhirGateway {
     private void addActivityDefinitionApply() throws FHIRException, NotImplementedException {
         FhirResourceInstanceOperation activityDefinitionApply = new FhirResourceInstanceOperation( "PlanDefinition", "$apply" ) {
             @Override
-            public FhirOperationCall createOperationCall(FhirServer fhirServer, String resourceId, Map<String, String> queryParams) {
+            public FhirOperationCall createGetOperationCall(FhirServer fhirServer, String resourceId, Map<String, String> queryParams) {
                 return new FhirOperationCall() {
                     @Override
                     public IBaseResource getResult() throws FHIRException, NotImplementedException {
@@ -161,7 +169,7 @@ public class MyController extends SampleFhirGateway {
     private void addPlanDefinitionApply() throws FHIRException, NotImplementedException {
         FhirResourceInstanceOperation activityDefinitionApply = new FhirResourceInstanceOperation( "ActivityDefinition", "$apply" ) {
             @Override
-            public FhirOperationCall createOperationCall(FhirServer fhirServer, String resourceId, Map<String, String> queryParams) {
+            public FhirOperationCall createGetOperationCall(FhirServer fhirServer, String resourceId, Map<String, String> queryParams) {
                 return new FhirOperationCall() {
                     @Override
                     public IBaseResource getResult() throws FHIRException, NotImplementedException {

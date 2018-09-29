@@ -10,7 +10,7 @@ public class GenericFhirResourceInstanceOperation extends FhirResourceInstanceOp
     }
 
     @Override
-    public FhirOperationCall createOperationCall(FhirServer fhirServer, String resourceId, Map<String, String> queryparams) {
+    public FhirOperationCall createGetOperationCall(FhirServer fhirServer, String resourceId, Map<String, String> queryparams) {
         return new GenericFhirResourceInstanceOperationCall( fhirServer, resourceType, resourceId, operationName, queryparams );
     }
 }

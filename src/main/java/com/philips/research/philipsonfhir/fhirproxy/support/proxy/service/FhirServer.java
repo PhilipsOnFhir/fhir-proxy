@@ -109,7 +109,7 @@ public class FhirServer implements IFhirServer {
         logger.info( "GET " + fhirUrl + url );
 
         FhirOperationCall operation =
-            fhirOperationRepository.getGetOperation( this, resourceType, resourceId, params, queryParams );
+            fhirOperationRepository.doGetOperation( this, resourceType, resourceId, params, queryParams );
 
         if ( operation!=null ){
             return  operation.getResult();
@@ -186,12 +186,12 @@ public class FhirServer implements IFhirServer {
         logger.info( "POST " + fhirUrl + "/"+ url );
 
         if ( params.startsWith("$") ){
-//            FhirOperationCall operation =
-//                fhirOperationRepository.getPostOperation( this, resourceType, resourceId, params, parseResource, queryParams );
-//
-//            if ( operation!=null ){
-//                return  operation.getResult();
-//            }
+            FhirOperationCall operation =
+                fhirOperationRepository.doPostOperation( this, resourceType, resourceId, params, parseResource, queryParams );
+
+            if ( operation!=null ){
+                return  operation.getResult();
+            }
             return getResourceOperation( resourceType, resourceId, queryParams );
         } else {
 
