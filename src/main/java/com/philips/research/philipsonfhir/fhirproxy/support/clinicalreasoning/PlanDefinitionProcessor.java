@@ -11,10 +11,7 @@ import org.hl7.fhir.dstu3.utils.FHIRPathEngine;
 import org.hl7.fhir.exceptions.FHIRException;
 import org.opencds.cqf.cql.data.fhir.BaseFhirDataProvider;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.logging.Logger;
 
 public class PlanDefinitionProcessor {
@@ -159,6 +156,7 @@ public class PlanDefinitionProcessor {
                 Object result = null;
                 switch( condition.getLanguage() ) {
                     case "text/fhirpath":
+                        logger.info( "Processing action of PlanDefinition - condition  "+condition.getExpression() );
                         result = fhirPathEngine.evaluate( this.planDefinition, condition.getExpression() );
                         if ( !((List) result).isEmpty() ) {
                             result = ((List) result).get( 0 );
@@ -166,6 +164,7 @@ public class PlanDefinitionProcessor {
                         break;
                     case "text/cql":
                     default:
+                        logger.info( "Processing action of PlanDefinition - condition  "+condition.getExpression() );
                         result = cqlExecutionProvider.evaluateInContext(  condition.getExpression() );
                 }
                 if ( !(result instanceof Boolean) ) {
@@ -231,7 +230,7 @@ public class PlanDefinitionProcessor {
         }
 
         if ( planDefinitionAction.hasDefinition() ) {
-            logger.info( "Processing action of PlanDefinition - process definition" );
+            logger.info( "Processing action of PlanDefinition - process definition "+planDefinitionAction.getDefinition().getReference() );
             processDefinition( planDefinitionAction, requestGroupAction );
         }
         if (planDefinitionAction.hasDynamicValue()) {
@@ -322,7 +321,7 @@ public class PlanDefinitionProcessor {
                 ActivityDefinitionProcessor activityDefinitionProcessor = new ActivityDefinitionProcessor(
                     this.fhirDataProvider, activityDefinition, patientId, encounterId, practitionerId, organizationId, null, null, null, null, null
                 );
-
+                resource = (Resource) activityDefinitionProcessor.getResult();
             } catch ( FHIRException e ) {
                 throw new RuntimeException( "Error applying ActivityDefinition " + e.getMessage() );
             } catch ( NotImplementedException e ) {
@@ -332,7 +331,7 @@ public class PlanDefinitionProcessor {
             try {
                 StructureMapTransformServer structureMapTransformServer = new StructureMapTransformServer( fhirDataProvider.getFhirClient() );
                 Resource result=null;
-                structureMapTransformServer.doTransform( planDefinitionAction.getDefinition().getReferenceElement().getIdPart(), planDefinition, result  );
+                resource = (Resource) structureMapTransformServer.doTransform( planDefinitionAction.getDefinition().getReferenceElement().getIdPart(), planDefinition, result  );
             }catch ( FHIRException e ) {
                 throw new RuntimeException( "Error applying StructureMap " + e.getMessage() );
             }
@@ -342,14 +341,16 @@ public class PlanDefinitionProcessor {
                     new PlanDefinitionProcessor( fhirDataProvider, (IdType) planDefinitionAction.getDefinition().getReferenceElement(),
                         patientId, encounterId, practitionerId, organizationId, userType, userLanguage, userTaskContext, setting, settingContext  );
                 resource = planDefinitionProcessor.getCarePlan();
-            }catch ( FHIRException e ) {
-                throw new RuntimeException( "Error applying StructureMap " + e.getMessage() );
-            } catch ( NotImplementedException e ) {
+            }catch ( FHIRException | NotImplementedException e ) {
                 throw new RuntimeException( "Error applying StructureMap " + e.getMessage() );
             }
         } else {
-            throw new RuntimeException( "Error processing PlanDefinition, unknown definition " + planDefinitionAction.getDefinition() );
+            throw new RuntimeException( "Error processing PlanDefinition, unknown definition " + planDefinitionAction.getDefinition().getReference() );
         }
+        if (resource==null){
+            throw new FHIRException( "unable to create resource using "+planDefinitionAction.getDefinition().toString() );
+        }
+        if ( ! resource.hasId() ){ resource.setId( UUID.randomUUID().toString() );}
         resource.setId( (resource.getId().startsWith( "#" )?resource.getId():"#"+resource.getId()));
         requestGroupAction.setResourceTarget( resource );
         requestGroupAction.setResource( new Reference().setReference( resource.getId() ) );

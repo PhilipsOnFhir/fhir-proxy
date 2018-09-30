@@ -21,7 +21,7 @@ public class CqlLibrary {
     }
 
     private CqlLibrary(PlanDefinition planDefinition) {
-        library = "library PlDf"+getValidString( planDefinition.getId() )+"\n\n";
+        library = "library PlDf"+getValidString( planDefinition.getIdElement().getIdPart() )+"\n\n";
         library +="using FHIR version '3.0.0'\n\n";
         for ( Reference libRef : planDefinition.getLibrary() ){
             library += "include "+libRef.getReference().replace("Library/","")+"\n\n";
@@ -33,7 +33,7 @@ public class CqlLibrary {
     }
 
     private CqlLibrary( ActivityDefinition activityDefinition) {
-        library = "library AcDf"+getValidString( activityDefinition.getId() )+"\n\n";
+        library = "library AcDf"+getValidString( activityDefinition.getIdElement().getIdPart() )+"\n\n";
         for ( Reference libRef : activityDefinition.getLibrary() ){
             library += "include "+libRef.getReference().replace("Library/","")+"\n\n";
         }
@@ -43,7 +43,7 @@ public class CqlLibrary {
     }
 
     private CqlLibrary( Measure measure ) {
-        library = "library Mea"+getValidString( measure.getId() )+"\n\n";
+        library = "library Mea"+getValidString( measure.getIdElement().getIdPart() )+"\n\n";
         for ( Reference libRef : measure.getLibrary() ){
             library += "include "+libRef.getReference().replace("Library/","")+"\n\n";
         }

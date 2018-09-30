@@ -41,7 +41,7 @@ public class CqlExecutionProvider {
             if ( library==null) {
                 logger.info("Compile library for " + domainResource.getId());
 
-                getLibraryLoader().translateLibrary(new ByteArrayInputStream(cqlLibrary.getCqlLibaryStr().getBytes( StandardCharsets.UTF_8)), libraryManager, modelManager);
+                library = getLibraryLoader().translateLibrary(new ByteArrayInputStream(cqlLibrary.getCqlLibaryStr().getBytes( StandardCharsets.UTF_8)), getLibraryManager(), getModelManager());
 
 //                translateLibrary(cqlLibrary.getCqlLibaryStr(), getLibraryManager(), getModelManager());
 //                library = LibraryHelper.translateLibrary(cqlLibrary.getCqlLibaryStr(), getLibraryManager(), getModelManager());
@@ -161,6 +161,8 @@ public class CqlExecutionProvider {
         }
         return librarySourceProvider;
     }
+
+//    javax.xml.bind.JAXBElement a;
 
 //    private LibraryResourceProvider getLibraryResourceProvider() {
 //        return (LibraryResourceProvider)clinProvider.resolveResourceProvider("Library");

@@ -49,21 +49,17 @@ public class ActivityDefinitionProcessor  {
         initialize();
 
         this.activityDefinition = activityDefinition;
-        process( fhirDataProvider, patientId, null, null, null, null, null, null, null, null );
+        this.fhirDataProvider =fhirDataProvider;
+        process( patientId, null, null, null, null, null, null, null, null );
     }
 
     public ActivityDefinitionProcessor(BaseFhirDataProvider fhirDataProvider, ActivityDefinition activityDefinition, String patientId, String encounterId, String practitionerId, String organizationId, String userType, String userLanguage, String userTaskContext, String setting, String settingContext) throws FHIRException, NotImplementedException {
         initialize();
         this.activityDefinition = activityDefinition;
-        process( fhirDataProvider, patientId, encounterId, practitionerId, organizationId, userType, userLanguage, userTaskContext, setting, settingContext);
+        this.fhirDataProvider =fhirDataProvider;
+        process( patientId, encounterId, practitionerId, organizationId, userType, userLanguage, userTaskContext, setting, settingContext);
     }
 
-//    public ActivityDefinitionProcessor(BaseFhirDataProvider dataProvider, List<Object> contextParameters, PlanDefinition planDefinition, String patientId) throws FHIRException {
-//        initialize();
-//        this.contextParameters = contextParameters;
-//        this.planDefinition = planDefinition;
-//        process( fhirDataProvider, patientId, null, null, null, null, null, null, null, null );
-//    }
 
     public ActivityDefinitionProcessor(BaseFhirDataProvider fhirDataProvider
         , IdType activityDefinitionId
@@ -80,11 +76,10 @@ public class ActivityDefinitionProcessor  {
         if ( activityDefinition == null ) {
             throw new IllegalArgumentException( "Couldn't find ActivityDefinition "+activityDefinitionId  );
         }
-        process( fhirDataProvider, patientId, encounterId, practitionerId, organizationId, userType, userLanguage, userTaskContext, setting, settingContext );
+        process( patientId, encounterId, practitionerId, organizationId, userType, userLanguage, userTaskContext, setting, settingContext );
     }
 
-    private void process(BaseFhirDataProvider fhirDataProvider
-        , String patientId, String encounterId, String practitionerId, String organizationId, String userType, String userLanguage, String userTaskContext, String setting, String settingContext
+    private void process(String patientId, String encounterId, String practitionerId, String organizationId, String userType, String userLanguage, String userTaskContext, String setting, String settingContext
     ) throws FHIRException, NotImplementedException {
         resolveActivityDefinition(activityDefinition, patientId, practitionerId, organizationId);
     }
