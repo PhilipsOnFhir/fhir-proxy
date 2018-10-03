@@ -1,7 +1,12 @@
 package com.philips.research.philipsonfhir.fhirproxy.support.cdshooks.model;
 
-import java.util.Map;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class Context {
-    Map<String, String> map;
+    // patient-view
+    String patientId;
+    String encounterId;
 }

@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CdsServiceResponseBody {
+public class CdsServiceCallBody {
     String hook;
     String hookInstance;
     String fhirServer;

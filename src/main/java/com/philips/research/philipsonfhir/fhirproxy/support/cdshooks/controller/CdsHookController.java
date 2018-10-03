@@ -1,5 +1,6 @@
 package com.philips.research.philipsonfhir.fhirproxy.support.cdshooks.controller;
 
+import com.philips.research.philipsonfhir.fhirproxy.support.cdshooks.model.CdsServiceCallBody;
 import com.philips.research.philipsonfhir.fhirproxy.support.cdshooks.model.CdsServiceResponse;
 import com.philips.research.philipsonfhir.fhirproxy.support.cdshooks.model.CdsServices;
 import com.philips.research.philipsonfhir.fhirproxy.support.cdshooks.service.FhirClinicalReasoningCdsHooksService;
@@ -23,7 +24,7 @@ public class CdsHookController {
     }
 
     @PostMapping(PREFIX + "/cds-services{serviceId}")
-    public CdsServiceResponse callCdsService(@PathVariable String serviceId, @RequestBody String requestBody) {
-        return cdsHooksService.callCdsService( serviceId, requestBody );
+    public CdsServiceResponse callCdsService(@PathVariable String serviceId, @RequestBody CdsServiceCallBody body ) {
+        return cdsHooksService.callCdsService( serviceId, body );
     }
 }
