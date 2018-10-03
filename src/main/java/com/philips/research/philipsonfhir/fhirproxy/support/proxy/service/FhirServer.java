@@ -29,6 +29,11 @@ public class FhirServer implements IFhirServer {
     public FhirServer(String fhirUrl){
         this.fhirUrl = fhirUrl;
         ourCtx = FhirContext.forDstu3();
+        // Set how long to try and establish the initial TCP connection (in ms)
+        ourCtx.getRestfulClientFactory().setConnectTimeout(20 * 1000);
+
+        // Set how long to block for individual read/write operations (in ms)
+        ourCtx.getRestfulClientFactory().setSocketTimeout(120 * 1000);
         ourClient = ourCtx.newRestfulGenericClient(fhirUrl );
     }
 

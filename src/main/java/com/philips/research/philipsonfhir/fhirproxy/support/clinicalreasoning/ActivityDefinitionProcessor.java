@@ -12,9 +12,7 @@ import org.hl7.fhir.exceptions.FHIRException;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.opencds.cqf.cql.data.fhir.BaseFhirDataProvider;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Logger;
 
 /**
@@ -132,13 +130,34 @@ public class ActivityDefinitionProcessor  {
             case "ReferralRequest":
                 result = resolveReferralRequest(activityDefinition, patientId, practitionerId, organizationId);
                 break;
+
+            case "Observation":
+                result = resolveObservation(activityDefinition, patientId, practitionerId, organizationId);
+                break;
         }
 
         if ( activityDefinition.hasTransform() ){
             Reference transformReference = activityDefinition.getTransform();
             final String rn = "StructuredMap/";
             String strMapId = transformReference.getReference().substring( rn.length() );
-            IBaseResource resource  = this.transformServer.doTransform( strMapId, activityDefinition, (Resource) result);
+
+            StructureMap structureMap = null;
+            if ( strMapId.startsWith( "#" )){
+                Optional<StructureMap> opt = activityDefinition.getContained().stream()
+                    .filter( resource -> resource.getId().equals( strMapId.substring( 1 ) ) )
+                    .filter( resource -> resource instanceof StructureMap )
+                    .map( resource -> (StructureMap)resource )
+                    .findFirst();
+                if ( opt.isPresent() ) { structureMap=opt.get(); }
+            } else {
+                structureMap =
+                    this.fhirDataProvider.getFhirClient().read().resource( StructureMap.class ).withId( strMapId ).execute();
+            }
+            if ( structureMap==null ){
+                throw new FHIRException("StructureMap "+strMapId+" cannot be found");
+            }
+
+            IBaseResource resource  = this.transformServer.doTransform( structureMap, activityDefinition, (Resource) result);
 //            Resource resouce = fhirServer.postResource("StructuredMap", transformReference.getId(), null. null );
 //            FHIRStructureMapResourceProvider fhirStructureMapResourceProvider = (FHIRStructureMapResourceProvider) provider.resolveResourceProvider("StructureMap");
 //            Resource resource = fhirStructureMapResourceProvider.internalTransform( transformReference, activityDefinition, result );
@@ -171,6 +190,17 @@ public class ActivityDefinitionProcessor  {
         }
 
         return result;
+    }
+
+    private Resource resolveObservation(ActivityDefinition activityDefinition, String patientId, String practitionerId, String organizationId) {
+        Observation observation = new Observation(  );
+        observation.setCode( activityDefinition.getCode() );
+        observation.setIssued( new Date(  ) );
+        observation.setStatus( Observation.ObservationStatus.PRELIMINARY );
+        observation.addBasedOn( new Reference(  ).setReference( activityDefinition.getResourceType()+"/"+activityDefinition.getId() ) );
+        observation.setSubject(new Reference(patientId));
+
+        return observation;
     }
 
     private ProcedureRequest resolveProcedureRequest(ActivityDefinition activityDefinition, String patientId,

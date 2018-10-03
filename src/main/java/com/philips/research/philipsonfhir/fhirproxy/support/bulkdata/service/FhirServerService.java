@@ -20,7 +20,9 @@ public class FhirServerService implements IFhirServer {
 
     public FhirServerService() {
 //        super("http://hapi.fhir.org/baseDstu3");
-        FhirServerBulkdata fhirServerBulkdata = new FhirServerBulkdata( new FhirServer("http://localhost:9500/baseDstu3"));
+//        FhirServerBulkdata fhirServerBulkdata = new FhirServerBulkdata( new FhirServer("http://localhost:9500/baseDstu3"));
+        FhirServerBulkdata fhirServerBulkdata = new FhirServerBulkdata( new FhirServer("http://measure.eval.kanvix.com/cqf-ruler/baseDstu3" ));
+
         fhirServer = fhirServerBulkdata;
     }
 

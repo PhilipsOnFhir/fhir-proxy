@@ -28,7 +28,10 @@ public class StructureMapTransformServer {
     public IBaseResource doTransform(String id, Resource content, Resource result) throws FHIRException {
         StructureMap structuredMap =
             fhirClient.read().resource( StructureMap.class ).withId( id ).execute();
-//            (StructureMap) fhirServer.getResource( "StructureMap", id, queryParams );
+        return doTransform(  structuredMap, content, result  );
+    }
+
+    public IBaseResource doTransform( StructureMap structuredMap, Resource content, Resource result) throws FHIRException {
 
         List<StructureMap.StructureMapStructureComponent> structureMapStructureComponents = structuredMap.getStructure().stream()
                 .filter( structureMapStructureComponent -> structureMapStructureComponent.getMode().equals( StructureMap.StructureMapModelMode.PRODUCED)

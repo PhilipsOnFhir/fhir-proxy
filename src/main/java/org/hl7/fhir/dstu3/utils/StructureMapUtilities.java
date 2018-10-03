@@ -1605,8 +1605,7 @@ public class StructureMapUtilities {
                     List<Base> v = fpe.evaluate(vars, null, tgt.getParameter().size() == 2 ? getParam(vars, tgt.getParameter().get(0)) : new BooleanType(false), expr);
                     if (v.size() == 0)
                         return null;
-                    else if (v.size() != 1)
-                        throw new FHIRException("Rule \""+ruleId+"\": Evaluation of "+expr.toString()+" returned "+Integer.toString(v.size())+" objects");
+                    else if (v.size() != 1) throw new FHIRException("Rule \""+ruleId+"\": Evaluation of "+expr.toString()+" returned "+Integer.toString(v.size())+" objects");
                     else
                         return v.get(0);
 

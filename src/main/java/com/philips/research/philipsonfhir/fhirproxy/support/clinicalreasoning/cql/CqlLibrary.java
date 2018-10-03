@@ -34,6 +34,7 @@ public class CqlLibrary {
 
     private CqlLibrary( ActivityDefinition activityDefinition) {
         library = "library AcDf"+getValidString( activityDefinition.getIdElement().getIdPart() )+"\n\n";
+        library +="using FHIR version '3.0.0'\n\n";
         for ( Reference libRef : activityDefinition.getLibrary() ){
             library += "include "+libRef.getReference().replace("Library/","")+"\n\n";
         }

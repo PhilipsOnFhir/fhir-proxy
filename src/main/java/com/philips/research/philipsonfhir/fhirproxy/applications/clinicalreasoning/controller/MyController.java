@@ -4,6 +4,7 @@ import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
 import com.philips.research.philipsonfhir.fhirproxy.support.NotImplementedException;
 import com.philips.research.philipsonfhir.fhirproxy.support.clinicalreasoning.ActivityDefinitionProcessor;
+import com.philips.research.philipsonfhir.fhirproxy.support.clinicalreasoning.MeasureEvaluationProcessor;
 import com.philips.research.philipsonfhir.fhirproxy.support.clinicalreasoning.PlanDefinitionProcessor;
 import com.philips.research.philipsonfhir.fhirproxy.support.clinicalreasoning.StructureMapTransformServer;
 import com.philips.research.philipsonfhir.fhirproxy.support.clinicalreasoning.helpers.DateHelper;
@@ -16,7 +17,6 @@ import org.hl7.fhir.exceptions.FHIRException;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.opencds.cqf.cql.data.fhir.BaseFhirDataProvider;
 import org.opencds.cqf.cql.data.fhir.FhirDataProviderStu3;
-import org.opencds.cqf.cql.runtime.Interval;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
@@ -25,18 +25,20 @@ import java.util.Optional;
 @RestController
 public class MyController extends SampleFhirGateway {
     private static final String url = "http://localhost:9500/baseDstu3";
+
     public MyController() throws FHIRException, NotImplementedException {
         super( url );
         FhirContext ourCtx = this.fhirServer.getCtx();
         IGenericClient client = this.fhirServer.getCtx().newRestfulGenericClient( url );
 
+        addMeasureEvaluate( ourCtx, client );
         addPlanDefinitionApply();
         addActivityDefinitionApply();
         addStructureMapTransform( ourCtx, client );
     }
 
     private void addMeasureEvaluate(FhirContext ourCtx, IGenericClient client) throws FHIRException {
-        FhirResourceInstanceOperation structuredMapTransform = new FhirResourceInstanceOperation( ResourceType.StructureMap.name(), "$evaluatee" ) {
+        FhirResourceInstanceOperation measureEvaluation = new FhirResourceInstanceOperation( ResourceType.Measure.name(), "$evaluate-measure" ) {
             @Override
             public FhirOperationCall createGetOperationCall(FhirServer fhirServer, String resourceId, Map<String, String> queryParams) {
                 return new FhirOperationCall() {
@@ -46,22 +48,30 @@ public class MyController extends SampleFhirGateway {
                         String periodEnd   = queryParams.get( "periodEnd" );
                         String measureRef  = queryParams.get( "measure" );
                         String reportType  = queryParams.get( "reportType" );
-                        String subject     = queryParams.get( "subject" );
+                        String patient     = queryParams.get( "patient" );
                         String practitioner = queryParams.get("practitioner");
                         String lastReceivedOn = queryParams.get( "lastReceievedOn" );
 
                         String resId = ( measureRef!=null? measureRef: resourceId );
                         Measure measure = client.read().resource( Measure.class ).withId( resourceId ).execute();
 
-
                         // resolve the measurement period
-                        Interval measurementPeriod =
-                            new org.opencds.cqf.cql.runtime.Interval(
-                                DateHelper.resolveRequestDate(periodStart, true), true,
-                                DateHelper.resolveRequestDate(periodEnd, false), true
-                            );
+//                        Interval measurementPeriod =
+//                            new org.opencds.cqf.cql.runtime.Interval(
+//                                DateHelper.resolveRequestDate(periodStart, true), true,
+//                                DateHelper.resolveRequestDate(periodEnd, false), true
+//                            );
 
-                        return null;
+//                        Period period = new Period();
+//                        period.setStart( DateHelper.resolveRequestDate(periodStart, true) );
+//                        period.setEnd( DateHelper.resolveRequestDate(periodEnd, false) );
+
+                        MeasureEvaluationProcessor measureEvaluationProcesso =
+                            new MeasureEvaluationProcessor( client, null,
+                                DateHelper.resolveRequestDate(periodStart, true),
+                                DateHelper.resolveRequestDate( periodEnd,false ));
+
+                        return measureEvaluationProcesso.getResult();
                     }
 
                     @Override
@@ -79,7 +89,7 @@ public class MyController extends SampleFhirGateway {
 
             }
         };
-        this.fhirServer.getFhirOperationRepository().registerOperation(  structuredMapTransform  );
+        this.fhirServer.getFhirOperationRepository().registerOperation(  measureEvaluation  );
     }
 
     private void addStructureMapTransform(FhirContext ourCtx, IGenericClient client) throws FHIRException {
