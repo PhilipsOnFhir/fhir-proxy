@@ -2,10 +2,15 @@ package com.philips.research.philipsonfhir.fhirproxy.support.proxy.controller;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.parser.IParser;
+import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException;
+import com.philips.research.philipsonfhir.fhirproxy.support.NotImplementedException;
 import com.philips.research.philipsonfhir.fhirproxy.support.proxy.service.FhirServer;
+import org.hl7.fhir.dstu3.model.OperationOutcome;
 import org.hl7.fhir.exceptions.FHIRException;
 import org.hl7.fhir.instance.model.api.IBaseOperationOutcome;
 import org.hl7.fhir.instance.model.api.IBaseResource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +27,9 @@ public class SampleFhirGateway {
     private Logger logger = Logger.getLogger(SampleFhirGateway.class.getName());
     private FhirContext myContext = FhirContext.forDstu3();
 
+    public SampleFhirGateway(){
+        this( "http:localhost:9500/baseStu3" );
+    }
     public SampleFhirGateway(String fhirUrl) {
         this.fhirServer = new FhirServer( fhirUrl );
     }
@@ -128,15 +136,32 @@ public class SampleFhirGateway {
             value = "/fhir/{resourceType}/{id}/{params}",
             produces =  "application/fhir+json"
     )
-    public String getJsonResourceWithParams(
+    public ResponseEntity<String> getJsonResourceWithParams(
             @RequestHeader("Accept") String accept,
 //            @RequestHeader("Content-Type") String contentType,
             @PathVariable String resourceType,
             @PathVariable String id,
             @PathVariable String params,
             @RequestParam Map<String, String> queryParams
-    ) throws Exception {
-        return parser(accept).encodeResourceToString(fhirServer.getResource( resourceType, id, params, queryParams ));
+    )  {
+        IBaseResource iBaseResource;
+        HttpStatus httpStatus;
+        try{
+            iBaseResource = fhirServer.getResource( resourceType, id, params, queryParams );
+            httpStatus= HttpStatus.OK;
+        } catch ( FHIRException| NotImplementedException e1 ){
+            iBaseResource = new OperationOutcome().addIssue( new OperationOutcome.OperationOutcomeIssueComponent()
+                .setSeverity( OperationOutcome.IssueSeverity.FATAL )
+                .setDiagnostics( e1.getMessage() )
+            );
+            httpStatus= HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+        catch ( BaseServerResponseException se ){
+            iBaseResource = se.getOperationOutcome();
+            httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+        ResponseEntity<String> responseEntity = new ResponseEntity<>( parser( accept ).encodeResourceToString(iBaseResource), httpStatus );
+        return responseEntity;
     }
 
     private String getResourceWithParams(

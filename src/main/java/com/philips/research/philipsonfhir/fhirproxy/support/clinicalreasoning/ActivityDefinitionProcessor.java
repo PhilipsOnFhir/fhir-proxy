@@ -163,32 +163,34 @@ public class ActivityDefinitionProcessor  {
 //            Resource resource = fhirStructureMapResourceProvider.internalTransform( transformReference, activityDefinition, result );
             result= (Resource) resource;
         }
-        CqlExecutionProvider cqlExecutionProvider = new CqlExecutionProvider( this.fhirDataProvider, activityDefinition, patientId );
-        for (ActivityDefinition.ActivityDefinitionDynamicValueComponent dynamicValue : activityDefinition.getDynamicValue())
-        {
-            if (dynamicValue.hasPath() && dynamicValue.hasExpression()) {
-                Object dynValResult = null;
-                switch( dynamicValue.getLanguage() ) {
-                    case "text/fhirpath":
-                        dynValResult = fhirPathEngine.evaluate( this.activityDefinition, dynamicValue.getExpression() );
-                        if ( !((List) dynValResult).isEmpty() ) {
-                            dynValResult = ((List) dynValResult).get( 0 );
-                        }
-                        break;
-                    case "text/cql":
-                    default:
-                        dynValResult = cqlExecutionProvider.evaluateInContext(  dynamicValue.getExpression() );
-                }
 
-                if ( dynamicValue.getPath().equals( "$this" ) ) {
-                    this.result= (Resource) dynValResult;
-                } else {
-//                    this.clinReasoningProvider.setValue( carePlan, dynamicValue.getPath(), result );
-                    FhirValueSetter.setProperty( result, dynamicValue.getPath(), (Base) dynValResult );
+        if( activityDefinition.hasDynamicValue() ) {
+            CqlExecutionProvider cqlExecutionProvider = new CqlExecutionProvider( this.fhirDataProvider, activityDefinition, patientId );
+
+            for ( ActivityDefinition.ActivityDefinitionDynamicValueComponent dynamicValue : activityDefinition.getDynamicValue() ) {
+                if ( dynamicValue.hasPath() && dynamicValue.hasExpression() ) {
+                    Object dynValResult = null;
+                    switch ( dynamicValue.getLanguage() ) {
+                        case "text/fhirpath":
+                            dynValResult = fhirPathEngine.evaluate( this.activityDefinition, dynamicValue.getExpression() );
+                            if ( !((List) dynValResult).isEmpty() ) {
+                                dynValResult = ((List) dynValResult).get( 0 );
+                            }
+                            break;
+                        case "text/cql":
+                        default:
+                            dynValResult = cqlExecutionProvider.evaluateInContext( dynamicValue.getExpression() );
+                    }
+
+                    if ( dynamicValue.getPath().equals( "$this" ) ) {
+                        this.result = (Resource) dynValResult;
+                    } else {
+                        //                    this.clinReasoningProvider.setValue( carePlan, dynamicValue.getPath(), result );
+                        FhirValueSetter.setProperty( result, dynamicValue.getPath(), (Base) dynValResult );
+                    }
                 }
             }
         }
-
         return result;
     }
 
@@ -212,6 +214,7 @@ public class ActivityDefinitionProcessor  {
         procedureRequest.setStatus(ProcedureRequest.ProcedureRequestStatus.DRAFT);
         procedureRequest.setIntent(ProcedureRequest.ProcedureRequestIntent.ORDER);
         procedureRequest.setSubject(new Reference(patientId));
+        procedureRequest.addBasedOn( new Reference().setReference( activityDefinition.getResourceType()+"/"+activityDefinition.getId() ));
 
         if (practitionerId != null) {
             procedureRequest.setRequester(
@@ -442,9 +445,10 @@ public class ActivityDefinitionProcessor  {
                                             String practitionerId, String organizationId) {
         ReferralRequest referralRequest = new ReferralRequest();
         referralRequest.setStatus(ReferralRequest.ReferralRequestStatus.DRAFT);
-        referralRequest.addDefinition(new Reference().setReference( activityDefinition.getId() ));
+        referralRequest.addDefinition(new Reference().setReference( activityDefinition.getResourceType()+"/"+activityDefinition.getId() ));
         referralRequest.setSubject(new Reference(patientId));
         referralRequest.setIntent( ReferralRequest.ReferralCategory.ORDER );
+        referralRequest.setSpecialty( activityDefinition.getCode() );
 
         if (practitionerId != null) {
             referralRequest.setRequester(

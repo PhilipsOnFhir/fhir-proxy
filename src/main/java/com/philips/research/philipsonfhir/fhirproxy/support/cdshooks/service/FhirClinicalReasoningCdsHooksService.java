@@ -17,7 +17,7 @@ import java.util.*;
 public class FhirClinicalReasoningCdsHooksService {
     IFhirServer fhirServer;
 
-    FhirClinicalReasoningCdsHooksService( IFhirServer fhirServer ){
+    public FhirClinicalReasoningCdsHooksService(IFhirServer fhirServer){
         this.fhirServer = fhirServer;
     }
 

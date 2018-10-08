@@ -130,15 +130,14 @@ public class FhirServer implements IFhirServer {
         }
 
         Parameters outParams = ourClient
-                .operation()
-                .onInstance(new IdDt(resourceType, resourceId ))
-                .named(params)
-                .withParameters( parameters )
-                .useHttpGet()
-                .execute();
+            .operation()
+            .onInstance( new IdDt( resourceType, resourceId ) )
+            .named( params )
+            .withParameters( parameters )
+            .useHttpGet()
+            .execute();
 
         List<Parameters.ParametersParameterComponent> response = outParams.getParameter();
-
         Resource resource = response.get(0).getResource();
         return resource;
     }
