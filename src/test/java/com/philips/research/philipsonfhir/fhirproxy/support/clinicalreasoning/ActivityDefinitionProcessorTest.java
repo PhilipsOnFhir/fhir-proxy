@@ -1,6 +1,7 @@
 package com.philips.research.philipsonfhir.fhirproxy.support.clinicalreasoning;
 
 import com.philips.research.philipsonfhir.fhirproxy.support.NotImplementedException;
+import com.philips.research.philipsonfhir.fhirproxy.support.clinicalreasoning.processor.ActivityDefinitionProcessor;
 import org.hl7.fhir.dstu3.model.*;
 import org.hl7.fhir.exceptions.FHIRException;
 import org.hl7.fhir.instance.model.api.IBaseResource;
@@ -104,5 +105,6 @@ public class ActivityDefinitionProcessorTest {
 
             assertEquals( coding, observation.getCode().getCodingFirstRep() );
         }
+
     }
 }

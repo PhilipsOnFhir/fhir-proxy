@@ -3,7 +3,7 @@ package com.philips.research.philipsonfhir.fhirproxy.support.cdshooks.service;
 import com.philips.research.philipsonfhir.fhirproxy.support.NotImplementedException;
 import com.philips.research.philipsonfhir.fhirproxy.support.bulkdata.fhir.BundleRetriever;
 import com.philips.research.philipsonfhir.fhirproxy.support.cdshooks.model.*;
-import com.philips.research.philipsonfhir.fhirproxy.support.clinicalreasoning.PlanDefinitionProcessor;
+import com.philips.research.philipsonfhir.fhirproxy.support.clinicalreasoning.processor.PlanDefinitionProcessor;
 import com.philips.research.philipsonfhir.fhirproxy.support.proxy.service.IFhirServer;
 import org.hl7.fhir.dstu3.model.*;
 import org.hl7.fhir.exceptions.FHIRException;

@@ -1,4 +1,4 @@
-package com.philips.research.philipsonfhir.fhirproxy.support.clinicalreasoning;
+package com.philips.research.philipsonfhir.fhirproxy.support.clinicalreasoning.processor;
 
 import ca.uhn.fhir.rest.client.api.IGenericClient;
 import com.philips.research.philipsonfhir.fhirproxy.support.clinicalreasoning.cql.MyWorkerContext;
