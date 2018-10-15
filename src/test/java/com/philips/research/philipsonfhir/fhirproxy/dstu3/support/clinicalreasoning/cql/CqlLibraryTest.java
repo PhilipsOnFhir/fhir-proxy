@@ -1,16 +1,21 @@
 package com.philips.research.philipsonfhir.fhirproxy.dstu3.support.clinicalreasoning.cql;
 
+import org.hl7.fhir.dstu3.model.PlanDefinition;
+import org.hl7.fhir.dstu3.model.Reference;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static junit.framework.TestCase.assertNotNull;
+import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 public class CqlLibraryTest {
 
     @Test
-    public void testDefinePrefixxing(){
+    public void testDefinePrefixing(){
 
         List<String> defineList = new ArrayList();
         defineList.add("Expression1");
@@ -35,34 +40,94 @@ public class CqlLibraryTest {
         );
     }
 
-//    private String addPrefixes(String prefix, List<String> defineList, String expression) {
-//        Collections.sort( defineList, new Comparator<String>() {
-//            @Override
-//            public int compare(String o1, String o2) {
-//                return o2.length() - o1.length();
-//            }
-//        } );
-//
-//        String newExpression = expression;
-//        for ( int i=0; i< defineList.size(); i++ ){
-//            String replacementString = String.format( "===%04d===",i );
-//            String searchString      = defineList.get( i );
-//            newExpression = newExpression.replace( searchString,replacementString  );
-//        }
-//
-//        for ( int i=0; i< defineList.size(); i++ ){
-//            String replacementString = "."+defineList.get( i );
-//            String searchString      = String.format( "\\.\\s*===%04d===", i );
-//            newExpression = newExpression.replaceAll( searchString, replacementString );
-//        }
-//
-//        for ( int i=0; i< defineList.size(); i++ ){
-//            String replacementString = prefix+"."+defineList.get( i );
-//            String searchString      = String.format( "===%04d===", i );
-//            newExpression = newExpression.replaceAll( searchString, replacementString  );
-//        }
-//
-//        return newExpression;
-//    }
+    @Test
+    public void testPlainPlanDefinition(){
+        PlanDefinition planDefinition = (PlanDefinition) new PlanDefinition()
+            .addAction( new PlanDefinition.PlanDefinitionActionComponent()
+            )
+            .addAction( new PlanDefinition.PlanDefinitionActionComponent()
+            ).setId( "cqlTest1" );
 
+        CqlLibrary cqlLibrary = CqlLibrary.generateCqlLibrary( planDefinition );
+        assertNotNull( cqlLibrary );
+        assertFalse( cqlLibrary.hasCqlExpressions() );
+    }
+
+    @Test
+    public void testNoLibraryPlanDefinition(){
+        PlanDefinition planDefinition = (PlanDefinition) new PlanDefinition()
+            .addAction( new PlanDefinition.PlanDefinitionActionComponent()
+                .addDynamicValue( new PlanDefinition.PlanDefinitionActionDynamicValueComponent()
+                    .setLanguage( "text/cql" )
+                    .setPath( "somePath" )
+                    .setExpression( "now()" )
+                )
+            )
+            .addAction( new PlanDefinition.PlanDefinitionActionComponent()
+                .addDynamicValue( new PlanDefinition.PlanDefinitionActionDynamicValueComponent()
+                    .setLanguage( "text/cql" )
+                    .setPath( "somePath" )
+                    .setExpression( "Patient.id.value" )
+                )
+            ).setId( "cqlTest2" );
+
+        CqlLibrary cqlLibrary = CqlLibrary.generateCqlLibrary( planDefinition );
+        assertNotNull( cqlLibrary );
+        assertTrue( cqlLibrary.hasCqlExpressions() );
+        assertNotNull( cqlLibrary.getCqlLibaryStr() );
+        System.out.println(cqlLibrary.getCqlLibaryStr());
+        assertTrue( cqlLibrary.getCqlLibaryStr().contains( "context Patient" ) );
+
+        planDefinition.getAction().stream()
+            .filter( action -> action.hasDynamicValue() )
+            .forEach( action -> action.getDynamicValue().stream().forEach(
+                dynamicValue -> assertTrue( cqlLibrary.getCqlLibaryStr().contains( dynamicValue.getExpression() )
+                )
+                )
+            );
+
+    }
+
+    @Test
+    public void testLibraryPlanDefinition(){
+        PlanDefinition planDefinition = (PlanDefinition) new PlanDefinition()
+            .addLibrary( new Reference(  ).setReference( "mylib" ) )
+            .addAction( new PlanDefinition.PlanDefinitionActionComponent()
+                .addDynamicValue( new PlanDefinition.PlanDefinitionActionDynamicValueComponent()
+                    .setLanguage( "text/cql" )
+                    .setPath( "somePath" )
+                    .setExpression( "Expression1" )
+                )
+            )
+            .addAction( new PlanDefinition.PlanDefinitionActionComponent()
+                .addDynamicValue( new PlanDefinition.PlanDefinitionActionDynamicValueComponent()
+                    .setLanguage( "text/cql" )
+                    .setPath( "somePath" )
+                    .setExpression( "Expression2" )
+                )
+            ).setId( "cqlTest3" );
+
+        List<String> defineList = new ArrayList<>(  );
+        defineList.add("Expression1");
+        defineList.add("Expression2");
+        defineList.add("Expression");
+
+        CqlLibrary cqlLibrary = CqlLibrary.generateCqlLibrary( planDefinition, defineList );
+
+        assertNotNull( cqlLibrary.getCqlLibaryStr(),cqlLibrary );
+        assertTrue( cqlLibrary.getCqlLibaryStr(),cqlLibrary.hasCqlExpressions() );
+        assertNotNull( cqlLibrary.getCqlLibaryStr(),cqlLibrary.getCqlLibaryStr() );
+//        System.out.println(cqlLibrary.getCqlLibaryStr());
+        assertTrue( cqlLibrary.getCqlLibaryStr().contains( "context Patient" ) );
+
+        planDefinition.getAction().stream()
+            .filter( action -> action.hasDynamicValue() )
+            .forEach( action -> action.getDynamicValue().stream().forEach(
+                dynamicValue -> assertTrue(  cqlLibrary.getCqlLibaryStr(), cqlLibrary.getCqlLibaryStr().contains( dynamicValue.getExpression() ))
+                )
+            );
+
+        assertTrue( cqlLibrary.getCqlLibaryStr(),cqlLibrary.getCqlLibaryStr().contains( "mylib.Expression1" ) );
+        assertTrue( cqlLibrary.getCqlLibaryStr(),cqlLibrary.getCqlLibaryStr().contains( "mylib.Expression2" ) );
+    }
 }

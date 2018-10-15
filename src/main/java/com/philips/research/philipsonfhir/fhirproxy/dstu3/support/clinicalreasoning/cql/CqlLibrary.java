@@ -35,12 +35,13 @@ public class CqlLibrary {
         library = "library PlDf"+getValidString( planDefinition.getIdElement().getIdPart() )+"\n\n";
         library +="using FHIR version '3.0.0'\n\n";
         for ( Reference libRef : planDefinition.getLibrary() ){
-            String libraryRef = libRef.getReference().replace("Library/","")+"\n\n";
-            library += "include "+libraryRef;
+            String libraryRef = libRef.getReference().replace("Library/","");
+            library += "include "+libraryRef+"\n\n";
             if ( this.primaryLibrary==null && defineList!=null ){
                 this.primaryLibrary = libraryRef;
             }
         }
+        library+="\ncontext Patient\n\n";
         int actionNo = 0;
         for ( PlanDefinition.PlanDefinitionActionComponent actionComponent: planDefinition.getAction() ){
             addDynamicValuesFromAction(actionComponent, defineList );
@@ -121,7 +122,7 @@ public class CqlLibrary {
         String result = "// none /n";
         if ( language!=null && language.equals("text/cql")){
             String newExpression = addPrefixes( primaryLibrary, defineList, expression );
-            result = "define "+ getCqlDefine(expression) +": "+expression+"\n\n";
+            result = "define "+ getCqlDefine(expression) +": "+newExpression+"\n\n";
             hasCqlExpressions = true;
         }
         return result;
