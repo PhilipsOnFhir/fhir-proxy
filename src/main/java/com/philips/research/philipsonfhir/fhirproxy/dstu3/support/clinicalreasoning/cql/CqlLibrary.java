@@ -2,6 +2,9 @@ package com.philips.research.philipsonfhir.fhirproxy.dstu3.support.clinicalreaso
 
 import org.hl7.fhir.dstu3.model.*;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class CqlLibrary {
@@ -25,7 +28,7 @@ public class CqlLibrary {
     }
 
     static CqlLibrary generateCqlLibrary(DomainResource instance ){
-        return generateCqlLibrary( instance, null );
+        return generateCqlLibrary( instance, new ArrayList<>() );
     }
 
     private CqlLibrary(PlanDefinition planDefinition, List<String> defineList ) {
@@ -117,21 +120,41 @@ public class CqlLibrary {
     private String addExpression(String language, String expression, List<String> defineList) {
         String result = "// none /n";
         if ( language!=null && language.equals("text/cql")){
-
-//            defineList.stream().forEach( define -> {
-//                if ( expression.contains( define ) ){
-//                    int location = expression.indexOf( define );
-//                    if ( location==0 || !expression.substring( location-1 ).startsWith( "." )){
-//                        // no library reference
-//
-//                    }
-//                }
-//            } );
-
+            String newExpression = addPrefixes( primaryLibrary, defineList, expression );
             result = "define "+ getCqlDefine(expression) +": "+expression+"\n\n";
             hasCqlExpressions = true;
         }
         return result;
+    }
+
+    static String addPrefixes(String prefix, List<String> defineList, String expression) {
+        Collections.sort( defineList, new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                return o2.length() - o1.length();
+            }
+        } );
+
+        String newExpression = expression;
+        for ( int i=0; i< defineList.size(); i++ ){
+            String replacementString = String.format( "===%04d===",i );
+            String searchString      = defineList.get( i );
+            newExpression = newExpression.replace( searchString,replacementString  );
+        }
+
+        for ( int i=0; i< defineList.size(); i++ ){
+            String replacementString = "."+defineList.get( i );
+            String searchString      = String.format( "\\.\\s*===%04d===", i );
+            newExpression = newExpression.replaceAll( searchString, replacementString );
+        }
+
+        for ( int i=0; i< defineList.size(); i++ ){
+            String replacementString = prefix+"."+defineList.get( i );
+            String searchString      = String.format( "===%04d===", i );
+            newExpression = newExpression.replaceAll( searchString, replacementString  );
+        }
+
+        return newExpression;
     }
 
     static String getCqlDefine(String expression) {
