@@ -3,7 +3,7 @@ package org.hl7.fhir.dstu3.utils;
 // remember group resolution
 // trace - account for which wasn't transformed in the source
 
-import com.philips.research.philipsonfhir.fhirproxy.support.FhirValueSetter;
+import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.FhirValueSetter;
 import org.hl7.fhir.dstu3.conformance.ProfileUtilities;
 import org.hl7.fhir.dstu3.conformance.ProfileUtilities.ProfileKnowledgeProvider;
 import org.hl7.fhir.dstu3.context.IWorkerContext;
