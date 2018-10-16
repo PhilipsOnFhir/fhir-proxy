@@ -10,12 +10,18 @@ group main
     input src: Parameters as source
     input tgt: ProcedureRequest as target
 
-    "ad.subject" : for src.parameter as p1 where name='subject' then {
-        "sbj": for p1.value as sbj make tgt.subject = sbj
+    "ad.subject" : for src.parameter as p where name='subject' then {
+        do: for p.value as sbj make tgt.subject = sbj
     }
-//
-//    "ad.requester" : for src.parameter as p where p.name="practitioner" then{
-//        "prac": for p.value as vvv then createAgent( vvv, tgt )
+
+    "ad.requester" : for src.parameter as p where src.name="practitioner" then{
+        do: for p.value as prac make tgt.requester as requester then {
+            doAlso: for prac make requester.agent=prac
+        }
+    }
+
+//    "ad.requester" : for src as p where ( src.name="practitioner" or src.name="organization").count()=2 then{
+//        do: for src make tgt.agent = create()
 //    }
 //
 //    "ad.requester" : for src.parameter as p where p.name="organization" then{
@@ -23,12 +29,12 @@ group main
 //    }
 //
 //
-    "ad.context" : for src.parameter as p2 where name='encounter' then {
-        "enc": for p2.value as enc make tgt.context = enc
+    "ad.context" : for src.parameter as p where name='encounter' then {
+        do: for p.value as enc make tgt.context = enc
     }
 
-    actded: for src.parameter as p3 where name='source' then {
-        do: for p3.resource as ad then createActDef( ad, tgt )
+    actded: for src.parameter as p where name='source' then {
+        do: for p.resource as ad then createActDef( ad, tgt )
     }
 endgroup
 

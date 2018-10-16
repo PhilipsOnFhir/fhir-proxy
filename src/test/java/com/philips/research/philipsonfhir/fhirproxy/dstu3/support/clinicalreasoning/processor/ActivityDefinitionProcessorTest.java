@@ -92,6 +92,14 @@ public class ActivityDefinitionProcessorTest {
                 .setName( "encounter" )
                 .setValue( new Reference( "Encounter/encounterid" ) )
             )
+            .addParameter( new Parameters.ParametersParameterComponent(  )
+                .setName( "practioner" )
+                .setValue( new Reference( "Practioner/practionerId" ) )
+            )
+//            .addParameter( new Parameters.ParametersParameterComponent(  )
+//                .setName( "organization" )
+//                .setValue( new Reference( "Encounter/encounterid" ) )
+//            )
         ;
 
         System.out.println(ourCtx.newJsonParser().setPrettyPrint( true ).encodeResourceToString( parameters ));
