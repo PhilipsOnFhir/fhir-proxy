@@ -69,10 +69,13 @@ public class ActivityDefinitionProcessorTest {
         ActivityDefinition activityDefinition = (ActivityDefinition) new ActivityDefinition(  )
             .setTiming(  new Timing().addEvent( new Date( ) ) )
             .setCode( new CodeableConcept().addCoding( new Coding( ).setCode( "2233" ).setSystem( "a" ) ) )
-            .setId( "2123" );
+            .addDosage( new Dosage().setText( "aaa" ) )
+            .setProduct( new Reference(  ).setReference( "Substance/sdakdjasl" ) )
+            .setId( "AdGenProcedureRequest" );
 
         System.out.println(ourCtx.newJsonParser().setPrettyPrint( true ).encodeResourceToString( structureMap ));
         TestUtil.storeResource(  structureMap );
+        TestUtil.storeResource(  activityDefinition );
 
         File rscFile = new File("example/"+structureMap.getResourceType()+"-"+structureMap.getId()+".fhirmap");
         FileWriter writer = new FileWriter( rscFile );
@@ -93,13 +96,13 @@ public class ActivityDefinitionProcessorTest {
                 .setValue( new Reference( "Encounter/encounterid" ) )
             )
             .addParameter( new Parameters.ParametersParameterComponent(  )
-                .setName( "practioner" )
+                .setName( "practitioner" )
                 .setValue( new Reference( "Practioner/practionerId" ) )
             )
-//            .addParameter( new Parameters.ParametersParameterComponent(  )
-//                .setName( "organization" )
-//                .setValue( new Reference( "Encounter/encounterid" ) )
-//            )
+            .addParameter( new Parameters.ParametersParameterComponent(  )
+                .setName( "organization" )
+                .setValue( new Reference( "Organization/organizationId" ) )
+            )
         ;
 
         System.out.println(ourCtx.newJsonParser().setPrettyPrint( true ).encodeResourceToString( parameters ));
