@@ -49,7 +49,7 @@ public class StructureMapTransformServer {
                 String resourceName = resourceUrl.replace("http://hl7.org/fhir/StructureDefinition/", "");
                 org.hl7.fhir.dstu3.model.ResourceType rt = null;
                 for (org.hl7.fhir.dstu3.model.ResourceType resourceType : ResourceType.values()) {
-                    if (resourceType.name().toLowerCase().equals(resourceName)) {
+                    if (resourceType.name().toLowerCase().equals(resourceName.toLowerCase())) {
                         rt = resourceType;
                     }
                 }

@@ -1,0 +1,168 @@
+{
+  "resourceType": "StructureMap",
+  "id": "test",
+  "url": "http://research.philips.com/fhir/dstu3/mapping/AdToProcedureRequest",
+  "name": "R3 Parameters of Activitydefinition.$apply to ProcedureRequest",
+  "structure": [
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/Parameters",
+      "mode": "source"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/ProcedureRequest",
+      "mode": "target",
+      "documentation": "imports \"http://hl7.org/fhir/StructureMap/*\""
+    }
+  ],
+  "group": [
+    {
+      "name": "main",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "src",
+          "type": "Parameters",
+          "mode": "source"
+        },
+        {
+          "name": "tgt",
+          "type": "ProcedureRequest",
+          "mode": "target",
+          "documentation": "subject : for src.parameter as p where p.name=\"subject\" then createReference( p, tgt. )"
+        }
+      ],
+      "rule": [
+        {
+          "name": "actded",
+          "source": [
+            {
+              "context": "src",
+              "element": "parameter",
+              "variable": "p",
+              "condition": "p.name = source"
+            }
+          ],
+          "rule": [
+            {
+              "name": "do",
+              "source": [
+                {
+                  "context": "p",
+                  "element": "resource",
+                  "variable": "ad"
+                }
+              ],
+              "dependent": [
+                {
+                  "name": "createActDef",
+                  "variable": [
+                    "ad",
+                    "tgt"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "createReference",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "src",
+          "mode": "source"
+        },
+        {
+          "name": "tgt",
+          "type": "Reference",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "reference",
+          "source": [
+            {
+              "context": "p",
+              "element": "value"
+            }
+          ],
+          "target": [
+            {
+              "context": "tgt",
+              "contextType": "variable",
+              "element": "reference",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "pid"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "createActDef",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "src",
+          "type": "ActivityDefinition",
+          "mode": "source"
+        },
+        {
+          "name": "tgt",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "\"status\"",
+          "source": [
+            {
+              "context": "src",
+              "element": "id"
+            }
+          ],
+          "target": [
+            {
+              "context": "tgt",
+              "contextType": "variable",
+              "element": "status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "draft"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "\"ad.code\"",
+          "source": [
+            {
+              "context": "src",
+              "element": "code",
+              "variable": "vvv"
+            }
+          ],
+          "target": [
+            {
+              "context": "tgt",
+              "contextType": "variable",
+              "element": "code",
+              "variable": "vvv",
+              "transform": "create"
+            }
+          ],
+          "documentation": "\"ad.occurance\": for src.timing make tgt.occurrence"
+        }
+      ]
+    }
+  ]
+}
