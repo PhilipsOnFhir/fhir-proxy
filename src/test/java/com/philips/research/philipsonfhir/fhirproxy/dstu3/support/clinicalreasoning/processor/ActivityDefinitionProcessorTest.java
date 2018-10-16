@@ -94,6 +94,8 @@ public class ActivityDefinitionProcessorTest {
             )
         ;
 
+        System.out.println(ourCtx.newJsonParser().setPrettyPrint( true ).encodeResourceToString( parameters ));
+
         IBaseResource result = structureMapTransformServer.doTransform( structureMap, parameters, null );
         assertNotNull( result );
         System.out.println(ourCtx.newJsonParser().setPrettyPrint( true ).encodeResourceToString( result ));

@@ -10,7 +10,7 @@ group main
     input src: Parameters as source
     input tgt: ProcedureRequest as target
 
-    "ad.subject" : for src.parameter as p1 where p1.name="subject" then {
+    "ad.subject" : for src.parameter as p1 where name='subject' then {
         "sbj": for p1.value as sbj make tgt.subject = sbj
     }
 //
@@ -23,21 +23,13 @@ group main
 //    }
 //
 //
-    "ad.context" : for src.parameter as p2 where p2.name="encounter" then {
+    "ad.context" : for src.parameter as p2 where name='encounter' then {
         "enc": for p2.value as enc make tgt.context = enc
     }
 
-    actded: for src.parameter as p3 where p3.name="source" then {
+    actded: for src.parameter as p3 where name='source' then {
         do: for p3.resource as ad then createActDef( ad, tgt )
     }
-endgroup
-
-group createReference
-    input src as source
-    input tgt:Reference as target
-
-    reference: for src.value as pid make tgt.reference = pid
-
 endgroup
 
 group createActDef
