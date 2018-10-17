@@ -2,7 +2,7 @@ package com.philips.research.philipsonfhir.fhirproxy.dstu3.support.clinicalreaso
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
-import com.philips.research.philipsonfhir.TestUtil;
+import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.NotImplementedException;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.clinicalreasoning.cql.MyWorkerContext;
 import org.hl7.fhir.dstu3.hapi.validation.DefaultProfileValidationSupport;
 import org.hl7.fhir.dstu3.model.*;
@@ -11,8 +11,13 @@ import org.hl7.fhir.exceptions.FHIRException;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.opencds.cqf.cql.data.fhir.BaseFhirDataProvider;
+import org.opencds.cqf.cql.data.fhir.FhirDataProviderStu3;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Date;
 import java.util.stream.Collectors;
 
@@ -38,7 +43,7 @@ public class ActivityDefinitionProcessorTest {
     }
 
     @Test
-    public void testProcedureRequestFull() throws FHIRException, IOException {
+    public void testProcedureRequest() throws FHIRException, IOException {
         String mapStr = "";
         String mapJsonStr = "";
         StructureMap structureMap = getStructureMap( mapStr );
@@ -60,6 +65,7 @@ public class ActivityDefinitionProcessorTest {
                 .setValue( new Reference( "Patient/patientid" ) )
             )
             ;
+        System.out.println( ourCtx.newJsonParser().setPrettyPrint( true ).encodeResourceToString( parameters ) );
 
         IBaseResource result = structureMapTransformServer.doTransform( structureMap, parameters, null );
         assertNotNull( result );
@@ -139,58 +145,36 @@ public class ActivityDefinitionProcessorTest {
     }
 
     @Test
-    public void testProcedureRequest() throws FHIRException, IOException {
-
-
-        StructureMap structureMap;
-        String mapStr = "";
-        String mapJsonStr = "";
-        structureMap = getStructureMap( mapStr );
-
+    public void testCommunication() throws FHIRException, IOException, NotImplementedException {
         ActivityDefinition activityDefinition = (ActivityDefinition) new ActivityDefinition(  )
-            .setTiming(  new Timing().addEvent( new Date( ) ) )
+            .setKind( ActivityDefinition.ActivityDefinitionKind.COMMUNICATION )
+//            .setTiming(  new Timing().addEvent( new Date( ) ) )
             .setCode( new CodeableConcept().addCoding( new Coding( ).setCode( "2233" ).setSystem( "a" ) ) )
-            .addDosage( new Dosage().setText( "aaa" ) )
-            .setProduct( new Reference(  ).setReference( "Substance/sdakdjasl" ) )
-            .setId( "AdGenProcedureRequest" );
+//            .addBodySite( new CodeableConcept().addCoding( new Coding( ).setSystem( "http://example.com").setCode( "someCode" ) ) )
+            .setId( "Ad2Communication" );
 
-        System.out.println(ourCtx.newJsonParser().setPrettyPrint( true ).encodeResourceToString( structureMap ));
-        TestUtil.storeResource(  structureMap );
-        TestUtil.storeResource(  activityDefinition );
+        BaseFhirDataProvider baseFhirDataProvider = new FhirDataProviderStu3().setEndpoint( "http://somesever" );
+        ActivityDefinitionProcessor activityDefinitionProcessor;
 
-        File rscFile = new File("example/"+structureMap.getResourceType()+"-"+structureMap.getId()+".fhirmap");
-        FileWriter writer = new FileWriter( rscFile );
-        writer.write( StructureMapUtilities.render( structureMap ));
-        writer.close();
+        activityDefinitionProcessor = new ActivityDefinitionProcessor( baseFhirDataProvider, activityDefinition, "Patient/patientId" );
+        IBaseResource resource = activityDefinitionProcessor.getResult();
+        assertNotNull( resource );
+        assertTrue( resource instanceof Communication );
+        Communication communication = (Communication) resource;
 
-        Parameters parameters = new Parameters()
-            .addParameter( new Parameters.ParametersParameterComponent(  )
-                .setName( "source" )
-                .setResource( activityDefinition )
-            )
-            .addParameter( new Parameters.ParametersParameterComponent(  )
-                .setName( "subject" )
-                .setValue( new Reference( "Patient/patientid" ) )
-            )
-            .addParameter( new Parameters.ParametersParameterComponent(  )
-                .setName( "encounter" )
-                .setValue( new Reference( "Encounter/encounterid" ) )
-            )
-            .addParameter( new Parameters.ParametersParameterComponent(  )
-                .setName( "practitioner" )
-                .setValue( new Reference( "Practioner/practionerId" ) )
-            )
-            .addParameter( new Parameters.ParametersParameterComponent(  )
-                .setName( "organization" )
-                .setValue( new Reference( "Organization/organizationId" ) )
-            )
-        ;
+        assertEquals( "Patient/patientId", communication.getSubject().getReference() );
+        assertEquals("ActivityDefinition/"+activityDefinition.getId(),communication.getBasedOnFirstRep().getReference()  );
+        assertEquals( Communication.CommunicationStatus.PREPARATION, communication.getStatus() );
+        assertEquals( activityDefinition.getCode(), communication.getReasonCodeFirstRep() );
 
-        System.out.println(ourCtx.newJsonParser().setPrettyPrint( true ).encodeResourceToString( parameters ));
+        activityDefinitionProcessor = new ActivityDefinitionProcessor( baseFhirDataProvider, activityDefinition, "Patient/patientId","Encounter/encounterId", "Practitioner/pracId", "Organization/orgId", null, null, null, null, null );
+        communication = (Communication) activityDefinitionProcessor.getResult();
+        assertEquals( "Encounter/encounterId", communication.getContext().getReference() );
+        assertEquals( "Practitioner/pracId", communication.getSender().getReference() );
 
-        IBaseResource result = structureMapTransformServer.doTransform( structureMap, parameters, null );
-        assertNotNull( result );
-        System.out.println(ourCtx.newJsonParser().setPrettyPrint( true ).encodeResourceToString( result ));
+        activityDefinitionProcessor = new ActivityDefinitionProcessor( baseFhirDataProvider, activityDefinition, "Patient/patientId","Encounter/encounterId", null, "Organization/orgId", null, null, null, null, null );
+        communication = (Communication) activityDefinitionProcessor.getResult();
+        assertEquals( "Organization/orgId", communication.getSender().getReference() );
     }
 
     private StructureMap getStructureMap(String mapStr) throws FHIRException {

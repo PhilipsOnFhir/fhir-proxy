@@ -47,7 +47,13 @@ public class StructureMapTransformOperation extends FhirResourceInstanceOperatio
 
                 StructureMapTransformServer structureMapTransformServer = new StructureMapTransformServer( client );
 
-                IBaseResource result = structureMapTransformServer.doTransform( resourceId, contentRsource, null );
+                StructureMap structuredMap =
+                       client.read().resource( StructureMap.class ).withId( resourceId ).execute();
+                if ( structuredMap==null ){
+                    throw new FHIRException( "StructureMap "+resourceId+" can not be found" );
+                }
+
+                IBaseResource result = structureMapTransformServer.doTransform( structuredMap, contentRsource, null );
                 return result;
             }
 

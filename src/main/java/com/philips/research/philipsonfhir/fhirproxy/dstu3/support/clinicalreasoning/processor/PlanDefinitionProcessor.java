@@ -51,19 +51,19 @@ public class PlanDefinitionProcessor {
     }
     ///////////////////////////////////////
 
-    public PlanDefinitionProcessor(BaseFhirDataProvider dataSource, PlanDefinition planDefinition, String patientId) throws FHIRException, NotImplementedException {
-        initialize();
-
-        this.planDefinition = planDefinition;
-        process( fhirDataProvider, patientId, encounterId, practitionerId, organizationId, userType, userLanguage, userTaskContext, setting, settingContext );
-    }
-
-    public PlanDefinitionProcessor(BaseFhirDataProvider dataProvider, List<Object> contextParameters, PlanDefinition planDefinition, String patientId) throws FHIRException, NotImplementedException {
-        initialize();
-        this.contextParameters = contextParameters;
-        this.planDefinition = planDefinition;
-        process( fhirDataProvider, patientId, encounterId, practitionerId, organizationId, userType, userLanguage, userTaskContext, setting, settingContext );
-    }
+//    public PlanDefinitionProcessor(BaseFhirDataProvider dataSource, PlanDefinition planDefinition, String patientId) throws FHIRException, NotImplementedException {
+//        initialize();
+//
+//        this.planDefinition = planDefinition;
+//        process( fhirDataProvider, patientId, encounterId, practitionerId, organizationId, userType, userLanguage, userTaskContext, setting, settingContext );
+//    }
+//
+//    public PlanDefinitionProcessor(BaseFhirDataProvider dataProvider, List<Object> contextParameters, PlanDefinition planDefinition, String patientId) throws FHIRException, NotImplementedException {
+//        initialize();
+//        this.contextParameters = contextParameters;
+//        this.planDefinition = planDefinition;
+//        process( fhirDataProvider, patientId, encounterId, practitionerId, organizationId, userType, userLanguage, userTaskContext, setting, settingContext );
+//    }
 
     public PlanDefinitionProcessor(BaseFhirDataProvider fhirDataProvider
         , IdType planDefinitionId
@@ -345,7 +345,13 @@ public class PlanDefinitionProcessor {
             try {
                 StructureMapTransformServer structureMapTransformServer = new StructureMapTransformServer( fhirDataProvider.getFhirClient() );
                 Resource result=null;
-                resource = (Resource) structureMapTransformServer.doTransform( planDefinitionAction.getDefinition().getReferenceElement().getIdPart(), planDefinition, result  );
+                String structureMapId = planDefinitionAction.getDefinition().getReferenceElement().getIdPart();
+                StructureMap structuredMap =
+                    fhirDataProvider.getFhirClient().read().resource( StructureMap.class ).withId( structureMapId ).execute();
+                if ( structuredMap==null ){
+                    throw new FHIRException( "StructureMap "+structureMapId+" can not be found" );
+                }
+                resource = (Resource) structureMapTransformServer.doTransform( structuredMap, planDefinition, result  );
             }catch ( FHIRException e ) {
                 throw new RuntimeException( "Error applying StructureMap " + e.getMessage() );
             }

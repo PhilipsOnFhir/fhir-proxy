@@ -18,18 +18,20 @@ import java.util.stream.Collectors;
 
 public class StructureMapTransformServer {
 
-    private final IGenericClient fhirClient;
+//    private final IGenericClient fhirClient;
     private static final DefaultProfileValidationSupport defaultProfileValidationSupport = new DefaultProfileValidationSupport();
+    private final MyWorkerContext hapiWorkerContext;
 
     public StructureMapTransformServer(IGenericClient fhirClient){
-        this.fhirClient = fhirClient;
+//        this.fhirClient = fhirClient;
+        hapiWorkerContext = new MyWorkerContext( fhirClient.getFhirContext(), defaultProfileValidationSupport );
     }
 
-    public IBaseResource doTransform(String id, Resource content, Resource result) throws FHIRException {
-        StructureMap structuredMap =
-            fhirClient.read().resource( StructureMap.class ).withId( id ).execute();
-        return doTransform(  structuredMap, content, result  );
-    }
+//    public IBaseResource doTransform(String id, Resource content, Resource result) throws FHIRException {
+//        StructureMap structuredMap =
+//            fhirClient.read().resource( StructureMap.class ).withId( id ).execute();
+//        return doTransform(  structuredMap, content, result  );
+//    }
 
     public IBaseResource doTransform( StructureMap structuredMap, Resource content, Resource result) throws FHIRException {
 
@@ -59,7 +61,6 @@ public class StructureMapTransformServer {
             }
         }
         // 3 process structure map
-        MyWorkerContext hapiWorkerContext = new MyWorkerContext( fhirClient.getFhirContext(), defaultProfileValidationSupport );
 
         // TODO Map should contain all structure maps.
         Map<String, StructureMap> mapTreeMap = new TreeMap<>();

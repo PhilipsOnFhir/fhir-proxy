@@ -1,0 +1,27 @@
+map "http://research.philips.com/fhir/dstu3/mapping/AdToProcedureRequest" =
+    "R3 Parameters of Activitydefinition.$apply to ProcedureRequest"
+
+uses "http://hl7.org/fhir/StructureDefinition/Parameters"       as source
+uses "http://hl7.org/fhir/StructureDefinition/ProcedureRequest" as target
+
+group main
+    input src: Parameters as source
+    input tgt: ProcedureRequest as target
+
+    subject : for src.parameter as p where p.name="subject" then createReference( p, tgt.subject )
+    }
+endgroup
+
+group createReference
+    input src as source
+    input tgt:Reference as target
+
+    reference: for p.value make tgt.reference = pid
+
+endgroup
+
+    subject : for src.parameter as p where p.name="subject" then {
+        patientParameter: for p.value as pid make create(Reference) tgt.subject as ref then {
+            pop: for ref.reference make pid
+        }
+    }
