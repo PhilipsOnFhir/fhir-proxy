@@ -135,6 +135,10 @@ public class ActivityDefinitionProcessor  {
             );
         }
 
+        if ( !activityDefinition.hasKind() ){
+            throw new FHIRException( "ActivityDefinition.kind is not set" );
+        }
+
         InputStream is = getClass().getClassLoader().getResourceAsStream( "dstu3/"+activityDefinition.getKind().toCode()+".fhirmap" );
         if ( is != null ) {
             BufferedReader reader = new BufferedReader( new InputStreamReader( is ) );
