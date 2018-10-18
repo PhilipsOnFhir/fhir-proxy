@@ -38,9 +38,9 @@ group createActDef
     input src: ActivityDefinition as source
     input tgt: ProcedureRequest as target
 
-    "basedOn"      : for src                 make  tgt.definition = reference( src )
+    "basedOn"      : for src                 make  tgt.basedOn = reference( src )
     "status"       : for src                 make  tgt.status = "draft"
-    "authoredOn"   : for src                 make  tgt.authoredOn = Now()
+    "authoredOn"   : for src                 make  tgt.authoredOn = evaluate( src, now() )
     "ad.code"      : for src.code     as vvv make  tgt.reasonCode = vvv
     "ad.timing"    : for src.timing   as vvv make  tgt.occurrence = vvv
     "ad.location"  : for src          as vvv check location.empty()

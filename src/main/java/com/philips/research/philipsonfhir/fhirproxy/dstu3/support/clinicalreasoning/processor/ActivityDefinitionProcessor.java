@@ -30,7 +30,7 @@ public class ActivityDefinitionProcessor  {
     private Logger logger = Logger.getLogger( this.getClass().getName());
     private final ActivityDefinition activityDefinition;
     private BaseFhirDataProvider fhirDataProvider;
-    private StructureMapTransformServer transformServer = null;
+    private static StructureMapTransformServer transformServer = null;
     private CqlExecutionProvider executionProvider;
 
     ///////////////////////////////////////
@@ -49,6 +49,9 @@ public class ActivityDefinitionProcessor  {
         }
         if ( structureMapUtilities==null ) {
             structureMapUtilities = new StructureMapUtilities( new MyWorkerContext( ourCtx, new DefaultProfileValidationSupport() ) );
+        }
+        if ( transformServer==null ) {
+            transformServer = new StructureMapTransformServer( ourCtx );
         }
     }
     ///////////////////////////////////////
@@ -93,7 +96,7 @@ public class ActivityDefinitionProcessor  {
     public Resource resolveActivityDefinition(ActivityDefinition activityDefinition, String patientId,
                                               String practitionerId, String organizationId, String encounterId)
         throws FHIRException, NotImplementedException {
-        transformServer = new StructureMapTransformServer( fhirDataProvider.getFhirClient() );
+
         // create result resource
         result = null;
 //        try {

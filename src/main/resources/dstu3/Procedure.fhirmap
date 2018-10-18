@@ -1,12 +1,12 @@
-map "http://research.philips.com/fhir/dstu3/mapping/AdToProcedureRequest" =
-    "R3 Parameters of Activitydefinition.$apply to ProcedureRequest"
+map "http://research.philips.com/fhir/dstu3/mapping/AdToProcedure" =
+    "R3 Parameters of Activitydefinition.$apply to Procedure"
 
 uses "http://hl7.org/fhir/StructureDefinition/Parameters"       as source
-uses "http://hl7.org/fhir/StructureDefinition/ProcedureRequest" as target
+uses "http://hl7.org/fhir/StructureDefinition/Procedure" as target
 
 group main
     input src: Parameters as source
-    input tgt: ProcedureRequest as target
+    input tgt: Procedure as target
 
     "subject" : for src.parameter as p where name='subject' then {
         do: for p.value as sbj make tgt.subject = sbj
@@ -36,7 +36,7 @@ endgroup
 
 group createActDef
     input src: ActivityDefinition as source
-    input tgt: ProcedureRequest as target
+    input tgt: Procedure as target
 
     "basedOn"      : for src                 make  tgt.basedOn = reference( src )
     "status"       : for src                 make  tgt.status = "preparation"

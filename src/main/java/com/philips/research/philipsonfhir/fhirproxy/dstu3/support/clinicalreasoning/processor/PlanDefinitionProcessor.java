@@ -39,6 +39,7 @@ public class PlanDefinitionProcessor {
     private static MyWorkerContext hapiWorkerContext;
     private static final FhirContext ourCtx = FhirContext.forDstu3();
     private static FHIRPathEngine fhirPathEngine ;
+    private static StructureMapTransformServer structureMapTransformServer = null;
 
 
     public static void initialize(){
@@ -47,6 +48,9 @@ public class PlanDefinitionProcessor {
         }
         if ( fhirPathEngine==null ) {
             fhirPathEngine = new FHIRPathEngine( hapiWorkerContext );
+        }
+        if( structureMapTransformServer==null ){
+            structureMapTransformServer = new StructureMapTransformServer( ourCtx );
         }
     }
     ///////////////////////////////////////
@@ -343,7 +347,6 @@ public class PlanDefinitionProcessor {
             }
         } else if (definitionType.equals( ResourceType.StructureMap.name() )){
             try {
-                StructureMapTransformServer structureMapTransformServer = new StructureMapTransformServer( fhirDataProvider.getFhirClient() );
                 Resource result=null;
                 String structureMapId = planDefinitionAction.getDefinition().getReferenceElement().getIdPart();
                 StructureMap structuredMap =

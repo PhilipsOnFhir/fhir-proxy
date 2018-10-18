@@ -18,11 +18,13 @@ import java.util.Optional;
 public class StructureMapTransformOperation extends FhirResourceInstanceOperation {
     private final IGenericClient client;
     private final String url;
+    private StructureMapTransformServer structureMapTransformServer;
 
     public StructureMapTransformOperation(String url, IGenericClient client) throws FHIRException {
         super( ResourceType.StructureMap.name(), "$transform" );
         this.client = client;
         this.url = url;
+        this.structureMapTransformServer = new StructureMapTransformServer( client.getFhirContext() );
     }
 
     @Override
@@ -44,8 +46,6 @@ public class StructureMapTransformOperation extends FhirResourceInstanceOperatio
                     throw new FHIRException( "missing content parameter" );
                 }
                 Resource contentRsource = optResource.get();
-
-                StructureMapTransformServer structureMapTransformServer = new StructureMapTransformServer( client );
 
                 StructureMap structuredMap =
                        client.read().resource( StructureMap.class ).withId( resourceId ).execute();

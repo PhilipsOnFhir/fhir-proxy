@@ -41,7 +41,7 @@ group createActDef
     "basedOn"      : for src                 make tgt.definition = reference( src )
     "status"       : for src                 make tgt.status = "draft"
     "intent"       : for src                 make tgt.intent = "proposal"
-    "äuthoredOn"   : for src                 make tgt.authoredOn = Now()
+    "äuthoredOn"   : for src                 make tgt.authoredOn = evaluate( src, now() )
     "ad.code"      : for src          as vvv check code.empty()
     "ad.timing"    : for src.timing   as vvv make tgt.dispenseRequest as dr then {
         do: for vvv make dr.validityPeriod = vvv

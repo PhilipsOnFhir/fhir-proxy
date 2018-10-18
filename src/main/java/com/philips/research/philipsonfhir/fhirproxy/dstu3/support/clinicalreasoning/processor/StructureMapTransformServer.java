@@ -1,6 +1,6 @@
 package com.philips.research.philipsonfhir.fhirproxy.dstu3.support.clinicalreasoning.processor;
 
-import ca.uhn.fhir.rest.client.api.IGenericClient;
+import ca.uhn.fhir.context.FhirContext;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.clinicalreasoning.cql.MyWorkerContext;
 import org.hl7.fhir.dstu3.hapi.validation.DefaultProfileValidationSupport;
 import org.hl7.fhir.dstu3.model.Resource;
@@ -18,20 +18,12 @@ import java.util.stream.Collectors;
 
 public class StructureMapTransformServer {
 
-//    private final IGenericClient fhirClient;
     private static final DefaultProfileValidationSupport defaultProfileValidationSupport = new DefaultProfileValidationSupport();
     private final MyWorkerContext hapiWorkerContext;
 
-    public StructureMapTransformServer(IGenericClient fhirClient){
-//        this.fhirClient = fhirClient;
-        hapiWorkerContext = new MyWorkerContext( fhirClient.getFhirContext(), defaultProfileValidationSupport );
+    public StructureMapTransformServer(FhirContext ourCtx){
+        hapiWorkerContext = new MyWorkerContext( ourCtx, defaultProfileValidationSupport );
     }
-
-//    public IBaseResource doTransform(String id, Resource content, Resource result) throws FHIRException {
-//        StructureMap structuredMap =
-//            fhirClient.read().resource( StructureMap.class ).withId( id ).execute();
-//        return doTransform(  structuredMap, content, result  );
-//    }
 
     public IBaseResource doTransform( StructureMap structuredMap, Resource content, Resource result) throws FHIRException {
 
