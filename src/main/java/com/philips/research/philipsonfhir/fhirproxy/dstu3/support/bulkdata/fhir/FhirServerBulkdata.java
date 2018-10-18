@@ -106,4 +106,9 @@ public class FhirServerBulkdata implements IFhirServer {
     public FhirContext getCtx() {
         return this.fhirServer.getCtx();
     }
+
+    @Override
+    public String getUrl() {
+        return this.fhirServer.getUrl();
+    }
 }

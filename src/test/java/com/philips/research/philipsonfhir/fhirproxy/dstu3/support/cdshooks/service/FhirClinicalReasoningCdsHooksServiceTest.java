@@ -55,4 +55,37 @@ public class FhirClinicalReasoningCdsHooksServiceTest {
         assertEquals( pd2.getDescription(), cdsService.getDescription() );
     }
 
+//    @Test
+//    public void callService() throws FHIRException, NotImplementedException {
+//        IFhirServer fhirServer = mock( FhirServer.class );
+//        String resourceType = "PlanDefinition";
+//
+//        Bundle bundle = new Bundle(  );
+//
+//        when ( fhirServer.searchResource( resourceType,null )).thenReturn( bundle );
+//        when ( fhirServer.getUrl()).thenReturn( "http://dummyServer" );
+//
+//        FhirClinicalReasoningCdsHooksService fhirClinicalReasoningCdsHooksService = new FhirClinicalReasoningCdsHooksService( fhirServer );
+//
+//        PlanDefinition pd3 = (PlanDefinition) new PlanDefinition(  )
+//            .setTitle( "PD title" )
+//            .addAction( new PlanDefinition.PlanDefinitionActionComponent()
+//                .addTriggerDefinition( new TriggerDefinition(  )
+//                    .setType( TriggerDefinition.TriggerType.NAMEDEVENT )
+//                    .setEventName( "patient-view" )
+//                )
+//                .setTitle( "sometitle" )
+//                .setDescription( "somedescription" )
+//            )
+//            .setId("pd3");
+//        bundle.addEntry( new Bundle.BundleEntryComponent().setResource( pd3 ) );
+//
+//        CdsServiceCallBody cdsServiceCallBody = new CdsServiceCallBody();
+//        cdsServiceCallBody.setHook( "patient-view" );
+//        cdsServiceCallBody.setUser( "Practioner/pracId" );
+//        Context context = new Context();
+//        context.setPatientId( "Patient/somePatientId" );
+//        cdsServiceCallBody.setContext(  context );
+//        fhirClinicalReasoningCdsHooksService.callCdsService( pd3.getId(), cdsServiceCallBody );
+//    }
 }

@@ -18,10 +18,11 @@ import java.util.Map;
 public class FhirServerService implements IFhirServer {
     IFhirServer fhirServer;
 
+    String url = "http://measure.eval.kanvix.com/cqf-ruler/baseDstu3";
+//    String url = "http://localhost:9500/baseDstu3";
+
     public FhirServerService() {
-//        super("http://hapi.fhir.org/baseDstu3");
-//        FhirServerBulkdata fhirServerBulkdata = new FhirServerBulkdata( new FhirServer("http://localhost:9500/baseDstu3"));
-        FhirServerBulkdata fhirServerBulkdata = new FhirServerBulkdata( new FhirServer("http://measure.eval.kanvix.com/cqf-ruler/baseDstu3" ));
+        FhirServerBulkdata fhirServerBulkdata = new FhirServerBulkdata( new FhirServer( url ));
 
         fhirServer = fhirServerBulkdata;
     }
@@ -74,5 +75,10 @@ public class FhirServerService implements IFhirServer {
     @Override
     public FhirContext getCtx() {
         return fhirServer.getCtx();
+    }
+
+    @Override
+    public String getUrl() {
+        return this.url;
     }
 }

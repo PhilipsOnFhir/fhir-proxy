@@ -84,7 +84,10 @@ public class FhirClinicalReasoningCdsHooksService {
 
 //        FhirServer contentFhirServer = new FhirServer( requestBody.getFhirServer() );
 
-        BaseFhirDataProvider baseFhirDataProvider = new FhirDataProviderStu3().setEndpoint( requestBody.getFhirServer() );
+        BaseFhirDataProvider baseFhirDataProvider = new FhirDataProviderStu3().setEndpoint( this.fhirServer.getUrl() );
+        if ( requestBody.getFhirServer()!=null ) {
+            baseFhirDataProvider = new FhirDataProviderStu3().setEndpoint( requestBody.getFhirServer() );
+        }
         IdType idType = new IdType( ).setValue( "PlanDefinition/"+serviceId );
 
         Map<String, String > contextParameters =  processContext( requestBody.getHook(), requestBody.getUser(), requestBody.getContext() );
@@ -122,7 +125,7 @@ public class FhirClinicalReasoningCdsHooksService {
         return result;
     }
 
-    private List<Card> carePlanToCards(CarePlan carePlan) {
+    private List<Card> carePlanToCards(CarePlan carePlan) throws NotImplementedException {
         // what process to take?
         /*
          ? each trigger results in a card?

@@ -220,4 +220,9 @@ public class FhirServer implements IFhirServer {
         return ourCtx;
     }
 
+    @Override
+    public String getUrl() {
+        return this.fhirUrl;
+    }
+
 }

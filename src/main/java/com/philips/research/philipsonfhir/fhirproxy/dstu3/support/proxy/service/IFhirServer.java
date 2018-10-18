@@ -37,4 +37,5 @@ public interface IFhirServer {
 
     FhirContext getCtx();
 
+    String getUrl();
 }

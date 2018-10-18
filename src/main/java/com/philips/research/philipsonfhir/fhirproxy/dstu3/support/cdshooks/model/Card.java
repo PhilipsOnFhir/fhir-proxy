@@ -3,6 +3,7 @@ package com.philips.research.philipsonfhir.fhirproxy.dstu3.support.cdshooks.mode
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Setter
@@ -12,6 +13,6 @@ public class Card {
     String detail;
     String indicator;
     Source source;
-    List<Suggestion> suggestions;
+    List<Suggestion> suggestions = new ArrayList<>(  );
     List<Link> links;
 }

@@ -3,6 +3,7 @@ package com.philips.research.philipsonfhir.fhirproxy.dstu3.support.cdshooks.mode
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -10,5 +11,5 @@ import java.util.List;
 public class Suggestion {
     String label;
     String uuid;
-    List<Action> actions;
+    List<Action> actions = new ArrayList<>(  );
 }

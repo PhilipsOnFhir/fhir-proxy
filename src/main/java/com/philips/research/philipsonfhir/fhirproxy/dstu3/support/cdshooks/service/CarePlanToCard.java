@@ -1,55 +1,71 @@
 package com.philips.research.philipsonfhir.fhirproxy.dstu3.support.cdshooks.service;
 
+import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.NotImplementedException;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.cdshooks.model.*;
 import org.hl7.fhir.dstu3.model.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class CarePlanToCard {
 
-    public static List<Card> convert(CarePlan carePlan) {
+    public static List<Card> convert(CarePlan carePlan) throws NotImplementedException {
+
         List<Card> cards = new ArrayList<>();
 
         for (CarePlan.CarePlanActivityComponent activity : carePlan.getActivity()) {
             if (activity.getReferenceTarget() != null && activity.getReferenceTarget() instanceof RequestGroup) {
                 RequestGroup requestGroup = (RequestGroup) activity.getReferenceTarget();
-                cards = convert(requestGroup);
+                cards = convert(carePlan, requestGroup);
+            }
+            if (activity.getReference() != null && activity.getReference().getReference().startsWith( "#" ) ) {
+                String reference = activity.getReference().getReference();
+                Optional<Resource> optRG = carePlan.getContained().stream()
+                    .filter( resource -> reference.substring( 1 ).equals( resource.getId() ) )
+                    .findFirst();
+                if (optRG.isPresent()) {
+                    RequestGroup requestGroup = (RequestGroup) optRG.get();
+                    cards = convert( carePlan, requestGroup );
+                }
+            }
+            else {
+                throw new NotImplementedException( "Retrieval of repository stored request groups is not supported." );
             }
         }
 
         return cards;
     }
 
-    private static List<Card> convert(RequestGroup requestGroup) {
+    private static List<Card> convert( CarePlan carePlan, RequestGroup requestGroup) throws NotImplementedException {
         List<Card> cards = new ArrayList<>();
 
         // links
         List<Link> links = new ArrayList<>();
-        if (requestGroup.hasExtension()) {
-            for (Extension extension : requestGroup.getExtension()) {
-                Link link = new Link();
-
-                if (extension.getValue() instanceof Attachment) {
-                    Attachment attachment = (Attachment) extension.getValue();
-                    if (attachment.hasUrl()) {
-                        link.setUrl(attachment.getUrl());
-                    }
-                    if (attachment.hasTitle()) {
-                        link.setLabel(attachment.getTitle());
-                    }
-                    if (attachment.hasExtension()) {
-                        link.setType(attachment.getExtensionFirstRep().getValue().primitiveValue());
-                    }
-                }
-
-                else {
-                    throw new RuntimeException("Invalid link extension type: " + extension.getValue().fhirType());
-                }
-
-                links.add(link);
-            }
-        }
+//        if (requestGroup.hasExtension()) {
+//            for (Extension extension : requestGroup.getExtension()) {
+//                Link link = new Link();
+//
+//                if (extension.getValue() instanceof Attachment) {
+//                    Attachment attachment = (Attachment) extension.getValue();
+//                    if (attachment.hasUrl()) {
+//                        link.setUrl(attachment.getUrl());
+//                    }
+//                    if (attachment.hasTitle()) {
+//                        link.setLabel(attachment.getTitle());
+//                    }
+//                    if (attachment.hasExtension()) {
+//                        link.setType(attachment.getExtensionFirstRep().getValue().primitiveValue());
+//                    }
+//                }
+//
+//                else {
+//                    throw new RuntimeException("Invalid link extension type: " + extension.getValue().fhirType());
+//                }
+//
+//                links.add(link);
+//            }
+//        }
 
         if (requestGroup.hasAction()) {
             for (RequestGroup.RequestGroupActionComponent action : requestGroup.getAction()) {
@@ -85,27 +101,20 @@ public class CarePlanToCard {
 
                 // suggestions
                 // TODO - uuid
-                boolean hasSuggestions = false;
-                Suggestion suggestions = new Suggestion();
-                Action actions = new Action();
-                if (action.hasLabel()) {
-                    suggestions.setLabel(action.getLabel());
-                    hasSuggestions = true;
-                    if (action.hasDescription()) {
-                        actions.setDescription(action.getDescription());
-                    }
-                    if (action.hasType() && !action.getType().getCode().equals("fire-event")) {
-                        String code = action.getType().getCode();
-                        actions.setType( Action.ActionType.valueOf(code.equals("remove") ? "delete" : code));
-                    }
-                    if (action.hasResource()) {
-                        actions.setResource(action.getResourceTarget());
-                    }
+                for ( RequestGroup.RequestGroupActionComponent subAction : action.getAction() ){
+                    Suggestion suggestion = new Suggestion();
+                    suggestion.setLabel(action.getLabel());
+
+                    Action suggestionAction = new Action();
+                    suggestionAction.setType( Action.ActionType.valueOf( subAction.getType().getCode() ) );
+                    suggestionAction.setDescription( action.getLabel()+ " " + action.getTitle()+ " " + action.getDescription() );
+                    Resource resource = getResource( carePlan, subAction.getResource() );
+                    suggestionAction.setResource( resource );
+
+                    suggestion.getActions().add( suggestionAction );
+                    card.getSuggestions().add( suggestion );
                 }
-                if (hasSuggestions) {
-                    suggestions.getActions().add(actions);
-                    card.getSuggestions().add(suggestions);
-                }
+
                 if (!links.isEmpty()) {
                     card.setLinks(links);
                 }
@@ -114,5 +123,18 @@ public class CarePlanToCard {
         }
 
         return cards;
+    }
+
+    private static Resource getResource(CarePlan carePlan, Reference reference) throws NotImplementedException {
+
+        if ( reference != null && reference.getReference().startsWith( "#" ) ) {
+            Optional<Resource> optRG = carePlan.getContained().stream()
+                .filter( resource -> reference.getReference().substring( 1 ).equals( resource.getId() ) )
+                .findFirst();
+            if ( optRG.isPresent() ) {
+                return optRG.get();
+            }
+        }
+        throw new NotImplementedException( "Reference " + reference.getReference() + " does not point to a resource contained in Careplan" );
     }
 }
