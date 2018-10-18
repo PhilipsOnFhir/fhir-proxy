@@ -67,8 +67,8 @@ public class ActivityDefinitionProcessorTest {
         assertEquals( patientID, referralRequest.getSubject().getReference() );
         assertEquals( ReferralRequest.ReferralRequestStatus.DRAFT, referralRequest.getStatus() );
         assertEquals( "ActivityDefinition/" + activityDefinition.getId(), referralRequest.getDefinition().get( 0 ).getReference() );
-        assertEquals( coding.getSystem(), referralRequest.getSpecialty().getCodingFirstRep() .getSystem() );
-        assertEquals( coding.getCode(), referralRequest.getSpecialty().getCodingFirstRep() .getCode() );
+        assertEquals( coding.getSystem(), referralRequest.getType().getCodingFirstRep() .getSystem() );
+        assertEquals( coding.getCode(), referralRequest.getType().getCodingFirstRep() .getCode() );
     }
 
     @Test

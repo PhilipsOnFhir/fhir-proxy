@@ -1,12 +1,12 @@
-map "http://research.philips.com/fhir/dstu3/mapping/AdToProcedureRequest" =
-    "R3 Parameters of Activitydefinition.$apply to ProcedureRequest"
+map "http://research.philips.com/fhir/dstu3/mapping/AdToObservation" =
+    "R3 Parameters of Activitydefinition.$apply to Observation"
 
 uses "http://hl7.org/fhir/StructureDefinition/Parameters"       as source
-uses "http://hl7.org/fhir/StructureDefinition/ProcedureRequest" as target
+uses "http://hl7.org/fhir/StructureDefinition/Observation" as target
 
 group main
     input src: Parameters as source
-    input tgt: ProcedureRequest as target
+    input tgt: Observation as target
 
     "subject" : for src.parameter as p where name='subject' then {
         do: for p.value as sbj make tgt.subject = sbj
@@ -14,13 +14,13 @@ group main
 
     "practitioner" : for src.parameter as p where name='practitioner' then{
         do: for p.value as prac make tgt.performer=prac
-        }
     }
+
 
     "organization" : for src.parameter as p where name='organization' then{
         do: for p.value as org make tgt.performer=org
-        }
     }
+
 
     "context" : for src.parameter as p where name='encounter' then {
         do: for p.value as enc make tgt.context = enc
@@ -34,11 +34,11 @@ endgroup
 
 group createActDef
     input src: ActivityDefinition as source
-    input tgt: ProcedureRequest as target
+    input tgt: Observation as target
 
-//    "basedOn"      : for src                 make tgt.basedOn = reference( src )
+    "basedOn"      : for src                 make tgt.basedOn = reference( src )
     "status"       : for src                 make tgt.status = "preliminary"
-    "issued"       : for src                 make tgt.issued = Now()
+    "issued"       : for src                 make tgt.issued = evaluate( src, now() )
     "ad.code"      : for src.code     as vvv make tgt.code = vvv
     "ad.timing"    : for src.timing   as vvv make tgt.effective = vvv
     "ad.location"  : for src          as vvv check location.empty()

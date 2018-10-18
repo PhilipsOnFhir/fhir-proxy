@@ -286,4 +286,29 @@ public class ActivityDefinitionProcessorTest {
         assertTrue( resource instanceof SupplyRequest );
         SupplyRequest supplyRequest = (SupplyRequest) resource;
     }
+
+    @Test
+    public void testObservation() throws FHIRException, IOException, NotImplementedException {
+        ActivityDefinition activityDefinition = (ActivityDefinition) new ActivityDefinition()
+            .setKind( ActivityDefinition.ActivityDefinitionKind.OBSERVATION )
+            .setTiming( new Timing().addEvent( new Date() ) )
+            .setCode( new CodeableConcept().addCoding( new Coding().setCode( "2233" ).setSystem( "a" ) ) )
+//            .setLocation( new Reference(  ).setReference( "Location/locationId" ) )
+//            .setProduct( new Reference(  ).setReference( "Medication/medicationId" ) )
+            .setQuantity( (SimpleQuantity) new SimpleQuantity().setValue( 684 ) )
+            .addBodySite( new CodeableConcept().addCoding( new Coding(  ).setCode( "bodysite" ).setSystem( "http:/bodysitesystem" ) ) )
+//            .addDosage( new Dosage().setText("dosage info") )
+            .setId( "Ad2Observation" );
+
+        TestUtil.storeResource( activityDefinition );
+
+        BaseFhirDataProvider baseFhirDataProvider = new FhirDataProviderStu3().setEndpoint( "http://somesever" );
+        ActivityDefinitionProcessor activityDefinitionProcessor;
+
+        activityDefinitionProcessor = new ActivityDefinitionProcessor( baseFhirDataProvider, activityDefinition, "Patient/patientId" );
+        IBaseResource resource = activityDefinitionProcessor.getResult();
+        assertNotNull( resource );
+        assertTrue( resource instanceof Observation );
+        Observation supplyRequest = (Observation) resource;
+    }
 }
