@@ -37,12 +37,10 @@ public class FhirClinicalReasoningCdsHooksService {
                     CdsService cdsService = new CdsService();
                     cdsService.setHook( hook );
                     cdsService.setId( planDefinition.getIdElement().getIdPart() );
-                    if ( planDefinition.hasTitle() ) {
+                    if ( planDefinition.hasName() ) {
+                        cdsService.setTitle( planDefinition.getName() );
+                    } else if ( planDefinition.hasTitle() ) {
                         cdsService.setTitle( planDefinition.getTitle() );
-                    } else {
-                        if ( planDefinition.hasName() ) {
-                            cdsService.setTitle( planDefinition.getName() );
-                        }
                     }
 
                     if ( planDefinition.hasDescription() ) {
@@ -67,7 +65,7 @@ public class FhirClinicalReasoningCdsHooksService {
         Set<String> hooks = new TreeSet<>();
 
         action.getTriggerDefinition().stream()
-            .filter( triggerDefinition -> triggerDefinition.getType().equals( TriggerDefinition.TriggerType.NAMEDEVENT ) )
+            .filter( triggerDefinition -> triggerDefinition.hasType() && triggerDefinition.getType().equals( TriggerDefinition.TriggerType.NAMEDEVENT ) )
             .map( triggerDefinition -> triggerDefinition.getEventName() )
             .forEach( eventName -> hooks.add( eventName ) );
 
