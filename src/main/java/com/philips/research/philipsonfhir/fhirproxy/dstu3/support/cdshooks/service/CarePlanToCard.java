@@ -42,34 +42,36 @@ public class CarePlanToCard {
 
         // links
         List<Link> links = new ArrayList<>();
-//        if (requestGroup.hasExtension()) {
-//            for (Extension extension : requestGroup.getExtension()) {
-//                Link link = new Link();
-//
-//                if (extension.getValue() instanceof Attachment) {
-//                    Attachment attachment = (Attachment) extension.getValue();
-//                    if (attachment.hasUrl()) {
-//                        link.setUrl(attachment.getUrl());
-//                    }
-//                    if (attachment.hasTitle()) {
-//                        link.setLabel(attachment.getTitle());
-//                    }
-//                    if (attachment.hasExtension()) {
-//                        link.setType(attachment.getExtensionFirstRep().getValue().primitiveValue());
-//                    }
-//                }
-//
-//                else {
-//                    throw new RuntimeException("Invalid link extension type: " + extension.getValue().fhirType());
-//                }
-//
-//                links.add(link);
-//            }
-//        }
+        // TODO determine correct way to address this.
+        if (requestGroup.hasExtension()) {
+            for (Extension extension : requestGroup.getExtension()) {
+                Link link = new Link();
+
+                if (extension.getValue() instanceof Attachment) {
+                    Attachment attachment = (Attachment) extension.getValue();
+                    if (attachment.hasUrl()) {
+                        link.setUrl(attachment.getUrl());
+                    }
+                    if (attachment.hasTitle()) {
+                        link.setLabel(attachment.getTitle());
+                    }
+                    if (attachment.hasExtension()) {
+                        link.setType(attachment.getExtensionFirstRep().getValue().primitiveValue());
+                    }
+                }
+
+                else {
+                    throw new RuntimeException("Invalid link extension type: " + extension.getValue().fhirType());
+                }
+
+                links.add(link);
+            }
+        }
 
         if (requestGroup.hasAction()) {
             for (RequestGroup.RequestGroupActionComponent action : requestGroup.getAction()) {
                 Card card = new Card();
+                card.setIndicator( "info" ); //TODO - r4 priority field
                 // basic
                 if (action.hasTitle()) {
                     card.setSummary(action.getTitle());
@@ -80,6 +82,7 @@ public class CarePlanToCard {
                 if (action.hasExtension()) {
                     card.setIndicator(action.getExtensionFirstRep().getValue().toString());
                 }
+
 
                 // source
                 if (action.hasDocumentation()) {
