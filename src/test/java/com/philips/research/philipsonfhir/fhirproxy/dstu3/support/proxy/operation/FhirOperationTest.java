@@ -47,7 +47,7 @@ public class FhirOperationTest {
         String resourceType = "Group";
         FhirServer fhirServerMock = mock( FhirServer.class );
 
-        when( fhirServerMock.getResource( resourceType, resourceId, operationName, queryparams ) ).thenReturn( iBaseResource );
+        when( fhirServerMock.getResourceOperation( resourceType, resourceId, operationName, queryparams ) ).thenReturn( iBaseResource );
 
         GenericFhirResourceInstanceOperation operation = new GenericFhirResourceInstanceOperation( resourceType, operationName );
         FhirOperationCall call = operation.createGetOperationCall( fhirServerMock, resourceId, queryparams );

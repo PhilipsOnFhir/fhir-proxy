@@ -111,7 +111,7 @@ public class SampleFhirGateway {
             Map<String, String> queryParams
     ) throws Exception {
         logger.log(Level.INFO,"GET "+resourceType+" "+id );
-        return parser(contentType).encodeResourceToString( fhirServer.getResource( resourceType, id, queryParams ));
+        return parser(contentType).encodeResourceToString( fhirServer.readResource( resourceType, id, queryParams ));
     }
     /////////////////////////////////////////////////////////////////////////////
 
@@ -128,7 +128,7 @@ public class SampleFhirGateway {
             @PathVariable String params,
             @RequestParam Map<String, String> queryParams
     ) throws Exception {
-        return parser(accept).encodeResourceToString(fhirServer.getResource( resourceType, id, params, queryParams ));
+        return parser(accept).encodeResourceToString(fhirServer.getResourceOperation( resourceType, id, params, queryParams ));
     }
 
     @RequestMapping (
@@ -147,7 +147,7 @@ public class SampleFhirGateway {
         IBaseResource iBaseResource;
         HttpStatus httpStatus;
         try{
-            iBaseResource = fhirServer.getResource( resourceType, id, params, queryParams );
+            iBaseResource = fhirServer.getResourceOperation( resourceType, id, params, queryParams );
             httpStatus= HttpStatus.OK;
         } catch ( FHIRException| NotImplementedException e1 ){
             iBaseResource = new OperationOutcome().addIssue( new OperationOutcome.OperationOutcomeIssueComponent()
@@ -171,7 +171,7 @@ public class SampleFhirGateway {
             Map<String, String> queryParams
     ) throws Exception {
         logger.log(Level.INFO,"GET "+resourceType+" "+id );
-        return parser(contentType).encodeResourceToString( fhirServer.getResource( resourceType, id, queryParams ));
+        return parser(contentType).encodeResourceToString( fhirServer.readResource( resourceType, id, queryParams ));
     }
     /////////////////////////////////////////////////////////////////////////////
 
@@ -214,7 +214,7 @@ public class SampleFhirGateway {
     ) throws Exception {
         logger.log(Level.INFO,"PUT "+resourceType+" "+id );
         IBaseResource iBaseResource = parser( contentType ).parseResource(requestBody);
-        IBaseOperationOutcome operationalOutcome = fhirServer.putResource(iBaseResource);
+        IBaseOperationOutcome operationalOutcome = fhirServer.updateResource(iBaseResource);
         return parser( contentType).encodeResourceToString( operationalOutcome );
     }
 
@@ -245,7 +245,7 @@ public class SampleFhirGateway {
             @RequestParam Map<String, String> queryParams
     ) throws FHIRException {
         logger.log(Level.INFO,"POST "+resourceType+" "+id );
-        return parser( accept ).encodeResourceToString(fhirServer.postResource( parser(contentType).parseResource(requestBody) ));
+        return parser( accept ).encodeResourceToString(fhirServer.postResourceOperation( parser(contentType).parseResource(requestBody) ));
     }
 
     @RequestMapping (
@@ -262,7 +262,7 @@ public class SampleFhirGateway {
             @RequestParam Map<String, String> queryParams
     ) throws FHIRException {
         logger.log(Level.INFO,"POST "+resourceType+" "+id );
-        return parser( accept ).encodeResourceToString(fhirServer.postResource( parser(contentType).parseResource(requestBody) ));
+        return parser( accept ).encodeResourceToString(fhirServer.postResourceOperation( parser(contentType).parseResource(requestBody) ));
     }
 
     /////////////////////////////////////////////////////////////////////////////
@@ -285,7 +285,7 @@ public class SampleFhirGateway {
         logger.log(Level.INFO,"POST "+resourceType+" "+id );
         return parser( accept )
                 .encodeResourceToString(
-                        fhirServer.postResource( resourceType, id, parser(contentType).parseResource(requestBody),params, queryParams )
+                        fhirServer.postResourceOperation( resourceType, id, parser(contentType).parseResource(requestBody),params, queryParams )
                 );
     }
 
@@ -306,7 +306,7 @@ public class SampleFhirGateway {
         logger.log(Level.INFO,"POST "+resourceType+" "+id );
         return parser( accept )
                 .encodeResourceToString(
-                        fhirServer.postResource( resourceType, id, parser(contentType).parseResource(requestBody),params, queryParams )
+                        fhirServer.postResourceOperation( resourceType, id, parser(contentType).parseResource(requestBody),params, queryParams )
                 );
     }
 }

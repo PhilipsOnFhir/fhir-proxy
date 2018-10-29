@@ -281,28 +281,15 @@ public class PlanDefinitionProcessor {
                         result = cqlExecutionProvider.evaluateInContext(  dynamicValue.getExpression() );
                 }
 
-                // TODO not according to spec
-                if (dynamicValue.getPath().endsWith("title")) { // summary
-                    String title = (String) result;
-                    requestGroupAction.setTitle(title);
-                }
-                // TODO not according to spec
-                else if (dynamicValue.getPath().endsWith("description")) { // detail
-                    String description = (String) result;
-                    requestGroupAction.setDescription(description);
-                }
-                // TODO not according to spec
-                else if (dynamicValue.getPath().endsWith("extension")) { // indicator
-                    String extension = (String) result;
-                    requestGroupAction.addExtension( new Extension().setUrl("http://example.org").setValue(new StringType(extension)));
-                }
-                // TODO path does not a lot of sense any more -- $action would be interesting
-                else if ( dynamicValue.getPath().equals( "$this" ) ) {
+                if ( dynamicValue.getPath().startsWith( "%action" ) ) {
+                    FhirValueSetter.setProperty( requestGroupAction, dynamicValue.getPath().replace("%action",""), (Base) result );
+                } else if ( dynamicValue.getPath().equals( "%context" ) ) {
                     this.carePlan = (CarePlan)carePlan;
+                } else if ( dynamicValue.getPath().startsWith( "%context" ) ) {
+                    FhirValueSetter.setProperty( requestGroupAction, dynamicValue.getPath().replace("%context",""), (Base) result );
                 } else {
 //                    this.clinReasoningProvider.setValue( carePlan, dynamicValue.getPath(), result );
                     FhirValueSetter.setProperty( carePlan, dynamicValue.getPath(), (Base) result );
-
                 }
             }
         }

@@ -40,7 +40,7 @@ public class FhirServerBulkdata implements IFhirServer {
     }
 
     @Override
-    public IBaseResource getResource(String resourceType, String id, Map<String, String> queryParams) throws FHIRException {
+    public IBaseResource readResource(String resourceType, String id, Map<String, String> queryParams) throws FHIRException {
         if ( resourceType.equals("Patient") && id.equals("$export")){
             logger.info("Patient - $export");
             String outputFormat = queryParams.get( "outputFormat" );
@@ -48,7 +48,7 @@ public class FhirServerBulkdata implements IFhirServer {
             String type = queryParams.get( "type" );
             return this.fhirPatientExportServer.exportAllPatientData( outputFormat, since, type );
         }
-        return this.fhirServer.getResource(resourceType, id, queryParams );
+        return this.fhirServer.readResource(resourceType, id, queryParams );
     }
 
     @Override
@@ -60,11 +60,11 @@ public class FhirServerBulkdata implements IFhirServer {
             String type = queryParams.get( "type" );
             return this.fhirPatientExportServer.exportAllPatientData( outputFormat, since, type );
         }
-        return this.fhirServer.getResource( resourceType, operationName, queryParams );
+        return this.fhirServer.readResource( resourceType, operationName, queryParams );
     }
 
     @Override
-    public IBaseResource getResource(String resourceType, String id, String params, Map<String, String> queryParams) throws FHIRException, NotImplementedException {
+    public IBaseResource getResourceOperation(String resourceType, String id, String params, Map<String, String> queryParams) throws FHIRException, NotImplementedException {
         if ( resourceType.equals("Patient") && params.equals("$export")){
             logger.info("Patient - "+ id+" - $export");
             String outputFormat = queryParams.get("outputFormat");
@@ -79,7 +79,7 @@ public class FhirServerBulkdata implements IFhirServer {
             String type = queryParams.get( "type" );
             return this.fhirPatientExportServer.exportAllGroupData( id, outputFormat, since, type );
         }
-        return this.fhirServer.getResource(resourceType, id, params, queryParams );
+        return this.fhirServer.getResourceOperation(resourceType, id, params, queryParams );
     }
 
     @Override
@@ -88,18 +88,18 @@ public class FhirServerBulkdata implements IFhirServer {
     }
 
     @Override
-    public IBaseOperationOutcome putResource(IBaseResource iBaseResource) throws FHIRException {
-        return this.fhirServer.putResource( iBaseResource );
+    public IBaseOperationOutcome updateResource(IBaseResource iBaseResource) throws FHIRException {
+        return this.fhirServer.updateResource( iBaseResource );
     }
 
     @Override
-    public IBaseOperationOutcome postResource(IBaseResource iBaseResource) throws FHIRException {
-        return this.fhirServer.postResource( iBaseResource );
+    public IBaseOperationOutcome postResourceOperation(IBaseResource iBaseResource) throws FHIRException {
+        return this.fhirServer.postResourceOperation( iBaseResource );
     }
 
     @Override
-    public IBaseResource postResource(String resourceType, String id, IBaseResource parseResource, String params, Map<String, String> queryParams) throws FHIRException, NotImplementedException {
-        return this.fhirServer.postResource( resourceType, id, parseResource, params, queryParams );
+    public IBaseResource postResourceOperation(String resourceType, String id, IBaseResource parseResource, String params, Map<String, String> queryParams) throws FHIRException, NotImplementedException {
+        return this.fhirServer.postResourceOperation( resourceType, id, parseResource, params, queryParams );
     }
 
     @Override

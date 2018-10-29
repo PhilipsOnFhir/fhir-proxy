@@ -83,7 +83,7 @@ public class MeasureEvaluationProcessor {
 //            }
 ////            List<IBaseResource> patientList = new ArrayList<>(  );
 //            results.getEntry().stream().forEach( entry -> {
-//                patients.add( (Patient) entry.getResource() );
+//                patients.add( (Patient) entry.getResourceOperation() );
 //            } );
         }
         return evaluate(measure, context, patients, MeasureReport.MeasureReportType.PATIENTLIST);

@@ -49,9 +49,9 @@ public class FhirRequest {
         }
         if ( id!=null){
             if ( params!=null ) {
-                return fhirServer.getResource(resourceType, id, params, queryParams);
+                return fhirServer.getResourceOperation(resourceType, id, params, queryParams);
             } else{
-                return fhirServer.getResource(resourceType, id, queryParams);
+                return fhirServer.readResource(resourceType, id, queryParams);
             }
         } else{
             if ( params!=null ) {

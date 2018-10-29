@@ -158,7 +158,7 @@ public class ActivityDefinitionProcessor  {
             }
 
             IBaseResource resource  = this.transformServer.doTransform( structureMap, activityDefinition, (Resource) result);
-//            Resource resouce = fhirServer.postResource("StructuredMap", transformReference.getId(), null. null );
+//            Resource resouce = fhirServer.postResourceOperation("StructuredMap", transformReference.getId(), null. null );
 //            FHIRStructureMapResourceProvider fhirStructureMapResourceProvider = (FHIRStructureMapResourceProvider) provider.resolveResourceProvider("StructureMap");
 //            Resource resource = fhirStructureMapResourceProvider.internalTransform( transformReference, activityDefinition, result );
             result= (Resource) resource;

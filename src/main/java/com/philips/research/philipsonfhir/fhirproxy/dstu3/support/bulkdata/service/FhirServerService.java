@@ -38,8 +38,8 @@ public class FhirServerService implements IFhirServer {
     }
 
     @Override
-    public IBaseResource getResource(String resourceType, String id, Map<String, String> queryParams) throws FHIRException {
-        return fhirServer.getResource( resourceType, id, queryParams );
+    public IBaseResource readResource(String resourceType, String id, Map<String, String> queryParams) throws FHIRException {
+        return fhirServer.readResource( resourceType, id, queryParams );
     }
 
     @Override
@@ -48,8 +48,8 @@ public class FhirServerService implements IFhirServer {
     }
 
     @Override
-    public IBaseResource getResource(String resourceType, String id, String params, Map<String, String> queryParams) throws FHIRException, NotImplementedException {
-        return fhirServer.getResource( resourceType, id, params, queryParams );
+    public IBaseResource getResourceOperation(String resourceType, String id, String params, Map<String, String> queryParams) throws FHIRException, NotImplementedException {
+        return fhirServer.getResourceOperation( resourceType, id, params, queryParams );
     }
 
     @Override
@@ -58,18 +58,18 @@ public class FhirServerService implements IFhirServer {
     }
 
     @Override
-    public IBaseOperationOutcome putResource(IBaseResource iBaseResource) throws FHIRException {
-        return fhirServer.putResource( iBaseResource );
+    public IBaseOperationOutcome updateResource(IBaseResource iBaseResource) throws FHIRException {
+        return fhirServer.updateResource( iBaseResource );
     }
 
     @Override
-    public IBaseOperationOutcome postResource(IBaseResource iBaseResource) throws FHIRException {
-        return fhirServer.postResource( iBaseResource );
+    public IBaseOperationOutcome postResourceOperation(IBaseResource iBaseResource) throws FHIRException {
+        return fhirServer.postResourceOperation( iBaseResource );
     }
 
     @Override
-    public IBaseResource postResource(String resourceType, String id, IBaseResource parseResource, String params, Map<String, String> queryParams) throws FHIRException, NotImplementedException {
-        return fhirServer.postResource( resourceType, id, parseResource, params, queryParams );
+    public IBaseResource postResourceOperation(String resourceType, String id, IBaseResource parseResource, String params, Map<String, String> queryParams) throws FHIRException, NotImplementedException {
+        return fhirServer.postResourceOperation( resourceType, id, parseResource, params, queryParams );
     }
 
     @Override

@@ -129,7 +129,7 @@ public class BulkDataApplicationTest {
 
     private void putResource(IBaseResource baseResource) throws FHIRException {
 //        fhourClient.update().resource(baseResource).execute();
-        fhirServer.putResource( baseResource );
+        fhirServer.updateResource( baseResource );
     }
 
     private String createURLWithPort(String uri) {
@@ -326,9 +326,9 @@ public class BulkDataApplicationTest {
         }
 
 //        for ( Bundle.BundleEntryComponent bundleEntryComponent : resourceBundle.getEntry()) {
-//            Resource resource = bundleEntryComponent.getResource();
+//            Resource resource = bundleEntryComponent.getResourceOperation();
 //            assertTrue( patientData.getEntry().stream()
-//                .map(allPatientBundleEntryComponent -> allPatientBundleEntryComponent.getResource())
+//                .map(allPatientBundleEntryComponent -> allPatientBundleEntryComponent.getResourceOperation())
 //                .filter( res -> res.fhirType()==resourceType)
 //                .filter( res2 -> res2.getId().endsWith(resource.getId()))
 //                .findFirst().isPresent());

@@ -58,7 +58,7 @@ public class FhirServer implements IFhirServer {
     }
 
     @Override
-    public IBaseResource getResource(String resourceType, String resourceId, Map<String, String> queryParams) throws FHIRException {
+    public IBaseResource readResource(String resourceType, String resourceId, Map<String, String> queryParams) throws FHIRException {
         String url = getUrl( resourceType, resourceId, null, queryParams );
         logger.info( "GET " + fhirUrl + url );
 
@@ -109,7 +109,7 @@ public class FhirServer implements IFhirServer {
     }
 
     @Override
-    public IBaseResource getResource(String resourceType, String resourceId, String params, Map<String, String> queryParams) throws FHIRException, NotImplementedException {
+    public IBaseResource getResourceOperation(String resourceType, String resourceId, String params, Map<String, String> queryParams) throws FHIRException, NotImplementedException {
         String url = getUrl( resourceType, resourceId, params, queryParams );
         logger.info( "GET " + fhirUrl + url );
 
@@ -169,17 +169,17 @@ public class FhirServer implements IFhirServer {
     }
 
     @Override
-    public IBaseOperationOutcome putResource(IBaseResource iBaseResource) {
+    public IBaseOperationOutcome updateResource(IBaseResource iBaseResource) {
         return ourClient.update().resource(iBaseResource).execute().getOperationOutcome();
     }
 
     @Override
-    public IBaseOperationOutcome postResource(IBaseResource iBaseResource) {
+    public IBaseOperationOutcome postResourceOperation(IBaseResource iBaseResource) {
         return ourClient.create().resource(iBaseResource).execute().getOperationOutcome();
     }
 
     @Override
-    public IBaseResource postResource(
+    public IBaseResource postResourceOperation(
             String resourceType,
             String resourceId,
             IBaseResource parseResource,
