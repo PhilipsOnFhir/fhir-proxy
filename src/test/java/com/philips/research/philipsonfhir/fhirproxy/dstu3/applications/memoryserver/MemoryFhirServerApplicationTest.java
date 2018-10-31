@@ -2,28 +2,19 @@ package com.philips.research.philipsonfhir.fhirproxy.dstu3.applications.memoryse
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
-import ca.uhn.fhir.rest.client.api.ServerValidationModeEnum;
 import ca.uhn.fhir.rest.client.interceptor.LoggingInterceptor;
-import com.philips.research.philipsonfhir.fhirproxy.dstu3.applications.memoryserver.servlet.JpaServerDemo;
 import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.webapp.WebAppContext;
 import org.hl7.fhir.dstu3.model.Patient;
 import org.hl7.fhir.instance.model.api.IIdType;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.io.File;
 import java.io.IOException;
 
 import static org.junit.Assert.*;
@@ -53,30 +44,16 @@ public class MemoryFhirServerApplicationTest {
         HttpHeaders httpHeaders = new HttpHeaders();
         HttpEntity<String> entity = new HttpEntity<>( null, httpHeaders );
         ResponseEntity<String> response = restTemplate.exchange(
-                "http://localhost:"+port+"/memory/Patient" ,
+                "http://localhost:"+port+"/hapi/Patient" ,
                 HttpMethod.GET, entity, String.class
         );
         System.out.println( response.getBody() );
-
+        assertEquals( HttpStatus.OK, response.getStatusCode() );
     }
-    @Test
-    public void testContextAccessibility(){
-        System.out.println( port );
 
-        javax.xml.bind.JAXBException a;
-
-        HttpHeaders httpHeaders = new HttpHeaders();
-        HttpEntity<String> entity = new HttpEntity<>( null, httpHeaders );
-        ResponseEntity<String> response = restTemplate.exchange(
-                "http://localhost:"+port+"/context/Patient" ,
-                HttpMethod.GET, entity, String.class
-        );
-        System.out.println( response.getBody() );
-
-    }
     @Test
     public void testCreateAndRead() throws IOException {
-        ourServerBase = "http://localhost:" + ourPort + "/memory";
+        ourServerBase = "http://localhost:" + ourPort + "/hapi";
         ourClient = ourCtx.newRestfulGenericClient(ourServerBase);
         ourClient.registerInterceptor(new LoggingInterceptor(true));
 

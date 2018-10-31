@@ -1,5 +1,5 @@
 
-package com.philips.research.philipsonfhir.fhirproxy.dstu3.applications.memoryserver.servlet;
+package com.philips.research.philipsonfhir.fhirproxy.dstu3.support.hapi;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.context.FhirVersionEnum;

@@ -1,81 +1,123 @@
-//package com.philips.research.philipsonfhir.fhirproxy.dstu3.support.context.controller;
-//
-//import ca.uhn.fhir.context.FhirContext;
-//import ca.uhn.fhir.parser.IParser;
-//import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException;
-//import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.NotImplementedException;
-//import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.cdshooks.model.CdsServiceCallBody;
-//import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.cdshooks.model.CdsServiceResponse;
-//import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.cdshooks.model.CdsServices;
-//import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.cdshooks.service.FhirClinicalReasoningCdsHooksService;
-//import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.context.service.ContextService;
-//import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.context.service.ContextSession;
-//import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.proxy.service.FhirServer;
-//import org.hl7.fhir.dstu3.model.OperationOutcome;
-//import org.hl7.fhir.exceptions.FHIRException;
-//import org.hl7.fhir.instance.model.api.IBaseResource;
-//import org.springframework.http.HttpStatus;
-//import org.springframework.http.ResponseEntity;
-//import org.springframework.stereotype.Controller;
-//import org.springframework.web.bind.annotation.*;
-//
-//import java.util.Map;
-//import java.util.Set;
-//import java.util.logging.Level;
-//
-//@Controller
-//@RestController
-//public class ContextController {
-//
-//    static final String PREFIX = "context";
-//    private ContextService contextService;
-//    private FhirServer fhirServer=null;
-//    private FhirContext myContext = FhirContext.forDstu3();
-//
-//
-//    public void setFhirServerUrl( String url ){
-//        fhirServer = new FhirServer(url);
-//        this.contextService = new ContextService( fhirServer );
-//    }
-//
-//    @PostMapping(PREFIX )
-//    public long callCdsService( @RequestBody CdsServiceCallBody body ) throws FHIRException, NotImplementedException {
-//        return contextService.createContext();
-//    }
-//
-//    @GetMapping(PREFIX )
-//    public Set<Long> getCdsServices() throws FHIRException, NotImplementedException {
-//        return contextService.getActiveContext();
-//    }
-//
-//    /////////////////////////////////////////////////////////////////////////////
-//
-//    @RequestMapping (
-//            method = RequestMethod.GET,
-//            value = "/context/{contextId}/{resourceType}",
-//            produces =  "application/fhir+json"
-//    )
-//    public String searchResourcesJson(
-//            @RequestHeader(value = "Accept", defaultValue = "application/fhir+json") String accept,
-//            @PathVariable String contextId,
-//            @PathVariable String resourceType,
-//            @RequestParam Map<String, String> queryParams
-//    ) throws FHIRException {
-//        ContextSession contextSession = contextService.getContextSession(contextId);
-//        if ( contextSession==null) { throw new FHIRException("unknown session");}
-//
-//        /* Context stuff */
-//
-//
-//        if ( resourceType.equals("metadata")){
-//            return parser(accept).encodeResourceToString( fhirServer.getCapabilityStatement() );
-//        }
-//        else {
-//            return parser(accept).encodeResourceToString(fhirServer.searchResource(resourceType, queryParams ));
-//        }
-//    }
-//
-//    @RequestMapping (
+package com.philips.research.philipsonfhir.fhirproxy.dstu3.support.context.controller;
+
+import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.parser.IParser;
+import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException;
+import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.NotImplementedException;
+import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.context.service.ContextService;
+import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.context.service.ContextSession;
+import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.proxy.service.FhirServer;
+import org.hl7.fhir.dstu3.model.OperationOutcome;
+import org.hl7.fhir.exceptions.FHIRException;
+import org.hl7.fhir.instance.model.api.IBaseResource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+@Controller
+@RestController
+public class ContextController {
+
+    static final String PREFIX = "context";
+    private ContextService contextService = new ContextService();
+    private FhirContext myContext = FhirContext.forDstu3();
+
+
+    @PostMapping(PREFIX )
+    public String createContextSession(
+            HttpServletRequest request,
+            @RequestBody  String requestBody
+    ) throws FHIRException, NotImplementedException {
+        System.out.println( request.getLocalAddr() );
+        System.out.println( request.getLocalName() );
+        String fhirServerUrl = requestBody;
+        return contextService.createContextSession( new FhirServer(fhirServerUrl)).getSessionId();
+    }
+
+    @GetMapping(PREFIX )
+    public List<String> getCdsServices() throws FHIRException, NotImplementedException {
+        return  contextService.getActiveContextSessions().stream()
+                .map( contextSession -> contextSession.getSessionId())
+                .collect(Collectors.toList());
+
+    }
+
+    @DeleteMapping(PREFIX+"/{sessionId}" )
+    public void removeCdsService( @PathVariable String sessionId) throws FHIRException, NotImplementedException {
+        contextService.deleteContextSession(sessionId);
+    }
+    /////////////////////////////////////////////////////////////////////////////
+
+    @RequestMapping (
+            method = RequestMethod.GET,
+            value = "/context/{contextId}/{resourceType}"
+    )
+    public String searchResources(
+            @RequestHeader(value = "Accept", defaultValue = "application/fhir+json") String accept,
+            @PathVariable String contextId,
+            @PathVariable String resourceType,
+            @RequestParam Map<String, String> queryParams
+    ) throws FHIRException, NotImplementedException {
+        ContextSession contextSession = contextService.getContextSession(contextId);
+        if ( contextSession==null) { throw new FHIRException("unknown session");}
+
+        /* Context stuff */
+
+        if ( resourceType.equals("metadata")){
+            return parser(accept).encodeResourceToString( contextSession.getFhirServer().getCapabilityStatement() );
+        }
+        else {
+            return parser(accept).encodeResourceToString(contextSession.searchResource(resourceType, queryParams ));
+        }
+    }
+
+    @RequestMapping (
+            method = RequestMethod.POST,
+            value = "/context/{contextId}/{resourceType}"
+    )
+    public ResponseEntity<String> postResources(
+            @RequestHeader(value = "Content-Type", defaultValue = "application/fhir+json") String contentType,
+            @RequestHeader(value = "Accept", defaultValue = "application/fhir+json") String accept,
+            @PathVariable String contextId,
+            @PathVariable String resourceType,
+            @RequestBody String requestBody,
+            @RequestParam Map<String, String> queryParams
+    ) throws FHIRException, NotImplementedException {
+        ContextSession contextSession = contextService.getContextSession(contextId);
+        if ( contextSession==null) { throw new FHIRException("unknown session");}
+
+
+        IBaseResource newResource;
+        HttpStatus httpStatus;
+        try{
+            IBaseResource resource = parser( contentType ).parseResource(requestBody );
+
+            newResource = contextSession.postResourceOperation2(resource);
+            httpStatus= HttpStatus.OK;
+        } catch ( FHIRException| NotImplementedException e1 ){
+            newResource = new OperationOutcome().addIssue( new OperationOutcome.OperationOutcomeIssueComponent()
+                    .setSeverity( OperationOutcome.IssueSeverity.FATAL )
+                    .setDiagnostics( e1.getMessage() )
+            );
+            httpStatus= HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+        catch ( BaseServerResponseException se ){
+            newResource = se.getOperationOutcome();
+            httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+        ResponseEntity<String> responseEntity = new ResponseEntity<>( parser( accept ).encodeResourceToString(newResource), httpStatus );
+        return responseEntity;
+    }
+
+
+
+    //    @RequestMapping (
 //            method = RequestMethod.GET,
 //            value = "/context/{contextId}/{resourceType}",
 //            produces =  "application/fhir+xml"
@@ -228,14 +270,14 @@
 //        return putResource( contentType, requestBody, resourceType, id, queryParams);
 //    }
 //
-//    private IParser parser(String contentType) {
-//        if ( contentType.contains("application/fhir+xml")){
-//            return myContext.newXmlParser();
-//        } else if ( contentType.contains("application/fhir+json")){
-//            return myContext.newJsonParser();
-//        } else {
-//            return myContext.newJsonParser();
-//        }
-//
-//    }
-//}
+    private IParser parser(String contentType) {
+        if ( contentType.contains("application/fhir+xml")){
+            return myContext.newXmlParser();
+        } else if ( contentType.contains("application/fhir+json")){
+            return myContext.newJsonParser();
+        } else {
+            return myContext.newJsonParser();
+        }
+    }
+
+}

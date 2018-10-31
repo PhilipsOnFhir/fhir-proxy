@@ -1,4 +1,4 @@
-package com.philips.research.philipsonfhir.fhirproxy.dstu3.applications.memoryserver.servlet;
+package com.philips.research.philipsonfhir.fhirproxy.dstu3.applications.context.servlet;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
