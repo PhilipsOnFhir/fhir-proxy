@@ -2,6 +2,7 @@ package com.philips.research.philipsonfhir.fhirproxy.dstu3.support.bulkdata.cont
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.parser.IParser;
+import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.NotImplementedException;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.bulkdata.async.AsyncService;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.bulkdata.operations.ExportAllFhirOperation;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.bulkdata.operations.ExportAllFhirOperationCall;
@@ -48,7 +49,7 @@ public class BulkDataFhirController {
             @RequestHeader(value = "Accept", defaultValue = "application/fhir+json") String accept,
             @PathVariable String resourceType,
             @RequestParam Map<String, String> queryParams
-    ) {
+    ) throws NotImplementedException {
         return getStringResponseEntity( request, response, prefer, accept, resourceType, queryParams );
     }
 
@@ -65,12 +66,12 @@ public class BulkDataFhirController {
             @RequestHeader("Accept") String accept,
             @PathVariable String resourceType,
             @RequestParam Map<String, String> queryParams
-    ) {
+    ) throws NotImplementedException {
 
         return getStringResponseEntity( request, response, prefer, accept, resourceType, queryParams );
     }
 
-    private ResponseEntity<String> getStringResponseEntity(HttpServletRequest request, HttpServletResponse response, @RequestHeader(value = "Prefer", defaultValue = "") String prefer, @RequestHeader(value = "Accept", defaultValue = "application/fhir+json") String accept, @PathVariable String resourceType, @RequestParam Map<String, String> queryParams) {
+    private ResponseEntity<String> getStringResponseEntity(HttpServletRequest request, HttpServletResponse response, @RequestHeader(value = "Prefer", defaultValue = "") String prefer, @RequestHeader(value = "Accept", defaultValue = "application/fhir+json") String accept, @PathVariable String resourceType, @RequestParam Map<String, String> queryParams) throws NotImplementedException {
         if ( prefer!=null && prefer.equals("respond-async") ){
             return new ResponseEntity<>(
                 parser( accept ).encodeResourceToString( doAsyncBase( request, response, resourceType, queryParams ) ),

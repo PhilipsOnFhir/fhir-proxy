@@ -2,6 +2,7 @@ package com.philips.research.philipsonfhir.builders;
 
 import org.hl7.fhir.dstu3.model.Annotation;
 import org.hl7.fhir.dstu3.model.Type;
+import org.hl7.fhir.exceptions.FHIRFormatError;
 
 import java.util.Date;
 
@@ -12,7 +13,7 @@ public class AnnotationBuilder extends BaseBuilder<Annotation> {
     }
 
     // Type is one of the following: Reference or String
-    public AnnotationBuilder buildAuthor(Type choice) {
+    public AnnotationBuilder buildAuthor(Type choice) throws FHIRFormatError {
         complexProperty.setAuthor(choice);
         return this;
     }

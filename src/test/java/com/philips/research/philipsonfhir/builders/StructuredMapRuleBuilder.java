@@ -1,6 +1,7 @@
 package com.philips.research.philipsonfhir.builders;
 
 import org.hl7.fhir.dstu3.model.StructureMap;
+import org.hl7.fhir.exceptions.FHIRFormatError;
 
 public class StructuredMapRuleBuilder extends BaseBuilder<StructureMap.StructureMapGroupRuleComponent> {
 
@@ -27,15 +28,14 @@ public class StructuredMapRuleBuilder extends BaseBuilder<StructureMap.Structure
         return this;
     }
 
-    public StructuredMapRuleBuilder buildTargetSetValue(String target, String targetField, String value) {
+    public StructuredMapRuleBuilder buildTargetSetValue(String target, String targetField, String value) throws FHIRFormatError {
         return buildTarget(
                 new StructuredMapRuleTargetBuilder()
                         .buildTransformSetValue(target, targetField, value)
                         .build());
     }
 
-    public StructuredMapRuleBuilder buildTarget(String target, String targetField, StructureMap.StructureMapTransform transform, String...params)
-    {
+    public StructuredMapRuleBuilder buildTarget(String target, String targetField, StructureMap.StructureMapTransform transform, String...params) throws FHIRFormatError {
         return buildTarget(
                 new StructuredMapRuleTargetBuilder()
                         .buildTransform(target, targetField, transform, params)

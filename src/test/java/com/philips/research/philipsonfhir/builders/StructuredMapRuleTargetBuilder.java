@@ -2,6 +2,7 @@ package com.philips.research.philipsonfhir.builders;
 
 import org.hl7.fhir.dstu3.model.StringType;
 import org.hl7.fhir.dstu3.model.StructureMap;
+import org.hl7.fhir.exceptions.FHIRFormatError;
 
 public class StructuredMapRuleTargetBuilder extends BaseBuilder<StructureMap.StructureMapGroupRuleTargetComponent> {
 
@@ -28,7 +29,7 @@ public class StructuredMapRuleTargetBuilder extends BaseBuilder<StructureMap.Str
         return this;
     }
 
-    public StructuredMapRuleTargetBuilder buildTransformCopy(String source) {
+    public StructuredMapRuleTargetBuilder buildTransformCopy(String source) throws FHIRFormatError {
         complexProperty.setTransform(StructureMap.StructureMapTransform.COPY);
         StructureMap.StructureMapGroupRuleTargetParameterComponent structureMapGroupRuleTargetParameterComponent =
                 new StructureMap.StructureMapGroupRuleTargetParameterComponent();
@@ -37,7 +38,7 @@ public class StructuredMapRuleTargetBuilder extends BaseBuilder<StructureMap.Str
         return this;
     }
 
-    public StructuredMapRuleTargetBuilder buildTransformSetValue(String context, String targetField, String value) {
+    public StructuredMapRuleTargetBuilder buildTransformSetValue(String context, String targetField, String value) throws FHIRFormatError {
         return buildContext(context)
                 .buildContextType(StructureMap.StructureMapContextType.VARIABLE)
                 .buildElement(targetField)
@@ -51,8 +52,7 @@ public class StructuredMapRuleTargetBuilder extends BaseBuilder<StructureMap.Str
                 .buildElement(targetField);
     }
 
-    public StructuredMapRuleTargetBuilder buildTransform(String context, String targetField, StructureMap.StructureMapTransform transform, String...parameters)
-    {
+    public StructuredMapRuleTargetBuilder buildTransform(String context, String targetField, StructureMap.StructureMapTransform transform, String...parameters) throws FHIRFormatError {
         complexProperty.setTransform(transform);
         for (String param: parameters){
             StructureMap.StructureMapGroupRuleTargetParameterComponent structureMapGroupRuleTargetParameterComponent =

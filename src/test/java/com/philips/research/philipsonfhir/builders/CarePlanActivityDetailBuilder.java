@@ -2,6 +2,7 @@ package com.philips.research.philipsonfhir.builders;
 
 import org.hl7.fhir.dstu3.model.*;
 import org.hl7.fhir.exceptions.FHIRException;
+import org.hl7.fhir.exceptions.FHIRFormatError;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,7 +93,7 @@ public class CarePlanActivityDetailBuilder extends BaseBuilder<CarePlan.CarePlan
     }
 
     // Type is one of the following: Timing, Period, or String
-    public CarePlanActivityDetailBuilder buildScheduled(Type type) {
+    public CarePlanActivityDetailBuilder buildScheduled(Type type) throws FHIRFormatError {
         complexProperty.setScheduled(type);
         return this;
     }
@@ -117,7 +118,7 @@ public class CarePlanActivityDetailBuilder extends BaseBuilder<CarePlan.CarePlan
     }
 
     // Type is one of the following: CodeableConcept or Reference
-    public CarePlanActivityDetailBuilder buildProduct(Type type) {
+    public CarePlanActivityDetailBuilder buildProduct(Type type) throws FHIRFormatError {
         complexProperty.setProduct(type);
         return this;
     }

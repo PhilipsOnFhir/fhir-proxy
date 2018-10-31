@@ -5,6 +5,7 @@ import org.ajbrown.namemachine.Name;
 import org.ajbrown.namemachine.NameGenerator;
 import org.hl7.fhir.dstu3.model.*;
 import org.hl7.fhir.dstu3.model.Enumerations.AdministrativeGender;
+import org.hl7.fhir.exceptions.FHIRFormatError;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -103,7 +104,7 @@ public class PatientBuilder extends BaseBuilder<Patient> {
         return this;
     }
 
-    public PatientBuilder buildDeceased(Type type) {
+    public PatientBuilder buildDeceased(Type type) throws FHIRFormatError {
         complexProperty.setDeceased(type);
         return this;
     }
@@ -127,7 +128,7 @@ public class PatientBuilder extends BaseBuilder<Patient> {
         return this;
     }
 
-    public PatientBuilder buildMultipleBirth(Type type) {
+    public PatientBuilder buildMultipleBirth(Type type) throws FHIRFormatError {
         complexProperty.setMultipleBirth(type);
         return this;
     }

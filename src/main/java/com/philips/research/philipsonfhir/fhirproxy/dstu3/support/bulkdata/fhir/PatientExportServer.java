@@ -23,7 +23,7 @@ public class PatientExportServer {
     public Bundle exportAllPatientData(
             String outputFormat,
             String since,
-            String type) throws FHIRException {
+            String type) throws FHIRException, NotImplementedException {
 
         Bundle bundle = (Bundle) this.fhirServer.readResource("Patient","$everything",null);
         BundleRetriever bulkDataHelper = new BundleRetriever( this.fhirServer, bundle );
@@ -48,7 +48,7 @@ public class PatientExportServer {
         return resultBundle;
     }
 
-    public Bundle exportAllGroupData(String id, String outputFormat, String since, String type) throws FHIRException {
+    public Bundle exportAllGroupData(String id, String outputFormat, String since, String type) throws FHIRException, NotImplementedException {
         Group group = (Group) this.fhirServer.readResource( "Group", id, null );
 
         Bundle resultBundle = new Bundle()
@@ -97,7 +97,7 @@ public class PatientExportServer {
         return resultBundle;
     }
 
-    public Bundle exportAllData(String type) {
+    public Bundle exportAllData(String type) throws NotImplementedException {
         Set<String> allresources = new TreeSet<>();
         HashMap<String, IBaseResource> resultHashMap = new HashMap<>();
         fhirServer.getCapabilityStatement().getRest().stream()

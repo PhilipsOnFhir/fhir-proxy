@@ -4,6 +4,7 @@ import org.hl7.fhir.dstu3.model.*;
 import org.hl7.fhir.dstu3.model.Procedure.ProcedurePerformerComponent;
 import org.hl7.fhir.dstu3.model.Procedure.ProcedureStatus;
 import org.hl7.fhir.exceptions.FHIRException;
+import org.hl7.fhir.exceptions.FHIRFormatError;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,7 +16,7 @@ public class ProcedureBuilder extends BaseBuilder<Procedure> implements IBuilder
         super(new Procedure());
     }
 
-    public ProcedureBuilder(String id, Patient patient, Practitioner practitioner, String procedureDateString) {
+    public ProcedureBuilder(String id, Patient patient, Practitioner practitioner, String procedureDateString) throws FHIRFormatError {
         this();
         String status = "completed";
 
@@ -71,7 +72,7 @@ public class ProcedureBuilder extends BaseBuilder<Procedure> implements IBuilder
         return this;
     }
 
-    public ProcedureBuilder buildPerformedPeriod(Date start, Date end) {
+    public ProcedureBuilder buildPerformedPeriod(Date start, Date end) throws FHIRFormatError {
         PeriodBuilder periodBuilder = new PeriodBuilder();
 
         periodBuilder.buildStart(start);

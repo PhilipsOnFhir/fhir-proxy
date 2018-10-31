@@ -112,9 +112,7 @@ public class AsyncSession {
                     asyncResult.addResource( (Resource)iBaseResource );
                 }
 
-            } catch (FHIRException e ) {
-                e.printStackTrace();
-            } catch ( NotImplementedException e ) {
+            } catch (FHIRException | NotImplementedException e ) {
                 e.printStackTrace();
             }
 

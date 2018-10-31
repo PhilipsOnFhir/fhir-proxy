@@ -6,6 +6,7 @@ import com.philips.research.philipsonfhir.builders.EncounterBuilder;
 import com.philips.research.philipsonfhir.builders.PatientBuilder;
 import com.philips.research.philipsonfhir.builders.PractitionerBuilder;
 import com.philips.research.philipsonfhir.builders.ProcedureBuilder;
+import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.NotImplementedException;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.bulkdata.client.BulkDataClient;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.bulkdata.fhir.BundleRetriever;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.bulkdata.fhir.FhirServerBulkdata;
@@ -127,7 +128,7 @@ public class BulkDataApplicationTest {
         }
     }
 
-    private void putResource(IBaseResource baseResource) throws FHIRException {
+    private void putResource(IBaseResource baseResource) throws FHIRException, NotImplementedException {
 //        fhourClient.update().resource(baseResource).execute();
         fhirServer.updateResource( baseResource );
     }

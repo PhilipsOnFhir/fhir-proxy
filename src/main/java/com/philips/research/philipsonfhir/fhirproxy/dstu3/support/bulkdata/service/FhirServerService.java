@@ -28,22 +28,22 @@ public class FhirServerService implements IFhirServer {
     }
 
     @Override
-    public CapabilityStatement getCapabilityStatement() {
+    public CapabilityStatement getCapabilityStatement() throws NotImplementedException {
         return fhirServer.getCapabilityStatement();
     }
 
     @Override
-    public IBaseResource searchResource(String resourceType, Map<String, String> queryParams) {
+    public IBaseResource searchResource(String resourceType, Map<String, String> queryParams) throws NotImplementedException {
         return fhirServer.searchResource( resourceType, queryParams );
     }
 
     @Override
-    public IBaseResource readResource(String resourceType, String id, Map<String, String> queryParams) throws FHIRException {
+    public IBaseResource readResource(String resourceType, String id, Map<String, String> queryParams) throws FHIRException, NotImplementedException {
         return fhirServer.readResource( resourceType, id, queryParams );
     }
 
     @Override
-    public IBaseResource getResourceOperation(String resourceType, String operationName, Map<String, String> queryParams) throws FHIRException {
+    public IBaseResource getResourceOperation(String resourceType, String operationName, Map<String, String> queryParams) throws FHIRException, NotImplementedException {
         return fhirServer.getResourceOperation( resourceType, operationName, queryParams );
     }
 
@@ -53,17 +53,17 @@ public class FhirServerService implements IFhirServer {
     }
 
     @Override
-    public Bundle loadPage(Bundle resultBundle) throws FHIRException {
+    public Bundle loadPage(Bundle resultBundle) throws FHIRException, NotImplementedException {
         return fhirServer.loadPage( resultBundle );
     }
 
     @Override
-    public IBaseOperationOutcome updateResource(IBaseResource iBaseResource) throws FHIRException {
+    public IBaseOperationOutcome updateResource(IBaseResource iBaseResource) throws FHIRException, NotImplementedException {
         return fhirServer.updateResource( iBaseResource );
     }
 
     @Override
-    public IBaseOperationOutcome postResourceOperation(IBaseResource iBaseResource) throws FHIRException {
+    public IBaseOperationOutcome postResourceOperation(IBaseResource iBaseResource) throws FHIRException, NotImplementedException {
         return fhirServer.postResourceOperation( iBaseResource );
     }
 
@@ -73,7 +73,7 @@ public class FhirServerService implements IFhirServer {
     }
 
     @Override
-    public FhirContext getCtx() {
+    public FhirContext getCtx() throws NotImplementedException {
         return fhirServer.getCtx();
     }
 

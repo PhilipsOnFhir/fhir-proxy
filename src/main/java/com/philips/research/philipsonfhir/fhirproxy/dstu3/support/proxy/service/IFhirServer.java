@@ -15,7 +15,7 @@ public interface IFhirServer {
 
     IBaseResource searchResource(String resourceType, Map<String, String> queryParams) throws NotImplementedException;
 
-    IBaseResource readResource(String resourceType, String id, Map<String, String> queryParams) throws FHIRException;
+    IBaseResource readResource(String resourceType, String id, Map<String, String> queryParams) throws FHIRException, NotImplementedException;
 
     IBaseResource getResourceOperation(String resourceType, String operationName, Map<String, String> queryParams) throws FHIRException, NotImplementedException;
 

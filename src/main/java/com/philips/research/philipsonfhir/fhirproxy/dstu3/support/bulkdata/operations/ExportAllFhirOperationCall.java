@@ -1,5 +1,6 @@
 package com.philips.research.philipsonfhir.fhirproxy.dstu3.support.bulkdata.operations;
 
+import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.NotImplementedException;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.bulkdata.fhir.BundleRetriever;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.proxy.operation.FhirOperationCall;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.proxy.service.IFhirServer;
@@ -36,14 +37,14 @@ public class ExportAllFhirOperationCall implements FhirOperationCall {
         return Collections.unmodifiableMap( errorMap );
     }
 
-    public IBaseResource getResult() {
+    public IBaseResource getResult() throws NotImplementedException {
         if ( resultBundle == null ) {
             performOperation();
         }
         return resultBundle;
     }
 
-    private void performOperation() {
+    private void performOperation() throws NotImplementedException {
         this.status = Status.PROCESSING;
         String type = queryParams.get( "_type" );
         String since = queryParams.get( "_since" );

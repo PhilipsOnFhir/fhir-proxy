@@ -21,7 +21,7 @@ public class FhirClinicalReasoningCdsHooksService {
         this.fhirServer = fhirServer;
     }
 
-    public CdsServices getServices() throws FHIRException {
+    public CdsServices getServices() throws FHIRException, NotImplementedException {
         CdsServices cdsServices = new CdsServices();
 
         Bundle bundle = (Bundle) fhirServer.searchResource( "PlanDefinition", null );

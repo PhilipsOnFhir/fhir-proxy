@@ -24,12 +24,12 @@ public class FhirServerBulkdata implements IFhirServer {
     }
 
     @Override
-    public CapabilityStatement getCapabilityStatement() {
+    public CapabilityStatement getCapabilityStatement() throws NotImplementedException {
         return this.fhirServer.getCapabilityStatement();
     }
 
     @Override
-    public IBaseResource searchResource(String resourceType, Map<String, String> queryParams) {
+    public IBaseResource searchResource(String resourceType, Map<String, String> queryParams) throws NotImplementedException {
         if ( resourceType.equals( "$export" ) ) {
             String outputFormat = queryParams.get( "outputFormat" );
             String since = queryParams.get( "since" );
@@ -40,7 +40,7 @@ public class FhirServerBulkdata implements IFhirServer {
     }
 
     @Override
-    public IBaseResource readResource(String resourceType, String id, Map<String, String> queryParams) throws FHIRException {
+    public IBaseResource readResource(String resourceType, String id, Map<String, String> queryParams) throws FHIRException, NotImplementedException {
         if ( resourceType.equals("Patient") && id.equals("$export")){
             logger.info("Patient - $export");
             String outputFormat = queryParams.get( "outputFormat" );
@@ -52,7 +52,7 @@ public class FhirServerBulkdata implements IFhirServer {
     }
 
     @Override
-    public IBaseResource getResourceOperation(String resourceType, String operationName, Map<String, String> queryParams) throws FHIRException {
+    public IBaseResource getResourceOperation(String resourceType, String operationName, Map<String, String> queryParams) throws FHIRException, NotImplementedException {
         if ( resourceType.equals( "Patient" ) && operationName.equals( "$export" ) ) {
             logger.info( "Patient - $export" );
             String outputFormat = queryParams.get( "outputFormat" );
@@ -83,17 +83,17 @@ public class FhirServerBulkdata implements IFhirServer {
     }
 
     @Override
-    public Bundle loadPage(Bundle resultBundle) throws FHIRException {
+    public Bundle loadPage(Bundle resultBundle) throws FHIRException, NotImplementedException {
         return this.fhirServer.loadPage(  resultBundle );
     }
 
     @Override
-    public IBaseOperationOutcome updateResource(IBaseResource iBaseResource) throws FHIRException {
+    public IBaseOperationOutcome updateResource(IBaseResource iBaseResource) throws FHIRException, NotImplementedException {
         return this.fhirServer.updateResource( iBaseResource );
     }
 
     @Override
-    public IBaseOperationOutcome postResourceOperation(IBaseResource iBaseResource) throws FHIRException {
+    public IBaseOperationOutcome postResourceOperation(IBaseResource iBaseResource) throws FHIRException, NotImplementedException {
         return this.fhirServer.postResourceOperation( iBaseResource );
     }
 
@@ -103,12 +103,12 @@ public class FhirServerBulkdata implements IFhirServer {
     }
 
     @Override
-    public FhirContext getCtx() {
+    public FhirContext getCtx() throws NotImplementedException {
         return this.fhirServer.getCtx();
     }
 
     @Override
-    public String getUrl() {
+    public String getUrl() throws NotImplementedException {
         return this.fhirServer.getUrl();
     }
 }

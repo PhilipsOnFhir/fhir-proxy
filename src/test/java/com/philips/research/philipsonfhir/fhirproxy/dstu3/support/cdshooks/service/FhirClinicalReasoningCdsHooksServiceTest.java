@@ -1,5 +1,6 @@
 package com.philips.research.philipsonfhir.fhirproxy.dstu3.support.cdshooks.service;
 
+import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.NotImplementedException;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.cdshooks.model.CdsService;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.cdshooks.model.CdsServices;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.proxy.service.FhirServer;
@@ -18,7 +19,7 @@ import static org.mockito.Mockito.when;
 public class FhirClinicalReasoningCdsHooksServiceTest {
 
     @Test
-    public void retrieveServices() throws FHIRException {
+    public void retrieveServices() throws FHIRException, NotImplementedException {
         IFhirServer fhirServer = mock( FhirServer.class );
         String resourceType = "PlanDefinition";
 

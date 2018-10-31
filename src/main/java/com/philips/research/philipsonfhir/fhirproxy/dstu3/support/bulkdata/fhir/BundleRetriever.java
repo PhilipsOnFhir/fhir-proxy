@@ -1,5 +1,6 @@
 package com.philips.research.philipsonfhir.fhirproxy.dstu3.support.bulkdata.fhir;
 
+import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.NotImplementedException;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.proxy.service.IFhirServer;
 import org.hl7.fhir.dstu3.model.Bundle;
 import org.hl7.fhir.dstu3.model.Resource;
@@ -18,7 +19,7 @@ public class BundleRetriever {
         this.bundle = bundle;
     }
 
-    public List<Resource> retrieveAllResources() throws FHIRException {
+    public List<Resource> retrieveAllResources() throws FHIRException, NotImplementedException {
         List<Resource> iBaseResourceList = new ArrayList<>();
         addAll( iBaseResourceList, bundle );
         Bundle currentBundle = bundle;
@@ -35,7 +36,7 @@ public class BundleRetriever {
                 .forEach( bundleEntryComponent -> iBaseResourceList.add( bundleEntryComponent.getResource() ) );
     }
 
-    public Bundle addAllResourcesToBundle() throws FHIRException {
+    public Bundle addAllResourcesToBundle() throws FHIRException, NotImplementedException {
         Bundle resultBundle = bundle.copy();
         Bundle currentBundle = bundle;
         while ( currentBundle.getLink( Bundle.LINK_NEXT ) != null ) {
