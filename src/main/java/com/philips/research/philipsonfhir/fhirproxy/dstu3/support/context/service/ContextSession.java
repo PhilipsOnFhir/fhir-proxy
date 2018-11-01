@@ -1,12 +1,15 @@
 package com.philips.research.philipsonfhir.fhirproxy.dstu3.support.context.service;
 
 import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.rest.api.MethodOutcome;
+import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.NotImplementedException;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.proxy.service.FhirServer;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.proxy.service.IFhirServer;
 import org.hl7.elm.r1.Not;
 import org.hl7.fhir.dstu3.model.Bundle;
 import org.hl7.fhir.dstu3.model.CapabilityStatement;
+import org.hl7.fhir.dstu3.model.OperationOutcome;
 import org.hl7.fhir.dstu3.model.Resource;
 import org.hl7.fhir.exceptions.FHIRException;
 import org.hl7.fhir.instance.model.api.IBaseOperationOutcome;
@@ -54,12 +57,13 @@ public class ContextSession implements IFhirServer {
         Iterator<Bundle.BundleEntryComponent> iter = bundle.getEntry().iterator();
         while ( iter.hasNext() ){
             Bundle.BundleEntryComponent entryComponent = iter.next();
-            FhirAction fhirAction = resourceMap.get(entryComponent.getResource().getId() );
+            FhirAction fhirAction = resourceMap.get(entryComponent.getResource().getIdElement().getIdPart() );
             if ( fhirAction != null ){
                 switch (fhirAction.getAction() ){
                     case DELETE:
                         iter.remove();
                         break;
+                    case CREATE:
                     case UPDATE:
                         entryComponent.setResource(fhirAction.getResource());
                         break;
@@ -102,11 +106,30 @@ public class ContextSession implements IFhirServer {
 
     @Override
     public IBaseOperationOutcome updateResource(IBaseResource iBaseResource) throws FHIRException, NotImplementedException {
-        Resource resource = (Resource)iBaseResource;
-        Map<String,FhirAction> resourceMap = getResourceMap(resource.fhirType());
-        FhirAction fhirAction = new FhirAction( FhirAction.FhirActionAction.UPDATE, resource );
-        resourceMap.put(resource.getId(), fhirAction);
-        return null;
+        throw new NotImplementedException();
+    }
+
+    public MethodOutcome updateResource2(Resource resourceIn) throws FHIRException, NotImplementedException {
+        MethodOutcome methodOutcome = new MethodOutcome();
+        boolean existsInFhirServer = true;
+        try {
+            Resource resourceFs = (Resource) fhirServer.readResource(resourceIn.getResourceType().name(), resourceIn.getIdElement().getIdPart(), null);
+        } catch ( ResourceNotFoundException e ){
+            existsInFhirServer = false;
+        }
+
+        Map<String,FhirAction> resourceMap = getResourceMap(resourceIn.fhirType());
+        boolean existsInContext = resourceMap.containsKey(resourceIn.getIdElement().getIdPart());
+        methodOutcome.setCreated( !existsInFhirServer && !existsInContext );
+
+        FhirAction fhirAction = new FhirAction(
+                (existsInFhirServer?FhirAction.FhirActionAction.UPDATE: FhirAction.FhirActionAction.CREATE),
+                resourceIn
+        );
+
+        resourceMap.put(resourceIn.getIdElement().getIdPart(), fhirAction);
+
+        return methodOutcome;
     }
 
     @Override
@@ -119,7 +142,7 @@ public class ContextSession implements IFhirServer {
         resource.setId( UUID.randomUUID().toString() );
         Map<String,FhirAction> resourceMap = getResourceMap(resource.fhirType());
         FhirAction fhirAction = new FhirAction( FhirAction.FhirActionAction.CREATE, resource );
-        resourceMap.put(resource.getId(), fhirAction);
+        resourceMap.put(resource.getIdElement().getIdPart(), fhirAction);
 
         return resource;
     }
@@ -146,4 +169,5 @@ public class ContextSession implements IFhirServer {
     public FhirServer getFhirServer() {
         return fhirServer;
     }
+
 }

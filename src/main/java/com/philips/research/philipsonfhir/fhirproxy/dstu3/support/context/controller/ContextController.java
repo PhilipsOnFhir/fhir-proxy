@@ -2,12 +2,14 @@ package com.philips.research.philipsonfhir.fhirproxy.dstu3.support.context.contr
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.parser.IParser;
+import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.NotImplementedException;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.context.service.ContextService;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.context.service.ContextSession;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.proxy.service.FhirServer;
 import org.hl7.fhir.dstu3.model.OperationOutcome;
+import org.hl7.fhir.dstu3.model.Resource;
 import org.hl7.fhir.exceptions.FHIRException;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.springframework.http.HttpStatus;
@@ -81,7 +83,7 @@ public class ContextController {
             method = RequestMethod.POST,
             value = "/context/{contextId}/{resourceType}"
     )
-    public ResponseEntity<String> postResources(
+    public ResponseEntity<String> postResource(
             @RequestHeader(value = "Content-Type", defaultValue = "application/fhir+json") String contentType,
             @RequestHeader(value = "Accept", defaultValue = "application/fhir+json") String accept,
             @PathVariable String contextId,
@@ -115,6 +117,44 @@ public class ContextController {
         return responseEntity;
     }
 
+    @RequestMapping (
+            method = RequestMethod.PUT,
+            value = "/context/{contextId}/{resourceType}/{resourceId}"
+    )
+    public ResponseEntity<String> putResource(
+            @RequestHeader(value = "Content-Type", defaultValue = "application/fhir+json") String contentType,
+            @RequestHeader(value = "Accept", defaultValue = "application/fhir+json") String accept,
+            @PathVariable String contextId,
+            @PathVariable String resourceType,
+            @PathVariable String resourceId,
+            @RequestBody String requestBody,
+            @RequestParam Map<String, String> queryParams
+    ) throws FHIRException, NotImplementedException {
+        ContextSession contextSession = contextService.getContextSession(contextId);
+        if ( contextSession==null) { throw new FHIRException("unknown session");}
+
+        IBaseResource newResource;
+        HttpStatus httpStatus;
+        try{
+            Resource resource = (Resource) parser( contentType ).parseResource(requestBody );
+
+            MethodOutcome methodOutcome = contextSession.updateResource2(resource);
+            httpStatus = (methodOutcome.getCreated()? HttpStatus.CREATED : HttpStatus.OK);
+
+        } catch ( FHIRException| NotImplementedException e1 ){
+            newResource = new OperationOutcome().addIssue( new OperationOutcome.OperationOutcomeIssueComponent()
+                    .setSeverity( OperationOutcome.IssueSeverity.FATAL )
+                    .setDiagnostics( e1.getMessage() )
+            );
+            httpStatus= HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+        catch ( BaseServerResponseException se ){
+            newResource = se.getOperationOutcome();
+            httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+        ResponseEntity<String> responseEntity = new ResponseEntity<>( httpStatus );
+        return responseEntity;
+    }
 
 
     //    @RequestMapping (
