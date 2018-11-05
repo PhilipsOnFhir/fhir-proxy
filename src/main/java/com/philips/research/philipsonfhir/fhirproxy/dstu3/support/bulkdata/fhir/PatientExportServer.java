@@ -64,7 +64,7 @@ public class PatientExportServer {
                         .filter( bundleEntryComponent -> (type == null || type.contains( bundleEntryComponent.getResource().fhirType() )) )
                         //TODO since
                         .forEach( bundleEntryComponent -> resultBundle.addEntry( bundleEntryComponent ) );
-                } catch ( FHIRException | NotImplementedException e ) {
+                } catch ( FHIRException e ) {
                     e.printStackTrace();
                 }
             }

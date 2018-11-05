@@ -61,7 +61,7 @@ public class QuestionnairePopulateOperation extends FhirResourceInstanceOperatio
             @Override
             public IBaseResource getResult() throws FHIRException, NotImplementedException {
                 BaseFhirDataProvider baseFhirDataProvider = new FhirDataProviderStu3().setEndpoint(fhirServerUrl);
-                Parameters parameters = new Parameters();
+                MyParameters parameters = new MyParameters();
                 populateParameter(parameters,"identifier", false, Enumerations.FHIRAllTypes.URI, queryParams);
 //                populateParameter(parameters,"questionnaire", false, Enumerations.FHIRAllTypes.URI, queryParams);
                 populateParameter(parameters,"questionnaireRef", false, Enumerations.FHIRAllTypes.REFERENCE, queryParams);

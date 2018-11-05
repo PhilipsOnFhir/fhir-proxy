@@ -329,8 +329,6 @@ public class PlanDefinitionProcessor {
                 resource = (Resource) activityDefinitionProcessor.getResult();
             } catch ( FHIRException e ) {
                 throw new RuntimeException( "Error applying ActivityDefinition " + e.getMessage() );
-            } catch ( NotImplementedException e ) {
-                throw new RuntimeException( "Error applying ActivityDefinition " + e.getMessage() );
             }
         } else if (definitionType.equals( ResourceType.StructureMap.name() )){
             try {
@@ -351,7 +349,7 @@ public class PlanDefinitionProcessor {
                     new PlanDefinitionProcessor( fhirDataProvider, (IdType) planDefinitionAction.getDefinition().getReferenceElement(),
                         patientId, encounterId, practitionerId, organizationId, userType, userLanguage, userTaskContext, setting, settingContext  );
                 resource = planDefinitionProcessor.getCarePlan();
-            }catch ( FHIRException | NotImplementedException e ) {
+            }catch ( FHIRException e ) {
                 throw new RuntimeException( "Error applying StructureMap " + e.getMessage() );
             }
         } else {

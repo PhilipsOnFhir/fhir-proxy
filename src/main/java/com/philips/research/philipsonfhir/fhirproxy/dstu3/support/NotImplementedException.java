@@ -2,7 +2,7 @@ package com.philips.research.philipsonfhir.fhirproxy.dstu3.support;
 
 import org.hl7.fhir.exceptions.FHIRException;
 
-public class NotImplementedException extends Exception{
+public class NotImplementedException extends FHIRException {
     public NotImplementedException() {
         super(  );
     }

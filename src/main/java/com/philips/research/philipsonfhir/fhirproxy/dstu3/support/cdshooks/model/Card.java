@@ -14,5 +14,5 @@ public class Card {
     String indicator;
     Source source;
     List<Suggestion> suggestions = new ArrayList<>(  );
-    List<Link> links;
+    List<Link> links = new ArrayList<>();
 }

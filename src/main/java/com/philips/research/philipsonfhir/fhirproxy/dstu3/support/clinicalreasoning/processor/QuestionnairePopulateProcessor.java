@@ -52,4 +52,8 @@ public class QuestionnairePopulateProcessor {
         }
         return questionnaireResponseItem;
     }
+
+    public QuestionnaireResponse getQuestionnaireResponse() {
+        return questionnaireResponse;
+    }
 }

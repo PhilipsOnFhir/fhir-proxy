@@ -3,21 +3,27 @@ package com.philips.research.philipsonfhir.fhirproxy.dstu3.support.cdshooks.serv
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.NotImplementedException;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.cdshooks.model.*;
 import org.hl7.fhir.dstu3.model.*;
+import org.hl7.fhir.exceptions.FHIRException;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@EnableConfigurationProperties
 public class CarePlanToCard {
+    @Value("${fhirserver.url}")
+    private String url;
 
-    public static List<Card> convert(CarePlan carePlan) throws NotImplementedException {
+    public static List<Card> convert(CarePlan carePlan, String fhirServerurl, String questionnaireServerUrl) throws FHIRException {
+        CarePlanToCard carePlanToCard = new CarePlanToCard();
 
         List<Card> cards = new ArrayList<>();
-
         for (CarePlan.CarePlanActivityComponent activity : carePlan.getActivity()) {
             if (activity.getReferenceTarget() != null && activity.getReferenceTarget() instanceof RequestGroup) {
                 RequestGroup requestGroup = (RequestGroup) activity.getReferenceTarget();
-                cards = convert(carePlan, requestGroup);
+                cards = carePlanToCard.convert(carePlan, requestGroup, fhirServerurl, questionnaireServerUrl );
             }
             if (activity.getReference() != null && activity.getReference().getReference().startsWith( "#" ) ) {
                 String reference = activity.getReference().getReference();
@@ -26,47 +32,18 @@ public class CarePlanToCard {
                     .findFirst();
                 if (optRG.isPresent()) {
                     RequestGroup requestGroup = (RequestGroup) optRG.get();
-                    cards = convert( carePlan, requestGroup );
+                    cards = carePlanToCard.convert( carePlan, requestGroup, fhirServerurl, questionnaireServerUrl);
                 }
             }
             else {
                 throw new NotImplementedException( "Retrieval of repository stored request groups is not supported." );
             }
         }
-
         return cards;
     }
 
-    private static List<Card> convert( CarePlan carePlan, RequestGroup requestGroup) throws NotImplementedException {
+    private List<Card> convert( CarePlan carePlan, RequestGroup requestGroup, String fhirServerUrl, String questionnaireServerUrl ) throws NotImplementedException, FHIRException {
         List<Card> cards = new ArrayList<>();
-
-        // links
-        List<Link> links = new ArrayList<>();
-        // TODO determine correct way to address this.
-        if (requestGroup.hasExtension()) {
-            for (Extension extension : requestGroup.getExtension()) {
-                Link link = new Link();
-
-                if (extension.getValue() instanceof Attachment) {
-                    Attachment attachment = (Attachment) extension.getValue();
-                    if (attachment.hasUrl()) {
-                        link.setUrl(attachment.getUrl());
-                    }
-                    if (attachment.hasTitle()) {
-                        link.setLabel(attachment.getTitle());
-                    }
-                    if (attachment.hasExtension()) {
-                        link.setType(attachment.getExtensionFirstRep().getValue().primitiveValue());
-                    }
-                }
-
-                else {
-                    throw new RuntimeException("Invalid link extension type: " + extension.getValue().fhirType());
-                }
-
-                links.add(link);
-            }
-        }
 
         if (requestGroup.hasAction()) {
             for (RequestGroup.RequestGroupActionComponent action : requestGroup.getAction()) {
@@ -79,9 +56,10 @@ public class CarePlanToCard {
                 if (action.hasDescription()) {
                     card.setDetail(action.getDescription());
                 }
-                if (action.hasExtension()) {
-                    card.setIndicator(action.getExtensionFirstRep().getValue().toString());
-                }
+                // TODO replacement for indicator in extension
+//                if (action.hasExtension()) {
+//                    card.setIndicator(action.getExtensionFirstRep().getValue().toString());
+//                }
 
 
                 // source
@@ -118,9 +96,41 @@ public class CarePlanToCard {
                     card.getSuggestions().add( suggestion );
                 }
 
-                if (!links.isEmpty()) {
+                // links
+                List<Link> links = new ArrayList<>();
+                // TODO determine correct way to address this.
+                if (action.hasExtension()) {
+                    for (Extension extension : action.getExtension()) {
+                        Link link = new Link();
+
+                        if (extension.getValue() instanceof Attachment) {
+                            Attachment attachment = (Attachment) extension.getValue();
+                            if (attachment.hasUrl()) {
+                                link.setUrl(attachment.getUrl());
+                            }
+                            if (attachment.hasTitle()) {
+                                link.setLabel(attachment.getTitle());
+                            }
+                            link.setType("absolute");
+                        } else if (extension.getValue() instanceof Reference) {
+                            Reference reference = (Reference) extension.getValue();
+                            // TODO make these values dynamic
+                            if ( reference.getReference().startsWith(ResourceType.Questionnaire.name())){
+                                link.setType("absolute");
+                                link.setLabel(reference.getDisplay());
+                                link.setUrl( questionnaireServerUrl+reference.getReference()+"?fs="+fhirServerUrl);
+                            } else {
+                                throw new FHIRException("Invalid value in Questionnaire reference extension "+ reference.getReference());
+                            }
+                        } else {
+                            throw new FHIRException("Invalid link extension type: " + extension.getValue().fhirType());
+                        }
+
+                        links.add(link);
+                    }
                     card.setLinks(links);
                 }
+
                 cards.add(card);
             }
         }
@@ -128,7 +138,7 @@ public class CarePlanToCard {
         return cards;
     }
 
-    private static Resource getResource(CarePlan carePlan, Reference reference) throws NotImplementedException {
+    private Resource getResource(CarePlan carePlan, Reference reference) throws NotImplementedException {
 
         if ( reference != null && reference.getReference().startsWith( "#" ) ) {
             Optional<Resource> optRG = carePlan.getContained().stream()
@@ -140,4 +150,5 @@ public class CarePlanToCard {
         }
         throw new NotImplementedException( "Reference " + reference.getReference() + " does not point to a resource contained in Careplan" );
     }
+
 }

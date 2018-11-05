@@ -125,7 +125,7 @@ public class FhirClinicalReasoningCdsHooksService {
         return result;
     }
 
-    private List<Card> carePlanToCards(CarePlan carePlan) throws NotImplementedException {
+    private List<Card> carePlanToCards(CarePlan carePlan) throws NotImplementedException, FHIRException {
         // what process to take?
         /*
          ? each trigger results in a card?
@@ -150,7 +150,8 @@ public class FhirClinicalReasoningCdsHooksService {
 
             related action -- include text -- treat as subtrees?
          */
-        return CarePlanToCard.convert(  carePlan );
+        // TODO replace questionnaireEditor
+        return CarePlanToCard.convert(  carePlan, this.fhirServer.getUrl(), "http://questionnaireEditor" );
     }
 
 }

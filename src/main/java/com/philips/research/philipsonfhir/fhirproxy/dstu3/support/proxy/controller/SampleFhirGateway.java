@@ -149,7 +149,7 @@ public class SampleFhirGateway {
         try{
             iBaseResource = fhirServer.getResourceOperation( resourceType, id, params, queryParams );
             httpStatus= HttpStatus.OK;
-        } catch ( FHIRException| NotImplementedException e1 ){
+        } catch ( FHIRException e1 ){
             iBaseResource = new OperationOutcome().addIssue( new OperationOutcome.OperationOutcomeIssueComponent()
                 .setSeverity( OperationOutcome.IssueSeverity.FATAL )
                 .setDiagnostics( e1.getMessage() )

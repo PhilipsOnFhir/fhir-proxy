@@ -3,8 +3,10 @@ package com.philips.research.philipsonfhir.fhirproxy.dstu3.support.context.contr
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.parser.IParser;
 import ca.uhn.fhir.rest.api.MethodOutcome;
+import ca.uhn.fhir.rest.client.api.IGenericClient;
 import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.NotImplementedException;
+import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.clinicalreasoning.*;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.context.model.FhirCastSessionSubscribe;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.context.service.ContextService;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.context.service.ContextSession;
@@ -40,6 +42,17 @@ public class ContextController {
         System.out.println( request.getLocalAddr() );
         System.out.println( request.getLocalName() );
         String fhirServerUrl = requestBody;
+        FhirServer fhirServer = new FhirServer(fhirServerUrl);
+        FhirContext ourCtx = fhirServer.getCtx();
+        IGenericClient client = fhirServer.getCtx().newRestfulGenericClient( fhirServerUrl );
+
+        // add clinical reasoning operations.
+        fhirServer.getFhirOperationRepository().registerOperation(  new MeasureEvaluationOperation( client ) );
+        fhirServer.getFhirOperationRepository().registerOperation(  new StructureMapTransformOperation( fhirServerUrl, client )  );
+        fhirServer.getFhirOperationRepository().registerOperation(  new PlanDefinitionApplyOperation( fhirServerUrl )  );
+        fhirServer.getFhirOperationRepository().registerOperation(  new ActivityDefinitionApplyOperation( fhirServerUrl )  );
+        fhirServer.getFhirOperationRepository().registerOperation(  new QuestionnairePopulateOperation( fhirServerUrl )  );
+
         return contextService.createContextSession( new FhirServer(fhirServerUrl)).getSessionId();
     }
 
@@ -127,7 +140,7 @@ public class ContextController {
 
             newResource = contextSession.postResourceOperation2(resource);
             httpStatus= HttpStatus.OK;
-        } catch ( FHIRException| NotImplementedException e1 ){
+        } catch ( FHIRException e1 ){
             newResource = new OperationOutcome().addIssue( new OperationOutcome.OperationOutcomeIssueComponent()
                     .setSeverity( OperationOutcome.IssueSeverity.FATAL )
                     .setDiagnostics( e1.getMessage() )
@@ -166,7 +179,7 @@ public class ContextController {
             MethodOutcome methodOutcome = contextSession.updateResource2(resource);
             httpStatus = (methodOutcome.getCreated()? HttpStatus.CREATED : HttpStatus.OK);
 
-        } catch ( FHIRException| NotImplementedException e1 ){
+        } catch ( FHIRException e1 ){
             newResource = new OperationOutcome().addIssue( new OperationOutcome.OperationOutcomeIssueComponent()
                     .setSeverity( OperationOutcome.IssueSeverity.FATAL )
                     .setDiagnostics( e1.getMessage() )
