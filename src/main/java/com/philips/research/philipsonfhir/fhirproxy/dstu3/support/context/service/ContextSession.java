@@ -4,6 +4,7 @@ import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.NotImplementedException;
+import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.context.model.*;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.proxy.service.FhirServer;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.proxy.service.IFhirServer;
 import org.hl7.elm.r1.Not;
@@ -14,18 +15,24 @@ import org.hl7.fhir.dstu3.model.Resource;
 import org.hl7.fhir.exceptions.FHIRException;
 import org.hl7.fhir.instance.model.api.IBaseOperationOutcome;
 import org.hl7.fhir.instance.model.api.IBaseResource;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
+import org.springframework.scheduling.annotation.Async;
 
-import java.util.Iterator;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.UUID;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class ContextSession implements IFhirServer {
 
     private final String sessionId;
     private final FhirServer fhirServer;
     private Map<String,Map<String,FhirAction>> resourceMapMap = new TreeMap<>();
+    private Map<String, FhirCastSessionSubscribe>  fhirCastSubscriptions = new TreeMap<>();
 
     public ContextSession(String id, FhirServer fhirServer ) {
         this.fhirServer = fhirServer;
@@ -170,4 +177,52 @@ public class ContextSession implements IFhirServer {
         return fhirServer;
     }
 
+    public void addFhirCastSubscribe(FhirCastSessionSubscribe fhirCastSessionSubscribe) throws FHIRException {
+        if ( !fhirCastSessionSubscribe.getHub_topic().equals(this.sessionId)){
+            throw new FHIRException("SessionId does not correspond");
+        }
+        if ( fhirCastSessionSubscribe.getHub_mode().equals("subscribe")){
+            this.fhirCastSubscriptions.put( fhirCastSessionSubscribe.getHub_callback(), fhirCastSessionSubscribe );
+        } else if ( fhirCastSessionSubscribe.getHub_mode().equals("unsubscribe")) {
+            this.fhirCastSubscriptions.remove( fhirCastSessionSubscribe.getHub_callback() );
+        } else {
+            throw new FHIRException("Unknown value for hub.mode "+fhirCastSessionSubscribe.getHub_mode());
+        }
+    }
+
+    public void sendFhirContextChangedEvent(){
+        for ( FhirCastSessionSubscribe fhirCastSessionSubscribe: this.fhirCastSubscriptions.values() ){
+            if( fhirCastSessionSubscribe.getHub_events().contains("fhir-context-update")){
+                FhirCastWorkflowEvent fhirCastWorkflowEvent = new FhirCastWorkflowEvent();
+
+                TimeZone tz = TimeZone.getTimeZone("UTC");
+                DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");
+                df.setTimeZone(tz);
+
+                fhirCastWorkflowEvent.setTimestamp( df.format(new Date()));
+
+                fhirCastWorkflowEvent.setId( this.sessionId + java.lang.System.currentTimeMillis());
+                FhirCastWorkflowEventEvent fhirCastWorkflowEventEvent = new FhirCastWorkflowEventEvent();
+                fhirCastWorkflowEventEvent.setHub_topic( fhirCastSessionSubscribe.getHub_topic() );
+                fhirCastWorkflowEventEvent.setHub_event( "fhir-context-update" );
+
+                fhirCastWorkflowEvent.setEvent(fhirCastWorkflowEventEvent);
+
+            }
+        }
+    }
+
+
+    TestRestTemplate restTemplate = new TestRestTemplate();
+
+    @Async
+    public void sendEvent( FhirCastSessionSubscribe fhirCastSessionSubscribe, FhirCastWorkflowEvent fhirCastWorkflowEvent ){
+        HttpHeaders httpHeaders = new HttpHeaders();
+        // TODO add HMAC
+        HttpEntity<FhirCastWorkflowEvent> entity = new HttpEntity<>(fhirCastWorkflowEvent, httpHeaders);
+        ResponseEntity<String> response = restTemplate.exchange(
+                fhirCastSessionSubscribe.getHub_callback(),
+                HttpMethod.GET, entity, String.class
+        );
+    }
 }

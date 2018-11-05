@@ -5,6 +5,7 @@ import ca.uhn.fhir.parser.IParser;
 import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.NotImplementedException;
+import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.context.model.FhirCastSessionSubscribe;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.context.service.ContextService;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.context.service.ContextSession;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.proxy.service.FhirServer;
@@ -54,11 +55,35 @@ public class ContextController {
     public void removeCdsService( @PathVariable String sessionId) throws FHIRException, NotImplementedException {
         contextService.deleteContextSession(sessionId);
     }
-    /////////////////////////////////////////////////////////////////////////////
+
+    ///////////////////FHIR CAST ////////////////////////////////////////
+    @RequestMapping (
+            method = RequestMethod.POST,
+            value = "/context/{contextId}/fhircast"
+    )
+    public ResponseEntity subscibeToFhirCast(
+        @PathVariable String contextId,
+        @RequestBody FhirCastSessionSubscribe fhirCastSessionSubscribe,
+        @RequestParam Map<String, String> queryParams
+    ) {
+        ResponseEntity<String> responseEntity = new ResponseEntity(HttpStatus.ACCEPTED);
+
+        try {
+            ContextSession contextSession = contextService.getContextSession(contextId);
+            if ( contextSession==null) { throw new FHIRException("unknown session");}
+
+            contextSession.addFhirCastSubscribe( fhirCastSessionSubscribe );
+        } catch (FHIRException e) {
+            responseEntity = new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR );
+        }
+        return responseEntity;
+    }
+
+    //////////////////FHIR SERVER////////////////////////////////////////
 
     @RequestMapping (
             method = RequestMethod.GET,
-            value = "/context/{contextId}/{resourceType}"
+            value = "/context/{contextId}/fhir/{resourceType}"
     )
     public String searchResources(
             @RequestHeader(value = "Accept", defaultValue = "application/fhir+json") String accept,
@@ -81,7 +106,7 @@ public class ContextController {
 
     @RequestMapping (
             method = RequestMethod.POST,
-            value = "/context/{contextId}/{resourceType}"
+            value = "/context/{contextId}/fhir/{resourceType}"
     )
     public ResponseEntity<String> postResource(
             @RequestHeader(value = "Content-Type", defaultValue = "application/fhir+json") String contentType,
@@ -119,7 +144,7 @@ public class ContextController {
 
     @RequestMapping (
             method = RequestMethod.PUT,
-            value = "/context/{contextId}/{resourceType}/{resourceId}"
+            value = "/context/{contextId}/fhir/{resourceType}/{resourceId}"
     )
     public ResponseEntity<String> putResource(
             @RequestHeader(value = "Content-Type", defaultValue = "application/fhir+json") String contentType,

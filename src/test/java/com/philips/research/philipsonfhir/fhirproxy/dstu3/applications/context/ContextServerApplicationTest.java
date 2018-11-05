@@ -95,7 +95,7 @@ public class ContextServerApplicationTest {
         String sessionId = "";
         String fhirUrl = "http://localhost:" + port + "/hapi";
         sessionId = createSession( fhirUrl );
-        String contextUrl = "http://localhost:" + port + "/context/"+sessionId;
+        String contextUrl = "http://localhost:" + port + "/context/"+sessionId+"/fhir";
 
         IGenericClient hapiClient = ourCtx.newRestfulGenericClient( fhirUrl );
         {
@@ -117,7 +117,7 @@ public class ContextServerApplicationTest {
         String sessionId = "";
         String fhirUrl = "http://localhost:" + port + "/hapi";
         sessionId = createSession( fhirUrl );
-        String contextUrl = "http://localhost:" + port + "/context/"+sessionId;
+        String contextUrl = "http://localhost:" + port + "/context/"+sessionId+"/fhir";
 
         Patient patient1 = new Patient().addName(new HumanName().setFamily("SomethingGood1"));
         Patient patient2 = new Patient().addName(new HumanName().setFamily("SomethingGood2"));
@@ -152,7 +152,7 @@ public class ContextServerApplicationTest {
         String sessionId = "";
         String fhirUrl = "http://localhost:" + port + "/hapi";
         sessionId = createSession( fhirUrl );
-        String contextUrl = "http://localhost:" + port + "/context/"+sessionId;
+        String contextUrl = "http://localhost:" + port + "/context/"+sessionId+"/fhir";
 
         Patient patient3 = (Patient) new Patient().addName(new HumanName().setFamily("SomethingGood3")).setId("context1");
 
@@ -191,7 +191,7 @@ public class ContextServerApplicationTest {
         String sessionId = "";
         String fhirUrl = "http://localhost:" + port + "/hapi";
         sessionId = createSession( fhirUrl );
-        String contextUrl = "http://localhost:" + port + "/context/"+sessionId;
+        String contextUrl = "http://localhost:" + port + "/context/"+sessionId+"/fhir";
 
         Patient patient3 = (Patient) new Patient().addName(new HumanName().setFamily("SomethingGood3")).setId("context3");
 
