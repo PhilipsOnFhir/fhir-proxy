@@ -25,8 +25,8 @@ public class FhirOperationTest {
         String resourceType = "Patient";
         FhirServer fhirServerMock = mock( FhirServer.class );
 
-        when( fhirServerMock.getResourceOperation( resourceType, operationName, queryparams ) ).thenReturn( iBaseResource );
-        assertEquals( "Operation does not return a result.", iBaseResource, fhirServerMock.getResourceOperation( resourceType, operationName, queryparams ) );
+        when( fhirServerMock.doGet( resourceType, operationName, queryparams ) ).thenReturn( iBaseResource );
+        assertEquals( "Operation does not return a result.", iBaseResource, fhirServerMock.doGet( resourceType, operationName, queryparams ) );
 
         GenericFhirResourceOperation operation = new GenericFhirResourceOperation( resourceType, operationName );
         FhirOperationCall call = operation.createOperationCall( fhirServerMock,  null );
@@ -47,7 +47,7 @@ public class FhirOperationTest {
         String resourceType = "Group";
         FhirServer fhirServerMock = mock( FhirServer.class );
 
-        when( fhirServerMock.getResourceOperation( resourceType, resourceId, operationName, queryparams ) ).thenReturn( iBaseResource );
+        when( fhirServerMock.doGet( resourceType, resourceId, operationName, queryparams ) ).thenReturn( iBaseResource );
 
         GenericFhirResourceInstanceOperation operation = new GenericFhirResourceInstanceOperation( resourceType, operationName );
         FhirOperationCall call = operation.createGetOperationCall( fhirServerMock, resourceId, queryparams );

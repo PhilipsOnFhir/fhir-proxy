@@ -13,21 +13,19 @@ import java.util.Map;
 public interface IFhirServer {
     CapabilityStatement getCapabilityStatement() throws NotImplementedException;
 
-    IBaseResource searchResource(String resourceType, Map<String, String> queryParams) throws NotImplementedException;
+    IBaseResource doSearch(String resourceType, Map<String, String> queryParams) throws NotImplementedException;
 
-    IBaseResource readResource(String resourceType, String id, Map<String, String> queryParams) throws FHIRException, NotImplementedException;
+    IBaseResource doGet(String resourceType, String id, Map<String, String> queryParams) throws FHIRException;
 
-    IBaseResource getResourceOperation(String resourceType, String operationName, Map<String, String> queryParams) throws FHIRException, NotImplementedException;
+    IBaseResource doGet(String resourceType, String id, String params, Map<String, String> queryParams) throws FHIRException;
 
-    IBaseResource getResourceOperation(String resourceType, String id, String params, Map<String, String> queryParams) throws FHIRException, NotImplementedException;
+    Bundle loadPage(Bundle resultBundle) throws FHIRException;
 
-    Bundle loadPage(Bundle resultBundle) throws FHIRException, NotImplementedException;
+    IBaseOperationOutcome updateResource(IBaseResource iBaseResource) throws FHIRException;
 
-    IBaseOperationOutcome updateResource(IBaseResource iBaseResource) throws FHIRException, NotImplementedException;
+    IBaseResource doPost(String resourceType, String id, IBaseResource iBaseResource, Map<String, String> queryParams) throws FHIRException;
 
-    IBaseOperationOutcome postResourceOperation(IBaseResource iBaseResource) throws FHIRException, NotImplementedException;
-
-    IBaseResource postResourceOperation(
+    IBaseResource doPost(
             String resourceType,
             String id,
             IBaseResource parseResource,

@@ -63,7 +63,7 @@ public class ExportAllFhirOperationCall implements FhirOperationCall {
         allresources.stream().forEach( resourceName -> {
             try {
                 this.progressDescription = "Processing resource " + resourceName;
-                IBaseResource result = fhirServer.searchResource( resourceName, null );
+                IBaseResource result = fhirServer.doSearch( resourceName, null );
                 if ( result instanceof Bundle ) {
                     BundleRetriever bundleRetriever = new BundleRetriever( fhirServer, (Bundle) result );
                     bundleRetriever.retrieveAllResources().stream().forEach( resource ->

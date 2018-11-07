@@ -27,7 +27,7 @@ public class GenericFhirResourceInstanceOperationCall implements FhirOperationCa
     @Override
     public IBaseResource getResult() throws FHIRException, NotImplementedException {
         if ( this.result == null ) {
-            this.result = fhirServer.getResourceOperation( resourceType, resourceId, operationName, queryParams );
+            this.result = fhirServer.doGet( resourceType, resourceId, operationName, queryParams );
         }
         return this.result;
     }

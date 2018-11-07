@@ -24,7 +24,7 @@ public class FhirClinicalReasoningCdsHooksService {
     public CdsServices getServices() throws FHIRException, NotImplementedException {
         CdsServices cdsServices = new CdsServices();
 
-        Bundle bundle = (Bundle) fhirServer.searchResource( "PlanDefinition", null );
+        Bundle bundle = (Bundle) fhirServer.doSearch( "PlanDefinition", null );
         BundleRetriever bundleRetriever = new BundleRetriever( fhirServer, bundle );
 
         bundleRetriever.retrieveAllResources().stream()
@@ -95,9 +95,9 @@ public class FhirClinicalReasoningCdsHooksService {
         // requestBody.getFhirAuthorization() ==> ignore for now
         PlanDefinitionProcessor planDefinitionProcessor = new PlanDefinitionProcessor(
             baseFhirDataProvider, idType,
-            contextParameters.get("patientId"),
+            contextParameters.get("patient"),
             contextParameters.get("encounterId"),
-            contextParameters.get("practitionerId" ),
+            contextParameters.get("practitioner" ),
             contextParameters.get("organizationId" ),
             contextParameters.get("userType"),
             contextParameters.get("userLanguage"),
@@ -108,7 +108,7 @@ public class FhirClinicalReasoningCdsHooksService {
         CarePlan carePlan = planDefinitionProcessor.getCarePlan();
         CdsServiceResponse cdsServiceResponse = new CdsServiceResponse();
         cdsServiceResponse.setCards( carePlanToCards( carePlan ) );
-        return new CdsServiceResponse();
+        return cdsServiceResponse;
     }
 
     private Map<String, String> processContext(String hook, String user, Context context) throws NotImplementedException {
@@ -151,7 +151,8 @@ public class FhirClinicalReasoningCdsHooksService {
             related action -- include text -- treat as subtrees?
          */
         // TODO replace questionnaireEditor
-        return CarePlanToCard.convert(  carePlan, this.fhirServer.getUrl(), "http://questionnaireEditor" );
+//        return CarePlanToCard.convert(  carePlan, this.fhirServer.getUrl(), "http://localhost:4200/editor/" );
+        return CarePlanToCard.convert(  carePlan, "http://localhost:8080/fhir", "http://localhost:4200/editor/" );
     }
 
 }

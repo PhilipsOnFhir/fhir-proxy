@@ -114,9 +114,9 @@ public class PlanDefinitionProcessor {
         /******************************/
 
 
-        cqlExecutionProvider = new CqlExecutionProvider( fhirDataProvider, planDefinition,  patientId, contextParameters );
+//        cqlExecutionProvider = new CqlExecutionProvider( fhirDataProvider, planDefinition,  patientId, contextParameters );
 
-        cqlExecutionProvider = new CqlExecutionProvider( fhirDataProvider, planDefinition, patientId, contextParameters );
+//        cqlExecutionProvider = new CqlExecutionProvider( fhirDataProvider, planDefinition, patientId, contextParameters );
         if (contextParameters!=null && !contextParameters.isEmpty()) {
             cqlExecutionProvider.setContextParameters( contextParameters );
         }
@@ -268,32 +268,44 @@ public class PlanDefinitionProcessor {
     private void processDynamicValues(PlanDefinition.PlanDefinitionActionComponent planDefinitionAction, RequestGroup.RequestGroupActionComponent requestGroupAction) throws FHIRException {
         for ( PlanDefinition.PlanDefinitionActionDynamicValueComponent dynamicValue : planDefinitionAction.getDynamicValue()) {
             if (dynamicValue.hasPath() && dynamicValue.hasExpression()) {
-                Object result = null;
-                switch( dynamicValue.getLanguage() ) {
-                    case "text/fhirpath":
-                        result = fhirPathEngine.evaluate( this.planDefinition, dynamicValue.getExpression() );
-                        if ( !((List) result).isEmpty() ) {
-                            result = ((List) result).get( 0 );
-                        }
-                        break;
-                    case "text/cql":
-                    default:
-                        result = cqlExecutionProvider.evaluateInContext(  dynamicValue.getExpression() );
-                }
+                try {
+                    Object result = null;
+                    switch (dynamicValue.getLanguage()) {
+                        case "text/fhirpath":
+                            result = fhirPathEngine.evaluate(this.planDefinition, dynamicValue.getExpression());
+                            if (!((List) result).isEmpty()) {
+                                result = ((List) result).get(0);
+                            }
+                            break;
+                        case "text/cql":
+                        default:
+                            result = cqlExecutionProvider.evaluateInContext(dynamicValue.getExpression());
+                    }
 
-                if ( dynamicValue.getPath().startsWith( "%action" ) ) {
-                    FhirValueSetter.setProperty( requestGroupAction, dynamicValue.getPath().replace("%action",""), (Base) result );
-                } else if ( dynamicValue.getPath().equals( "%context" ) ) {
-                    this.carePlan = (CarePlan)carePlan;
-                } else if ( dynamicValue.getPath().startsWith( "%context" ) ) {
-                    FhirValueSetter.setProperty( requestGroupAction, dynamicValue.getPath().replace("%context",""), (Base) result );
-                } else {
-//                    this.clinReasoningProvider.setValue( carePlan, dynamicValue.getPath(), result );
-                    FhirValueSetter.setProperty( carePlan, dynamicValue.getPath(), (Base) result );
+                    if (dynamicValue.getPath().startsWith("%action")) {
+                        String newPath =
+                                dynamicValue.getPath().replace("%action.", "").replace("%action.", "");
+                        FhirValueSetter.setProperty(requestGroupAction, newPath, result);
+                    } else if (dynamicValue.getPath().equals("%context")) {
+                        this.carePlan = (CarePlan) carePlan;
+                    } else if (dynamicValue.getPath().startsWith("%context")) {
+                        String newPath =
+                                dynamicValue.getPath().replace("%context.", "").replace("%context.", "");
+                        FhirValueSetter.setProperty(requestGroupAction, newPath, result);
+                    } else {
+                        //                    this.clinReasoningProvider.setValue( carePlan, dynamicValue.getPath(), result );
+                        FhirValueSetter.setProperty(carePlan, dynamicValue.getPath(), result);
+                    }
+                }
+                catch (FHIRException e ){
+                    throw new FHIRException( "Error while processing dynamic value "+ dynamicValue.getPath()+" with expression "+dynamicValue.getExpression(), e );
+
                 }
             }
         }
     }
+
+
 
     private void processDefinition(PlanDefinition.PlanDefinitionActionComponent planDefinitionAction, RequestGroup.RequestGroupActionComponent requestGroupAction) throws FHIRException {
         String definitionType = planDefinitionAction.getDefinition().getReferenceElement().getResourceType();

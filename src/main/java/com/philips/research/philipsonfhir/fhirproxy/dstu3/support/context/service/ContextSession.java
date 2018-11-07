@@ -7,10 +7,8 @@ import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.NotImplemented
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.context.model.*;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.proxy.service.FhirServer;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.proxy.service.IFhirServer;
-import org.hl7.elm.r1.Not;
 import org.hl7.fhir.dstu3.model.Bundle;
 import org.hl7.fhir.dstu3.model.CapabilityStatement;
-import org.hl7.fhir.dstu3.model.OperationOutcome;
 import org.hl7.fhir.dstu3.model.Resource;
 import org.hl7.fhir.exceptions.FHIRException;
 import org.hl7.fhir.instance.model.api.IBaseOperationOutcome;
@@ -55,12 +53,12 @@ public class ContextSession implements IFhirServer {
     }
 
     @Override
-    public IBaseResource searchResource(String resourceType, @NonNull Map<String, String> queryParams) throws NotImplementedException {
+    public IBaseResource doSearch(String resourceType, @NonNull Map<String, String> queryParams) throws NotImplementedException {
         if ( !queryParams.isEmpty() ){
             throw new NotImplementedException("Search parameters not supported");
         }
         Map<String, FhirAction> resourceMap = getResourceMap(resourceType);
-        Bundle bundle = (Bundle) fhirServer.searchResource(resourceType, queryParams );
+        Bundle bundle = (Bundle) fhirServer.doSearch(resourceType, queryParams );
         Iterator<Bundle.BundleEntryComponent> iter = bundle.getEntry().iterator();
         while ( iter.hasNext() ){
             Bundle.BundleEntryComponent entryComponent = iter.next();
@@ -87,8 +85,8 @@ public class ContextSession implements IFhirServer {
     }
 
     @Override
-    public IBaseResource readResource(String resourceType, String id, Map<String, String> queryParams) throws FHIRException, NotImplementedException {
-        IBaseResource iBaseResource = fhirServer.readResource(resourceType,id,queryParams);
+    public IBaseResource doGet(String resourceType, String id, Map<String, String> queryParams) throws FHIRException, NotImplementedException {
+        IBaseResource iBaseResource = fhirServer.doGet(resourceType,id,queryParams);
 
         Map<String,FhirAction> resourceMap = this.resourceMapMap.get(resourceType);
         FhirAction fhirAction = resourceMap.get(id);
@@ -96,13 +94,9 @@ public class ContextSession implements IFhirServer {
         return fhirAction.process( iBaseResource );
     }
 
-    @Override
-    public IBaseResource getResourceOperation(String resourceType, String operationName, Map<String, String> queryParams) throws FHIRException, NotImplementedException {
-        throw new NotImplementedException();
-    }
 
     @Override
-    public IBaseResource getResourceOperation(String resourceType, String id, String params, Map<String, String> queryParams) throws FHIRException, NotImplementedException {
+    public IBaseResource doGet(String resourceType, String id, String params, Map<String, String> queryParams) throws FHIRException, NotImplementedException {
         throw new NotImplementedException();
     }
 
@@ -120,7 +114,7 @@ public class ContextSession implements IFhirServer {
         MethodOutcome methodOutcome = new MethodOutcome();
         boolean existsInFhirServer = true;
         try {
-            Resource resourceFs = (Resource) fhirServer.readResource(resourceIn.getResourceType().name(), resourceIn.getIdElement().getIdPart(), null);
+            Resource resourceFs = (Resource) fhirServer.doGet(resourceIn.getResourceType().name(), resourceIn.getIdElement().getIdPart(), null);
         } catch ( ResourceNotFoundException e ){
             existsInFhirServer = false;
         }
@@ -140,7 +134,7 @@ public class ContextSession implements IFhirServer {
     }
 
     @Override
-    public IBaseOperationOutcome postResourceOperation(IBaseResource iBaseResource) throws FHIRException, NotImplementedException {
+    public IBaseResource doPost(String resourceType, String id, IBaseResource iBaseResource, Map<String, String> queryParams) throws FHIRException, NotImplementedException {
             throw  new NotImplementedException();
     }
 
@@ -155,7 +149,7 @@ public class ContextSession implements IFhirServer {
     }
 
     @Override
-    public IBaseResource postResourceOperation(String resourceType, String id, IBaseResource parseResource, String params, Map<String, String> queryParams) throws FHIRException, NotImplementedException {
+    public IBaseResource doPost(String resourceType, String id, IBaseResource parseResource, String params, Map<String, String> queryParams) throws FHIRException, NotImplementedException {
         throw new NotImplementedException();
     }
 

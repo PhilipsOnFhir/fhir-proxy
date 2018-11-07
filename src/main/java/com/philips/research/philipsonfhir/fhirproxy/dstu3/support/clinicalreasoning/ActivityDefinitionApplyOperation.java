@@ -57,4 +57,10 @@ public class ActivityDefinitionApplyOperation extends FhirResourceInstanceOperat
             }
         };
     }
+
+    @Override
+    public FhirOperationCall createPostOperationCall(FhirServer fhirServer, IBaseResource parseResource, Map<String, String> queryParams) throws NotImplementedException {
+        throw new NotImplementedException();
+    }
+
 }

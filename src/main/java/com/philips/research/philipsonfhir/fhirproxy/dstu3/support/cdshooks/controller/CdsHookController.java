@@ -27,7 +27,7 @@ public class CdsHookController {
         return cdsHooksService.getServices();
     }
 
-    @PostMapping(PREFIX + "/cds-services{serviceId}")
+    @PostMapping(PREFIX + "/cds-services/{serviceId}")
     public CdsServiceResponse callCdsService(@PathVariable String serviceId, @RequestBody CdsServiceCallBody body ) throws FHIRException, NotImplementedException {
         return cdsHooksService.callCdsService( serviceId, body );
     }

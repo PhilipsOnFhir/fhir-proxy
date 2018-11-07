@@ -83,7 +83,7 @@ public class JpaServerDemo extends RestfulServer {
 		setPlainProviders(systemProvider);
 
 		/*
-		 * The conformance provider exports the supported resources, search parameters, etc for
+		 * The conformance provider exports the supported resources, doSearch parameters, etc for
 		 * this server. The JPA version adds resource counts to the exported statement, so it
 		 * is a nice addition.
 		 */
@@ -116,7 +116,7 @@ public class JpaServerDemo extends RestfulServer {
 
 		/*
 		 * -- New in HAPI FHIR 1.5 --
-		 * This configures the server to page search results to and from
+		 * This configures the server to page doSearch results to and from
 		 * the database, instead of only paging them to memory. This may mean
 		 * a performance hit when performing searches that return lots of results,
 		 * but makes the server much more scalable.
@@ -134,7 +134,7 @@ public class JpaServerDemo extends RestfulServer {
 		/*
 		 * If you are hosting this server at a specific DNS name, the server will try to 
 		 * figure out the FHIR base URL based on what the web container tells it, but
-		 * this doesn't always work. If you are setting links in your search bundles that
+		 * this doesn't always work. If you are setting links in your doSearch bundles that
 		 * just refer to "localhost", you might want to use a server address strategy:
 		 */
 		//setServerAddressStrategy(new HardcodedServerAddressStrategy("http://mydomain.com/fhir/baseDstu2"));

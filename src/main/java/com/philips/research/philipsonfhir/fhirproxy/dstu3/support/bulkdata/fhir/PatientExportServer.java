@@ -25,7 +25,7 @@ public class PatientExportServer {
             String since,
             String type) throws FHIRException, NotImplementedException {
 
-        Bundle bundle = (Bundle) this.fhirServer.readResource("Patient","$everything",null);
+        Bundle bundle = (Bundle) this.fhirServer.doGet("Patient","$everything",null);
         BundleRetriever bulkDataHelper = new BundleRetriever( this.fhirServer, bundle );
         List<Resource> resources = bulkDataHelper.retrieveAllResources();
 
@@ -49,7 +49,7 @@ public class PatientExportServer {
     }
 
     public Bundle exportAllGroupData(String id, String outputFormat, String since, String type) throws FHIRException, NotImplementedException {
-        Group group = (Group) this.fhirServer.readResource( "Group", id, null );
+        Group group = (Group) this.fhirServer.doGet( "Group", id, null );
 
         Bundle resultBundle = new Bundle()
             .setType( Bundle.BundleType.SEARCHSET );
@@ -74,7 +74,7 @@ public class PatientExportServer {
     }
 
     public Bundle exportPatientData(String id, String outputFormat, String since, String type) throws FHIRException, NotImplementedException {
-        Bundle bundle = (Bundle) this.fhirServer.getResourceOperation( "Patient", id, "$everything", null );
+        Bundle bundle = (Bundle) this.fhirServer.doGet( "Patient", id, "$everything", null );
         BundleRetriever bulkDataHelper = new BundleRetriever( this.fhirServer, bundle );
         List<Resource> resources = bulkDataHelper.retrieveAllResources();
 
@@ -108,7 +108,7 @@ public class PatientExportServer {
 
         allresources.stream().forEach( resourceName -> {
             try {
-                IBaseResource result = fhirServer.searchResource( resourceName, null );
+                IBaseResource result = fhirServer.doSearch( resourceName, null );
                 if ( result instanceof Bundle ) {
                     BundleRetriever bundleRetriever = new BundleRetriever( fhirServer, (Bundle) result );
                     bundleRetriever.retrieveAllResources().stream().forEach( resource ->

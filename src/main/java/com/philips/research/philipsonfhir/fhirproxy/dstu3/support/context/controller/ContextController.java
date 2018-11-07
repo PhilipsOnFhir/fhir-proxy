@@ -113,7 +113,7 @@ public class ContextController {
             return parser(accept).encodeResourceToString( contextSession.getFhirServer().getCapabilityStatement() );
         }
         else {
-            return parser(accept).encodeResourceToString(contextSession.searchResource(resourceType, queryParams ));
+            return parser(accept).encodeResourceToString(contextSession.doSearch(resourceType, queryParams ));
         }
     }
 
@@ -215,7 +215,7 @@ public class ContextController {
 //            return parser(accept).encodeResourceToString( fhirServer.getCapabilityStatement() );
 //        }
 //        else {
-//            return parser(accept).encodeResourceToString( fhirServer.searchResource(resourceType, queryParams ));
+//            return parser(accept).encodeResourceToString( fhirServer.doSearch(resourceType, queryParams ));
 //        }
 //    }
 //
@@ -255,7 +255,7 @@ public class ContextController {
 //            Map<String, String> queryParams
 //    ) throws Exception {
 //        logger.log(Level.INFO,"GET "+resourceType+" "+id );
-//        return parser(contentType).encodeResourceToString( fhirServer.readResource( resourceType, id, queryParams ));
+//        return parser(contentType).encodeResourceToString( fhirServer.doGet( resourceType, id, queryParams ));
 //    }
 //
 //    @RequestMapping (
@@ -271,7 +271,7 @@ public class ContextController {
 //            @PathVariable String params,
 //            @RequestParam Map<String, String> queryParams
 //    ) throws Exception {
-//        return parser(accept).encodeResourceToString(fhirServer.getResourceOperation( resourceType, id, params, queryParams ));
+//        return parser(accept).encodeResourceToString(fhirServer.doGet( resourceType, id, params, queryParams ));
 //    }
 //
 //    @RequestMapping (
@@ -290,7 +290,7 @@ public class ContextController {
 //        IBaseResource iBaseResource;
 //        HttpStatus httpStatus;
 //        try{
-//            iBaseResource = fhirServer.getResourceOperation( resourceType, id, params, queryParams );
+//            iBaseResource = fhirServer.doGet( resourceType, id, params, queryParams );
 //            httpStatus= HttpStatus.OK;
 //        } catch ( FHIRException| NotImplementedException e1 ){
 //            iBaseResource = new OperationOutcome().addIssue( new OperationOutcome.OperationOutcomeIssueComponent()
@@ -314,7 +314,7 @@ public class ContextController {
 //            Map<String, String> queryParams
 //    ) throws Exception {
 //        logger.log(Level.INFO,"GET "+resourceType+" "+id );
-//        return parser(contentType).encodeResourceToString( fhirServer.readResource( resourceType, id, queryParams ));
+//        return parser(contentType).encodeResourceToString( fhirServer.doGet( resourceType, id, queryParams ));
 //    }
 //    /////////////////////////////////////////////////////////////////////////////
 //

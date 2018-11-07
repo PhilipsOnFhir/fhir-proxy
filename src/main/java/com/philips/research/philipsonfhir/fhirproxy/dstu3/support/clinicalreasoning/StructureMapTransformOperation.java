@@ -37,15 +37,21 @@ public class StructureMapTransformOperation extends FhirResourceInstanceOperatio
 
                 String source = queryParams.get( "source" );
 
-                Optional<Resource> optResource = ((Parameters) parameters).getParameter().stream()
-                    .filter( parameter -> parameter.getName().equals( "content" ) )
-                    .map( parameter -> parameter.getResource() )
-                    .findFirst();
+                Optional<Resource> optSourceResource = ((Parameters) parameters).getParameter().stream()
+                        .filter( parameter -> parameter.getName().equals( "source" ) )
+                        .map( parameter -> parameter.getResource() )
+                        .findFirst();
 
-                if ( !optResource.isPresent() ) {
+                Optional<Resource> optContentResource = ((Parameters) parameters).getParameter().stream()
+                        .filter( parameter -> parameter.getName().equals( "content" ) )
+                        .map( parameter -> parameter.getResource() )
+                        .findFirst();
+
+
+                if ( !optContentResource.isPresent() ) {
                     throw new FHIRException( "missing content parameter" );
                 }
-                Resource contentRsource = optResource.get();
+                Resource contentResource = optContentResource.get();
 
                 StructureMap structuredMap =
                        client.read().resource( StructureMap.class ).withId( resourceId ).execute();
@@ -53,7 +59,7 @@ public class StructureMapTransformOperation extends FhirResourceInstanceOperatio
                     throw new FHIRException( "StructureMap "+resourceId+" can not be found" );
                 }
 
-                IBaseResource result = structureMapTransformServer.doTransform( structuredMap, contentRsource, null );
+                IBaseResource result = structureMapTransformServer.doTransform( structuredMap, contentResource, null );
                 return result;
             }
 
@@ -68,4 +74,51 @@ public class StructureMapTransformOperation extends FhirResourceInstanceOperatio
             }
         };
     }
+
+    @Override
+    public FhirOperationCall createPostOperationCall(FhirServer fhirServer, IBaseResource parameters, Map<String, String> queryParams) throws NotImplementedException {
+        return new FhirOperationCall() {
+            @Override
+            public IBaseResource getResult() throws FHIRException, NotImplementedException {
+                BaseFhirDataProvider baseFhirDataProvider = new FhirDataProviderStu3().setEndpoint( url );
+
+                Optional<Resource> optSourceResource = ((Parameters) parameters).getParameter().stream()
+                        .filter( parameter -> parameter.getName().equals( "source" ) )
+                        .map( parameter -> parameter.getResource() )
+                        .findFirst();
+                if ( !optSourceResource.isPresent() ) {
+                    throw new FHIRException( "missing source parameter" );
+                }
+
+                Optional<Resource> optContentResource = ((Parameters) parameters).getParameter().stream()
+                        .filter( parameter -> parameter.getName().equals( "content" ) )
+                        .map( parameter -> parameter.getResource() )
+                        .findFirst();
+                if ( !optContentResource.isPresent() ) {
+                    throw new FHIRException( "missing content parameter" );
+                }
+
+                Resource contentResource = optContentResource.get();
+                Resource sourceResource  = optSourceResource.get();
+                if ( sourceResource==null || !(sourceResource instanceof StructureMap)){
+                    throw new FHIRException( "Body should contain a valid structureMap" );
+                }
+                StructureMap structuredMap = (StructureMap) sourceResource;
+
+                IBaseResource result = structureMapTransformServer.doTransform( structuredMap, contentResource, null );
+                return result;
+            }
+
+            @Override
+            public String getDescription() {
+                return null;
+            }
+
+            @Override
+            public Map<String, OperationOutcome> getErrors() {
+                return null;
+            }
+        };
+    }
+
 }

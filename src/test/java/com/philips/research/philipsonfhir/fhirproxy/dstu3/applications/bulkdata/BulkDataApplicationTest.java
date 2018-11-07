@@ -327,9 +327,9 @@ public class BulkDataApplicationTest {
         }
 
 //        for ( Bundle.BundleEntryComponent bundleEntryComponent : resourceBundle.getEntry()) {
-//            Resource resource = bundleEntryComponent.getResourceOperation();
+//            Resource resource = bundleEntryComponent.doGet();
 //            assertTrue( patientData.getEntry().stream()
-//                .map(allPatientBundleEntryComponent -> allPatientBundleEntryComponent.getResourceOperation())
+//                .map(allPatientBundleEntryComponent -> allPatientBundleEntryComponent.doGet())
 //                .filter( res -> res.fhirType()==resourceType)
 //                .filter( res2 -> res2.getId().endsWith(resource.getId()))
 //                .findFirst().isPresent());

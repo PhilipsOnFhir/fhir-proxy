@@ -87,7 +87,7 @@
 //            } else {
 //                logger.log(Level.INFO, "JSON GET " + resourceType);
 //                return new ResponseEntity<>(
-//                    parser(accept).encodeResourceToString(fhirServer.searchResource(resourceType, queryParams)),
+//                    parser(accept).encodeResourceToString(fhirServer.doSearch(resourceType, queryParams)),
 //                    HttpStatus.OK
 //                );
 //            }
@@ -109,7 +109,7 @@
 //            @PathVariable String id,
 //            @RequestParam Map<String, String> queryParams
 //    ) throws Exception {
-//        return getResourceOperation( request, response, prefer, accept, resourceType, id, queryParams );
+//        return doGet( request, response, prefer, accept, resourceType, id, queryParams );
 //    }
 //
 //
@@ -127,10 +127,10 @@
 //            @PathVariable String id,
 //            @RequestParam Map<String, String> queryParams
 //    ) throws Exception {
-//        return getResourceOperation( request, response, prefer, accept, resourceType, id, queryParams );
+//        return doGet( request, response, prefer, accept, resourceType, id, queryParams );
 //    }
 //
-//    private ResponseEntity<String> getResourceOperation(
+//    private ResponseEntity<String> doGet(
 //            HttpServletRequest request,
 //            HttpServletResponse response,
 //            String prefer,
@@ -148,7 +148,7 @@
 //            );
 //        } else {
 //            return new ResponseEntity<>(
-//                    parser(accept).encodeResourceToString(fhirServer.getResourceOperation(resourceType, id, queryParams)),
+//                    parser(accept).encodeResourceToString(fhirServer.doGet(resourceType, id, queryParams)),
 //                    HttpStatus.OK
 //            );
 //        }
@@ -178,7 +178,7 @@
 //            );
 //        } else {
 //            return new ResponseEntity<>(
-//                    parser(accept).encodeResourceToString(fhirServer.getResourceOperation(resourceType, id, params, queryParams)),
+//                    parser(accept).encodeResourceToString(fhirServer.doGet(resourceType, id, params, queryParams)),
 //                    HttpStatus.OK
 //            );
 //        }
@@ -208,7 +208,7 @@
 //            );
 //        } else {
 //            return new ResponseEntity<>(
-//                    parser(accept).encodeResourceToString(fhirServer.getResourceOperation(resourceType, id, params, queryParams)),
+//                    parser(accept).encodeResourceToString(fhirServer.doGet(resourceType, id, params, queryParams)),
 //                    HttpStatus.OK
 //            );
 //        }
@@ -287,7 +287,7 @@
 //            @RequestParam Map<String, String> queryParams
 //    ) throws Exception {
 //        logger.log(Level.INFO,"POST "+resourceType+" "+id );
-//        return parser( accept ).encodeResourceToString(fhirServer.postResourceOperation( parser(contentType).parseResource(requestBody) ));
+//        return parser( accept ).encodeResourceToString(fhirServer.doPost( parser(contentType).parseResource(requestBody) ));
 //    }
 //
 //    @RequestMapping (
@@ -295,7 +295,7 @@
 //            value = "/fhir/{resourceType}/{id}",
 //            produces =  "application/fhir+json"
 //    )
-//    public String postResourceJson(
+//    public String postResourceTypeId(
 //            @RequestHeader("Accept") String accept,
 //            @RequestHeader("Content-Type") String contentType,
 //            @RequestBody  String requestBody,
@@ -304,7 +304,7 @@
 //            @RequestParam Map<String, String> queryParams
 //    ) throws Exception {
 //        logger.log(Level.INFO,"POST "+resourceType+" "+id );
-//        return parser( accept ).encodeResourceToString(fhirServer.postResourceOperation( parser(contentType).parseResource(requestBody) ));
+//        return parser( accept ).encodeResourceToString(fhirServer.doPost( parser(contentType).parseResource(requestBody) ));
 //    }
 //
 //    /////////////////////////////////////////////////////////////////////////////
@@ -315,7 +315,7 @@
 //            value = "/fhir/{resourceType}/{id}/{params}",
 //            produces =  "application/fhir+json"
 //    )
-//    public String postJsonResourceWithParams(
+//    public String postResourceTypeIdParams(
 //            @RequestHeader(value = "Accept", defaultValue = "application/fhir+json") String accept,
 //            @RequestHeader(value = "Content-Type", defaultValue = "application/fhir+json") String contentType,
 //            @RequestBody  String requestBody,
@@ -327,7 +327,7 @@
 //        logger.log(Level.INFO,"POST "+resourceType+" "+id );
 //        return parser( accept )
 //                .encodeResourceToString(
-//                        fhirServer.postResourceOperation( resourceType, id, parser(contentType).parseResource(requestBody),params, queryParams )
+//                        fhirServer.doPost( resourceType, id, parser(contentType).parseResource(requestBody),params, queryParams )
 //                );
 //    }
 //
@@ -348,7 +348,7 @@
 //        logger.log(Level.INFO,"POST "+resourceType+" "+id );
 //        return parser( accept )
 //                .encodeResourceToString(
-//                        fhirServer.postResourceOperation( resourceType, id, parser(contentType).parseResource(requestBody),params, queryParams )
+//                        fhirServer.doPost( resourceType, id, parser(contentType).parseResource(requestBody),params, queryParams )
 //                );
 //    }
 //

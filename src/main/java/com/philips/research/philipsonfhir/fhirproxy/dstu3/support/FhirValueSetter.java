@@ -1,10 +1,12 @@
 package com.philips.research.philipsonfhir.fhirproxy.dstu3.support;
 
 import org.hl7.fhir.dstu3.model.Base;
+import org.hl7.fhir.dstu3.model.StringType;
 import org.hl7.fhir.exceptions.FHIRException;
 
 public class FhirValueSetter {
-    public static Base setProperty(Base dest, String element, Base v) throws FHIRException {
+    public static Base setProperty(Base dest, String element, Object obj ) throws FHIRException {
+        Base v = FhirValueSetter.getBaseValue(obj);
 //        String item = "related";
 //        String type = "type";
 //        hObs.getProperty(item.hashCode(), item, false );
@@ -42,5 +44,14 @@ public class FhirValueSetter {
         Last -- use set.
 */
         return result;
+    }
+
+    private static Base getBaseValue(Object value) throws FHIRException {
+        if ( value instanceof Base ) {
+            return (Base) value;
+        } else if ( value instanceof String ){
+            return new StringType((String)value);
+        }
+        throw new FHIRException("Could not cast "+value.getClass()+" to Base.");
     }
 }

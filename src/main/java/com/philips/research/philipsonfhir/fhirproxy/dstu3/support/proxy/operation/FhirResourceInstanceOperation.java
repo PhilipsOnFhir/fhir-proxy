@@ -21,6 +21,10 @@ public abstract class FhirResourceInstanceOperation {
         this.operationName = operationName;
     }
 
+    public FhirOperationCall createGetOperationCall(FhirServer fhirServer, Map<String, String> queryparams) throws NotImplementedException {
+        throw new NotImplementedException();
+    }
+
     public FhirOperationCall createGetOperationCall(FhirServer fhirServer, String resourceId, Map<String, String> queryparams) throws NotImplementedException {
         throw new NotImplementedException();
     }
@@ -46,4 +50,6 @@ public abstract class FhirResourceInstanceOperation {
             throw new FHIRException("Missing required parameter "+name);
         }
     }
+
+    public abstract FhirOperationCall createPostOperationCall(FhirServer fhirServer, IBaseResource parseResource, Map<String, String> queryParams) throws NotImplementedException;
 }

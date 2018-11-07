@@ -27,7 +27,7 @@ public class FhirClinicalReasoningCdsHooksServiceTest {
 
         PlanDefinition pd1 = (PlanDefinition) new PlanDefinition(  ).setId("pd1");
         bundle.addEntry( new Bundle.BundleEntryComponent().setResource( pd1 ) );
-        when ( fhirServer.searchResource( resourceType,null )).thenReturn( bundle );
+        when ( fhirServer.doSearch( resourceType,null )).thenReturn( bundle );
 
         FhirClinicalReasoningCdsHooksService fhirClinicalReasoningCdsHooksService = new FhirClinicalReasoningCdsHooksService( fhirServer );
         CdsServices cdsServices = fhirClinicalReasoningCdsHooksService.getServices();
@@ -63,7 +63,7 @@ public class FhirClinicalReasoningCdsHooksServiceTest {
 //
 //        Bundle bundle = new Bundle(  );
 //
-//        when ( fhirServer.searchResource( resourceType,null )).thenReturn( bundle );
+//        when ( fhirServer.doSearch( resourceType,null )).thenReturn( bundle );
 //        when ( fhirServer.getUrl()).thenReturn( "http://dummyServer" );
 //
 //        FhirClinicalReasoningCdsHooksService fhirClinicalReasoningCdsHooksService = new FhirClinicalReasoningCdsHooksService( fhirServer );

@@ -43,4 +43,12 @@ public class FhirOperationRepository {
         }
         return null;
     }
+
+    public FhirOperationCall doPostOperation(FhirServer fhirServer, String resourceType, String operationName, IBaseResource parseResource, Map<String, String> queryParams) throws NotImplementedException {
+        FhirResourceInstanceOperation operation = getFhirResourceInstanceOperation( resourceType, operationName );
+        if ( operation != null ) {
+            return operation.createPostOperationCall( fhirServer, parseResource, queryParams );
+        }
+        return null;
+    }
 }

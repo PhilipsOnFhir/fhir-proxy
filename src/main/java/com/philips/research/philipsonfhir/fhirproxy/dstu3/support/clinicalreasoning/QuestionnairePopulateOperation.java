@@ -35,7 +35,7 @@ public class QuestionnairePopulateOperation extends FhirResourceInstanceOperatio
                 populateParameter(parameters,"content", false, Enumerations.FHIRAllTypes.REFERENCE, queryParams);
                 populateParameter(parameters,"local", false, Enumerations.FHIRAllTypes.BOOLEAN, queryParams);
 
-                IBaseResource iBaseResource = fhirServer.readResource(resourceType,resourceId,null);
+                IBaseResource iBaseResource = fhirServer.doGet(resourceType,resourceId,null);
                 if ( iBaseResource == null || !(iBaseResource instanceof  Questionnaire )){
                     throw new FHIRException("Questionnaire "+ resourceId + " cannot be found");
                 }
@@ -69,7 +69,7 @@ public class QuestionnairePopulateOperation extends FhirResourceInstanceOperatio
                 populateParameter(parameters,"content", false, Enumerations.FHIRAllTypes.REFERENCE, queryParams);
                 populateParameter(parameters,"local", false, Enumerations.FHIRAllTypes.BOOLEAN, queryParams);
 
-                IBaseResource iBaseResource = fhirServer.readResource(resourceType,resourceId,null);
+                IBaseResource iBaseResource = fhirServer.doGet(resourceType,resourceId,null);
                 if ( iBaseResource == null || !(iBaseResource instanceof  Questionnaire )){
                     throw new FHIRException("Questionnaire "+ resourceId + " cannot be found");
                 }
@@ -88,4 +88,10 @@ public class QuestionnairePopulateOperation extends FhirResourceInstanceOperatio
             }
         };
     }
+
+    @Override
+    public FhirOperationCall createPostOperationCall(FhirServer fhirServer, IBaseResource parseResource, Map<String, String> queryParams) throws NotImplementedException {
+        throw new NotImplementedException();
+    }
+
 }

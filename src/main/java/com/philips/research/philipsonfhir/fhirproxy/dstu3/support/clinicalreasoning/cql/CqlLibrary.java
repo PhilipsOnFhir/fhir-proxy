@@ -119,7 +119,8 @@ public class CqlLibrary {
     }
 
     private String addExpression(String language, String expression, List<String> defineList) {
-        String result = "// none /n";
+        String result = "/* none  */ /n";
+        result="";
         if ( language!=null && language.equals("text/cql")){
             String newExpression = addPrefixes( primaryLibrary, defineList, expression );
             result = "define "+ getCqlDefine(expression) +": "+newExpression+"\n\n";

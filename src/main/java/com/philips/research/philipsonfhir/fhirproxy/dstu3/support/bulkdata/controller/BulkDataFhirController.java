@@ -88,7 +88,7 @@ public class BulkDataFhirController {
             } else {
                 logger.log(Level.INFO, "JSON GET " + resourceType);
                 return new ResponseEntity<>(
-                    parser(accept).encodeResourceToString(fhirServer.searchResource(resourceType, queryParams)),
+                    parser(accept).encodeResourceToString(fhirServer.doSearch(resourceType, queryParams)),
                     HttpStatus.OK
                 );
             }
@@ -149,7 +149,7 @@ public class BulkDataFhirController {
             );
         } else {
             return new ResponseEntity<>(
-                    parser(accept).encodeResourceToString(fhirServer.readResource(resourceType, id, queryParams)),
+                    parser(accept).encodeResourceToString(fhirServer.doGet(resourceType, id, queryParams)),
                     HttpStatus.OK
             );
         }
@@ -179,7 +179,7 @@ public class BulkDataFhirController {
             );
         } else {
             return new ResponseEntity<>(
-                    parser(accept).encodeResourceToString(fhirServer.getResourceOperation(resourceType, id, params, queryParams)),
+                    parser(accept).encodeResourceToString(fhirServer.doGet(resourceType, id, params, queryParams)),
                     HttpStatus.OK
             );
         }
@@ -209,7 +209,7 @@ public class BulkDataFhirController {
             );
         } else {
             return new ResponseEntity<>(
-                    parser(accept).encodeResourceToString(fhirServer.getResourceOperation(resourceType, id, params, queryParams)),
+                    parser(accept).encodeResourceToString(fhirServer.doGet(resourceType, id, params, queryParams)),
                     HttpStatus.OK
             );
         }
@@ -288,7 +288,7 @@ public class BulkDataFhirController {
             @RequestParam Map<String, String> queryParams
     ) throws Exception {
         logger.log(Level.INFO,"POST "+resourceType+" "+id );
-        return parser( accept ).encodeResourceToString(fhirServer.postResourceOperation( parser(contentType).parseResource(requestBody) ));
+        return parser( accept ).encodeResourceToString(fhirServer.doPost(resourceType, id, parser(contentType).parseResource(requestBody), queryParams));
     }
 
     @RequestMapping (
@@ -305,7 +305,7 @@ public class BulkDataFhirController {
             @RequestParam Map<String, String> queryParams
     ) throws Exception {
         logger.log(Level.INFO,"POST "+resourceType+" "+id );
-        return parser( accept ).encodeResourceToString(fhirServer.postResourceOperation( parser(contentType).parseResource(requestBody) ));
+        return parser( accept ).encodeResourceToString(fhirServer.doPost(resourceType, id, parser(contentType).parseResource(requestBody), queryParams));
     }
 
     /////////////////////////////////////////////////////////////////////////////
@@ -328,7 +328,7 @@ public class BulkDataFhirController {
         logger.log(Level.INFO,"POST "+resourceType+" "+id );
         return parser( accept )
                 .encodeResourceToString(
-                        fhirServer.postResourceOperation( resourceType, id, parser(contentType).parseResource(requestBody),params, queryParams )
+                        fhirServer.doPost( resourceType, id, parser(contentType).parseResource(requestBody),params, queryParams )
                 );
     }
 
@@ -349,7 +349,7 @@ public class BulkDataFhirController {
         logger.log(Level.INFO,"POST "+resourceType+" "+id );
         return parser( accept )
                 .encodeResourceToString(
-                        fhirServer.postResourceOperation( resourceType, id, parser(contentType).parseResource(requestBody),params, queryParams )
+                        fhirServer.doPost( resourceType, id, parser(contentType).parseResource(requestBody),params, queryParams )
                 );
     }
 

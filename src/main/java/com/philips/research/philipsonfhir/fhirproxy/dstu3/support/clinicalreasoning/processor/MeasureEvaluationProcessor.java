@@ -77,13 +77,13 @@ public class MeasureEvaluationProcessor {
 
 //            provider.resolvePath(  )
 //            if (provider instanceof JpaDataProvider) {
-//                IBundleProvider patientProvider = ((JpaDataProvider) provider).resolveResourceProvider("Patient").getDao().search(map);
+//                IBundleProvider patientProvider = ((JpaDataProvider) provider).resolveResourceProvider("Patient").getDao().doSearch(map);
 //                List<IBaseResource> patientList = patientProvider.getResources(0, patientProvider.size());
 //                patientList.forEach(x -> patients.add((Patient) x));
 //            }
 ////            List<IBaseResource> patientList = new ArrayList<>(  );
 //            results.getEntry().stream().forEach( entry -> {
-//                patients.add( (Patient) entry.getResourceOperation() );
+//                patients.add( (Patient) entry.doGet() );
 //            } );
         }
         return evaluate(measure, context, patients, MeasureReport.MeasureReportType.PATIENTLIST);
@@ -102,7 +102,7 @@ public class MeasureEvaluationProcessor {
 //
 //
 //        if (provider instanceof JpaDataProvider) {
-//            IBundleProvider patientProvider = ((JpaDataProvider) provider).resolveResourceProvider("Patient").getDao().search(new SearchParameterMap());
+//            IBundleProvider patientProvider = ((JpaDataProvider) provider).resolveResourceProvider("Patient").getDao().doSearch(new SearchParameterMap());
 //            List<IBaseResource> patientList = patientProvider.getResources(0, patientProvider.size());
 //            patientList.forEach(x -> patients.add((Patient) x));
 //        }

@@ -49,15 +49,15 @@ public class FhirRequest {
         }
         if ( id!=null){
             if ( params!=null ) {
-                return fhirServer.getResourceOperation(resourceType, id, params, queryParams);
+                return fhirServer.doGet(resourceType, id, params, queryParams);
             } else{
-                return fhirServer.readResource(resourceType, id, queryParams);
+                return fhirServer.doGet(resourceType, id, queryParams);
             }
         } else{
             if ( params!=null ) {
-                throw new FHIRException("params on search not supported.");
+                throw new FHIRException("params on doSearch not supported.");
             } else{
-                return fhirServer.searchResource( resourceType, queryParams);
+                return fhirServer.doSearch( resourceType, queryParams);
             }
         }
     }

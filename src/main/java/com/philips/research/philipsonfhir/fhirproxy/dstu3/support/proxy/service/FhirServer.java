@@ -2,6 +2,7 @@ package com.philips.research.philipsonfhir.fhirproxy.dstu3.support.proxy.service
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.model.primitive.IdDt;
+import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.NotImplementedException;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.proxy.operation.FhirOperationCall;
@@ -47,7 +48,7 @@ public class FhirServer implements IFhirServer {
     public FhirOperationRepository getFhirOperationRepository(){return fhirOperationRepository;};
 
     @Override
-    public IBaseResource searchResource(String resourceType, Map<String, String> queryParams) {
+    public IBaseResource doSearch(String resourceType, Map<String, String> queryParams) {
         String url = getUrl( resourceType, null, null, queryParams );
         logger.info( "GET " + fhirUrl + url );
 
@@ -58,13 +59,30 @@ public class FhirServer implements IFhirServer {
     }
 
     @Override
-    public IBaseResource readResource(String resourceType, String resourceId, Map<String, String> queryParams) throws FHIRException {
+    public IBaseResource doGet(String resourceType, String resourceId, Map<String, String> queryParams) throws FHIRException {
         String url = getUrl( resourceType, resourceId, null, queryParams );
         logger.info( "GET " + fhirUrl + url );
 
         IBaseResource iBaseResource = null;
         if ( resourceId.startsWith("$") ){
-            return getResourceOperation( resourceType, resourceId, queryParams );
+            try {
+                String operationName = resourceId;
+                Class resourceClass = Class.forName( "org.hl7.fhir.dstu3.model." + resourceType );
+                // TODO parameters
+                Parameters parameters = getParameters(queryParams);
+                // operation on resource and not a retrieval
+                IBaseResource result = ourClient.operation()
+                        .onType( resourceClass )
+                        .named( operationName )
+                        .withParameters( parameters )
+                        .useHttpGet()
+                        .execute();
+                iBaseResource = ((Parameters) result).getParameterFirstRep().getResource();
+            } catch ( ClassNotFoundException e ) {
+                e.printStackTrace();
+                throw new FHIRException( "Unknown resource type " + resourceType );
+            }
+//            return getResourceOperation( resourceType, resourceId, queryParams );
         } else {
             if ( queryParams != null && queryParams.size() != 0 ) {
                 logger.severe( "queryParams on get resourcetype/id is not supported" );
@@ -79,60 +97,32 @@ public class FhirServer implements IFhirServer {
         return iBaseResource;
     }
 
-    @Override
-    public IBaseResource getResourceOperation(String resourceType, String operationName, Map<String, String> queryParams) throws FHIRException {
-        IBaseResource iBaseResource = null;
-        try {
-            Class resourceClass = Class.forName( "org.hl7.fhir.dstu3.model." + resourceType );
-            // TODO parameters
-            Parameters parameters = new Parameters();
-            if ( queryParams != null ) {
-                queryParams.entrySet().stream().forEach( stringStringEntry -> {
-                    parameters.addParameter( new Parameters.ParametersParameterComponent()
-                        .setName( stringStringEntry.getKey() )
-                        .setValue( new StringType( stringStringEntry.getValue() ) ) );
-                } );
-            }
-            // operation on resource and not a retrieval
-            IBaseResource result = ourClient.operation()
-                .onType( resourceClass )
-                .named( operationName )
-                .withParameters( parameters )
-                .useHttpGet()
-                .execute();
-            iBaseResource = ((Parameters) result).getParameterFirstRep().getResource();
-        } catch ( ClassNotFoundException e ) {
-            e.printStackTrace();
-            throw new FHIRException( "Unknown resource type " + resourceType );
+    private Parameters getParameters(Map<String, String> queryParams) {
+        Parameters parameters = new Parameters();
+        if ( queryParams != null ) {
+            parameters = getParameters(queryParams);
         }
-        return iBaseResource;
+        return parameters;
     }
 
     @Override
-    public IBaseResource getResourceOperation(String resourceType, String resourceId, String params, Map<String, String> queryParams) throws FHIRException, NotImplementedException {
-        String url = getUrl( resourceType, resourceId, params, queryParams );
+    public IBaseResource doGet(String resourceType, String resourceId, String operationName, Map<String, String> queryParams) throws FHIRException, NotImplementedException {
+        String url = getUrl( resourceType, resourceId, operationName, queryParams );
         logger.info( "GET " + fhirUrl + url );
 
         FhirOperationCall operation =
-            fhirOperationRepository.doGetOperation( this, resourceType, resourceId, params, queryParams );
+            fhirOperationRepository.doGetOperation( this, resourceType, resourceId, operationName, queryParams );
 
         if ( operation!=null ){
             return  operation.getResult();
         }
         // operation not found, call sever
-        Parameters parameters = new Parameters();
-        if ( queryParams != null ) {
-            queryParams.entrySet().stream().forEach( stringStringEntry -> {
-                parameters.addParameter()
-                    .setName( stringStringEntry.getKey() )
-                    .setValue( new StringType( stringStringEntry.getValue() ) );
-            } );
-        }
+        Parameters parameters = getParameters(queryParams);
 
         Parameters outParams = ourClient
             .operation()
             .onInstance( new IdDt( resourceType, resourceId ) )
-            .named( params )
+            .named( operationName )
             .withParameters( parameters )
             .useHttpGet()
             .execute();
@@ -174,45 +164,77 @@ public class FhirServer implements IFhirServer {
     }
 
     @Override
-    public IBaseOperationOutcome postResourceOperation(IBaseResource iBaseResource) {
-        return ourClient.create().resource(iBaseResource).execute().getOperationOutcome();
-    }
-
-    @Override
-    public IBaseResource postResourceOperation(
-            String resourceType,
-            String resourceId,
-            IBaseResource parseResource,
-            String params,
-            Map<String, String> queryParams
-    ) throws FHIRException, NotImplementedException {
-        String url = getUrl( resourceType, resourceId, params, queryParams );
+    public IBaseResource doPost(String resourceType, String resourceId, IBaseResource body, Map<String, String> queryParams)
+            throws FHIRException, NotImplementedException {
+        String url = getUrl( resourceType, resourceId, null, queryParams );
         logger.info( "POST " + fhirUrl + "/"+ url );
 
-        if ( params.startsWith("$") ){
+        if ( resourceId.startsWith("$") ){
+            String operationName = resourceId;
             FhirOperationCall operation =
-                fhirOperationRepository.doPostOperation( this, resourceType, resourceId, params, parseResource, queryParams );
+                    fhirOperationRepository.doPostOperation( this, resourceType, operationName, body, queryParams );
 
             if ( operation!=null ){
                 return  operation.getResult();
             }
-            return getResourceOperation( resourceType, resourceId, queryParams );
+
+            // operation on resource and not a retrieval
+            Class resourceClass = null;
+            try {
+                resourceClass = Class.forName( "org.hl7.fhir.dstu3.model." + resourceType );
+            } catch (ClassNotFoundException e) {
+                throw new FHIRException(e);
+            }
+
+            IBaseResource result = ourClient.operation()
+                    .onType( resourceClass )
+                    .named( operationName )
+                    .withParameters( (Parameters)body )
+                    .execute();
+            result =((Parameters) result).getParameterFirstRep().getResource();
+            return result;
         } else {
+            MethodOutcome methodOutcome = ourClient.create().resource(body).execute();
 
-            String xml = ourCtx.newXmlParser().encodeResourceToString( parseResource );
-            Parameters outParams = ourClient
-                .operation()
-                .onInstance( new IdDt( resourceType, resourceId ) )
-                .named( params )
-                .withNoParameters( Parameters.class )
-                .execute();
-
-            List<Parameters.ParametersParameterComponent> response = outParams.getParameter();
-
-            Resource resource = response.get( 0 ).getResource();
-
-            return resource;
+            return (methodOutcome.getResource()!=null? methodOutcome.getResource():methodOutcome.getOperationOutcome());
         }
+    }
+
+    @Override
+    public IBaseResource doPost(
+            String resourceType,
+            String resourceId,
+            IBaseResource parseResource,
+            String operationName,
+            Map<String, String> queryParams
+    ) throws FHIRException, NotImplementedException {
+        String url = getUrl( resourceType, operationName, operationName, queryParams );
+        logger.info( "POST " + fhirUrl + "/"+ url );
+        // id given so operation
+
+        FhirOperationCall operation =
+            fhirOperationRepository.doPostOperation( this, resourceType, resourceId, operationName, parseResource, queryParams );
+
+        if ( operation!=null ){
+            return  operation.getResult();
+        }
+
+        Parameters outParams = ourClient
+            .operation()
+            .onInstance( new IdDt( resourceType, resourceId ) )
+            .named( operationName )
+            .withParameters( (Parameters)parseResource )
+            .execute();
+
+        List<Parameters.ParametersParameterComponent> response = outParams.getParameter();
+
+        Resource resource = response.get( 0 ).getResource();
+
+        return resource;
+    }
+
+    public MethodOutcome doPost(String resourceType, IBaseResource iBaseResource, Map<String, String> queryParams) {
+        return this.ourClient.create().resource(iBaseResource).execute();
     }
 
     @Override
@@ -224,5 +246,6 @@ public class FhirServer implements IFhirServer {
     public String getUrl() {
         return this.fhirUrl;
     }
+
 
 }
