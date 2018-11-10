@@ -122,9 +122,12 @@ public class CarePlanToCardTest {
                 .setTitle( "some title" )
                 .setDescription( "description" )
                 .setSelectionBehavior( RequestGroup.ActionSelectionBehavior.ATMOSTONE )
-                .addExtension( new Extension()
-                        .setUrl("http://research.philips.com/connect/cdshookslink")
-                        .setValue( attachement )
+                .addAction((RequestGroup.RequestGroupActionComponent) new RequestGroup.RequestGroupActionComponent()
+                        .setType(new Coding().setCode("launch"))
+                        .addExtension( new Extension()
+                                .setUrl("http://research.philips.com/connect/cdshookslink")
+                                .setValue( attachement )
+                        )
                 );
 
         RequestGroup requestGroup = (RequestGroup) new RequestGroup()
@@ -162,10 +165,15 @@ public class CarePlanToCardTest {
                 .setTitle( "some title" )
                 .setDescription( "description" )
                 .setSelectionBehavior( RequestGroup.ActionSelectionBehavior.ATMOSTONE )
-                .addExtension( new Extension()
-                        .setUrl("http://research.philips.com/connect/questionnaireReference")
-                        .setValue( reference )
+                .addAction( new RequestGroup.RequestGroupActionComponent()
+                        .setTitle("test")
+                        .setResource(reference)
+                        .setType(new Coding().setCode("launch"))
                 );
+//                .addExtension( new Extension()
+//                        .setUrl("http://research.philips.com/connect/questionnaireReference")
+//                        .setValue( reference )
+//                );
 
         RequestGroup requestGroup = (RequestGroup) new RequestGroup()
                 .addAction( rootAction )
@@ -177,8 +185,8 @@ public class CarePlanToCardTest {
                 .addContained( requestGroup )
         ;
 
-        String fhirServerurl = "http://fhirserver";
-        String questionairreServerUrl = "http://fhirserver";
+        String fhirServerurl = "http://fhirserver/";
+        String questionairreServerUrl = "http://fhirserver/";
         List<Card> cardList = CarePlanToCard.convert( carePlan, fhirServerurl, questionairreServerUrl );
 
         assertNotNull( cardList );
@@ -190,7 +198,7 @@ public class CarePlanToCardTest {
         assertFalse("link not present", card.getLinks().isEmpty());
         assertTrue( card.getLinks().get(0).getUrl().contains( reference.getReference()));
         assertTrue( card.getLinks().get(0).getUrl().contains( fhirServerurl));
-        assertEquals( reference.getDisplay(), card.getLinks().get(0).getLabel() );
+        assertEquals( rootAction.getAction().get(0).getTitle(), card.getLinks().get(0).getLabel() );
         assertEquals( "absolute", card.getLinks().get(0).getType());
     }
 }

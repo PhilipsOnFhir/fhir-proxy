@@ -88,7 +88,7 @@ public class CarePlanToCard {
                         Link link = new Link();
                         link.setType("absolute");
                         link.setLabel(
-                                (subAction.hasLabel()? subAction.getLabel() : (subAction.hasTitle()?" ":"")) +
+                                (subAction.hasLabel()? subAction.getLabel() : (subAction.hasLabel()&&subAction.hasTitle()?" ":"")) +
                                 (subAction.hasTitle()?subAction.getTitle():(subAction.hasDescription()?" ":""))+
                                 (subAction.hasDescription()?subAction.getDescription():"")
                         );
@@ -105,7 +105,7 @@ public class CarePlanToCard {
                                 throw new FHIRException("Invalid value in Questionnaire reference extension "+ subAction.getResource().getReference());
                             }
                         } else if (subAction.hasExtension()) {
-                            for (Extension extension : action.getExtension()) {
+                            for (Extension extension : subAction.getExtension()) {
                                 if (extension.getValue() instanceof Attachment) {
                                     Attachment attachment = (Attachment) extension.getValue();
                                     if (attachment.hasUrl()) {

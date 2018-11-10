@@ -59,8 +59,8 @@ public class CqlExecutionProvider {
 //        initialize( provider, library, patientId );
 //    }
 
-    public CqlExecutionProvider(BaseFhirDataProvider fhirDataProvider, PlanDefinition planDefinition, String patientId, List<Object> contextParameters) throws NotImplementedException, FHIRException {
-        this( fhirDataProvider, planDefinition, patientId);
+    public CqlExecutionProvider(BaseFhirDataProvider fhirDataProvider, DomainResource domainResource, String patientId, List<Object> contextParameters) throws NotImplementedException, FHIRException {
+        this( fhirDataProvider, domainResource, patientId);
     }
 
     public CqlExecutionProvider(BaseFhirDataProvider dataProvider, DomainResource domainResource, String patientId, VersionedIdentifier vid, List<Object> contextParameters) throws FHIRException, NotImplementedException {
