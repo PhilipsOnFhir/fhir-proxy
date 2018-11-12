@@ -89,6 +89,7 @@ public class CqlExecutionProvider {
         }
         this.domainResource=domainResource;
         initialize( dataProvider, library, patientId );
+
     }
 
     public void setContextParameters(List<Object> resources) {
