@@ -3,6 +3,7 @@ package org.opencds.cqf.cql.runtime;
 import org.apache.commons.lang3.NotImplementedException;
 import org.cqframework.cql.elm.execution.Expression;
 import org.hl7.fhir.dstu3.model.DateTimeType;
+import org.hl7.fhir.dstu3.model.PrimitiveType;
 import org.opencds.cqf.cql.elm.execution.EqualEvaluator;
 import org.opencds.cqf.cql.elm.execution.EquivalentEvaluator;
 import org.opencds.cqf.cql.execution.Context;
@@ -74,8 +75,11 @@ public class CqlList {
         else if (right == null) return 1;
 
         try {
-            if ( left instanceof DateTimeType && right instanceof DateTimeType ){
-                return( ((DateTimeType) left).after((DateTimeType)right)? -1:1);
+            if ( left instanceof PrimitiveType && right instanceof PrimitiveType ){
+                Comparable a = (Comparable)(((PrimitiveType) left).getValue());
+                Comparable b = (Comparable)(((PrimitiveType) right).getValue());
+                return  a.compareTo(b);
+//                return( ((DateTimeType) left).after((DateTimeType)right)? -1:1);
             }
             return ((Comparable) left).compareTo(right);
         } catch (ClassCastException cce) {
