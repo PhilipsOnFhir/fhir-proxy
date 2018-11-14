@@ -3,3 +3,4 @@ fhir_proxy.iml
 
 /target/
 /bulk_data_proxy.iml
+example/
