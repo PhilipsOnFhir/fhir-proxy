@@ -1,7 +1,9 @@
-package com.philips.research.philipsonfhir.fhirproxy.dstu3.support.clinicalreasoning;
+package com.philips.research.philipsonfhir.fhirproxy.dstu3.support.bulkdata.operations;
 
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.NotImplementedException;
-import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.clinicalreasoning.processor.ActivityDefinitionProcessor;
+import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.bulkdata.fhir.FhirServerBulkdata;
+import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.bulkdata.fhir.PatientExportServer;
+import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.clinicalreasoning.processor.PlanDefinitionProcessor;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.proxy.operation.FhirOperationCall;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.proxy.operation.FhirResourceInstanceOperation;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.proxy.service.FhirServer;
@@ -14,18 +16,37 @@ import org.opencds.cqf.cql.data.fhir.FhirDataProviderStu3;
 
 import java.util.Map;
 
-public class PlanDefinitionApplyOperation extends FhirResourceInstanceOperation {
-
+public class PatientExportOperation extends FhirResourceInstanceOperation {
     private final String url;
+    private final PatientExportServer patientExportServer;
 
-    public PlanDefinitionApplyOperation(String url ) {
-        super( "ActivityDefinition", "$apply" );
+    public PatientExportOperation(String url) {
+        super( "Patient", "$export" );
         this.url = url;
+        this.patientExportServer = new PatientExportServer( new FhirServer(url));
     }
 
     @Override
-    public FhirOperationCall createGetOperationCall(FhirServer fhirServer, Map<String, String> queryparams) throws NotImplementedException {
-        throw new NotImplementedException();
+    public FhirOperationCall createGetOperationCall(FhirServer fhirServer, Map<String, String> queryParams) throws NotImplementedException {
+        return new FhirOperationCall() {
+            @Override
+            public IBaseResource getResult() throws FHIRException, NotImplementedException {
+                String outputFormat = queryParams.get( "outputFormat" );
+                String since = queryParams.get( "since" );
+                String type = queryParams.get( "type" );
+                return patientExportServer.exportAllPatientData( outputFormat, since, type );
+            }
+
+            @Override
+            public String getDescription() {
+                return null;
+            }
+
+            @Override
+            public Map<String, OperationOutcome> getErrors() {
+                return null;
+            }
+        };
     }
 
     @Override
@@ -33,23 +54,10 @@ public class PlanDefinitionApplyOperation extends FhirResourceInstanceOperation 
         return new FhirOperationCall() {
             @Override
             public IBaseResource getResult() throws FHIRException, NotImplementedException {
-                BaseFhirDataProvider baseFhirDataProvider = new FhirDataProviderStu3().setEndpoint( url );
-                IdType idType = new IdType( ).setValue( resourceType+"/"+resourceId );
-
-                String patientId = queryParams.get( "patient" );
-                String encounterId = queryParams.get( "encounter");
-                String practitionerId = queryParams.get( "practitioner");
-                String organizationId = queryParams.get( "organization");
-                String userType       = queryParams.get( "userType");
-                String userLanguage   = queryParams.get("userLanguage");
-                String userTaskContext = queryParams.get( "userTaskComtext");
-                String setting         = queryParams.get("setting");
-                String settingContext  = queryParams.get("settingContext");
-
-                ActivityDefinitionProcessor activityDefinitionProcessor = new ActivityDefinitionProcessor(
-                    baseFhirDataProvider, idType
-                    , patientId, encounterId, practitionerId, organizationId, userType, userLanguage, userTaskContext, setting, settingContext );
-                return activityDefinitionProcessor.getResult();
+                String outputFormat = queryParams.get( "outputFormat" );
+                String since = queryParams.get( "since" );
+                String type = queryParams.get( "type" );
+                return patientExportServer.exportPatientData( resourceId, outputFormat, since, type );
             }
 
             @Override

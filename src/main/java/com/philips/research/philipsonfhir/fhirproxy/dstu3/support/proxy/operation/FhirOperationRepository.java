@@ -28,6 +28,14 @@ public class FhirOperationRepository {
         return null;
     }
 
+    public FhirOperationCall doGetOperation(FhirServer fhirServer, String resourceType, String operationName, Map<String, String> queryparams) throws NotImplementedException {
+        FhirResourceInstanceOperation operation = getFhirResourceInstanceOperation( resourceType, operationName );
+        if ( operation != null ) {
+            return operation.createGetOperationCall( fhirServer, queryparams );
+        }
+        return null;
+    }
+
     public FhirOperationCall doGetOperation(FhirServer fhirServer, String resourceType, String resourceId, String operationName, Map<String, String> queryparams) throws NotImplementedException {
         FhirResourceInstanceOperation operation = getFhirResourceInstanceOperation( resourceType, operationName );
         if ( operation != null ) {

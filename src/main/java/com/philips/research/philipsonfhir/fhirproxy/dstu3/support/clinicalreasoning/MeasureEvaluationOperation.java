@@ -22,6 +22,12 @@ public class MeasureEvaluationOperation extends FhirResourceInstanceOperation {
         super( ResourceType.Measure.name(), "$evaluate-measure" );
         this.client = client;
     }
+
+    @Override
+    public FhirOperationCall createGetOperationCall(FhirServer fhirServer, Map<String, String> queryparams) throws NotImplementedException {
+        throw new NotImplementedException();
+    }
+
     @Override
     public FhirOperationCall createGetOperationCall(FhirServer fhirServer, String resourceId, Map<String, String> queryParams) {
         return new FhirOperationCall() {
@@ -70,6 +76,11 @@ public class MeasureEvaluationOperation extends FhirResourceInstanceOperation {
 
         };
 
+    }
+
+    @Override
+    public FhirOperationCall createPostOperationCall(FhirServer fhirServer, String resourceId, IBaseResource parseResource, Map<String, String> queryParams) throws NotImplementedException {
+        throw new NotImplementedException();
     }
 
     @Override

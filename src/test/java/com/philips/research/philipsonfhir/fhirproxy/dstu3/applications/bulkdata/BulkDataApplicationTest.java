@@ -6,6 +6,7 @@ import com.philips.research.philipsonfhir.builders.EncounterBuilder;
 import com.philips.research.philipsonfhir.builders.PatientBuilder;
 import com.philips.research.philipsonfhir.builders.PractitionerBuilder;
 import com.philips.research.philipsonfhir.builders.ProcedureBuilder;
+import com.philips.research.philipsonfhir.fhirproxy.dstu3.applications.bulkdata.testapp.BulkDataTestApplication;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.NotImplementedException;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.bulkdata.client.BulkDataClient;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.bulkdata.fhir.BundleRetriever;
@@ -42,14 +43,13 @@ import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = BulkDataApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = BulkDataTestApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 //@WebAppConfiguration
 public class BulkDataApplicationTest {
 
     TestRestTemplate restTemplate = new TestRestTemplate();
     boolean resourcesCreated = false;
-    @LocalServerPort
-    private long port;
+    @LocalServerPort private long port;
     private List<IBaseResource> resources = new ArrayList<>();
     private String patientId;
     private String groupId;

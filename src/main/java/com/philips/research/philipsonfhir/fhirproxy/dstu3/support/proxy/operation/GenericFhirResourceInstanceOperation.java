@@ -12,8 +12,18 @@ public class GenericFhirResourceInstanceOperation extends FhirResourceInstanceOp
     }
 
     @Override
+    public FhirOperationCall createGetOperationCall(FhirServer fhirServer, Map<String, String> queryparams) throws NotImplementedException {
+        throw new NotImplementedException();
+    }
+
+    @Override
     public FhirOperationCall createGetOperationCall(FhirServer fhirServer, String resourceId, Map<String, String> queryparams) {
         return new GenericFhirResourceInstanceOperationCall( fhirServer, resourceType, resourceId, operationName, queryparams );
+    }
+
+    @Override
+    public FhirOperationCall createPostOperationCall(FhirServer fhirServer, String resourceId, IBaseResource parseResource, Map<String, String> queryParams) throws NotImplementedException {
+        throw new NotImplementedException();
     }
 
     @Override

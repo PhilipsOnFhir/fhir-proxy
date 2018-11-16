@@ -28,6 +28,16 @@ public class StructureMapTransformOperation extends FhirResourceInstanceOperatio
     }
 
     @Override
+    public FhirOperationCall createGetOperationCall(FhirServer fhirServer, Map<String, String> queryparams) throws NotImplementedException {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public FhirOperationCall createGetOperationCall(FhirServer fhirServer, String resourceId, Map<String, String> queryparams) throws NotImplementedException {
+        throw new NotImplementedException();
+    }
+
+    @Override
     public FhirOperationCall createPostOperationCall(FhirServer fhirServer, String resourceId, IBaseResource parameters, Map<String, String> queryParams) {
         return new FhirOperationCall() {
             @Override

@@ -15,7 +15,7 @@ public class PatientExportServer {
     private final Logger logger = LoggerFactory.getLogger( this.getClass().getName() );
     private final IFhirServer fhirServer;
 
-    PatientExportServer(IFhirServer fhirServer ){
+    public PatientExportServer(IFhirServer fhirServer){
         this.fhirServer = fhirServer;
     }
 

@@ -6,11 +6,20 @@ import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.NotImplemented
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.bulkdata.async.AsyncService;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.bulkdata.operations.ExportAllFhirOperation;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.bulkdata.operations.ExportAllFhirOperationCall;
+import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.bulkdata.operations.GroupExportOperation;
+import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.bulkdata.operations.PatientExportOperation;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.bulkdata.service.FhirServerService;
+import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.proxy.operation.FhirOperationCall;
+import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.proxy.operation.FhirResourceInstanceOperation;
+import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.proxy.service.FhirServer;
 import org.hl7.fhir.dstu3.model.OperationOutcome;
 import org.hl7.fhir.instance.model.api.IBaseOperationOutcome;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.context.WebServerInitializedEvent;
+import org.springframework.context.event.EventListener;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -18,6 +27,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -30,12 +41,28 @@ public class BulkDataFhirController {
     public static final String CONTENT_LOCATION = "Content-Location";
     private Logger logger = Logger.getLogger( this.getClass().getName());
     private FhirContext myContext = FhirContext.forDstu3();
+    private static final String url = "http://localhost:9500/baseDstu3";
 
-    @Autowired
-    FhirServerService fhirServer;
+    FhirServer fhirServer = null;
 
     @Autowired
     AsyncService asyncService;
+    private int port;
+
+    public BulkDataFhirController(){
+//        fhirServer = new FhirServer( "http:localhost:9500/baseStu3" );
+        setFhirServerUrl("http:localhost:9500/baseStu3");
+//        fhirServer = new FhirServer( "http:localhost:9500/baseStu3" );
+//        String port = environment.getProperty("local.server.port");
+    }
+
+    public BulkDataFhirController( String url ){
+//        fhirServer = new FhirServer( "http:localhost:9500/baseStu3" );
+        setFhirServerUrl(url);
+//        fhirServer = new FhirServer( url );
+//        String port = environment.getProperty("local.server.port");
+    }
+
 
     @RequestMapping (
             method = RequestMethod.GET,
@@ -67,7 +94,11 @@ public class BulkDataFhirController {
             @PathVariable String resourceType,
             @RequestParam Map<String, String> queryParams
     ) throws NotImplementedException {
-
+        try {
+            int port = new URI( request.getRequestURL().toString()).getPort();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
         return getStringResponseEntity( request, response, prefer, accept, resourceType, queryParams );
     }
 
@@ -78,7 +109,6 @@ public class BulkDataFhirController {
                 HttpStatus.ACCEPTED
             );
         } else {
-
             if (resourceType.equals("metadata")) {
                 logger.log( Level.INFO, "JSON GET CapabilityStatement");
                 return new ResponseEntity<>(
@@ -258,7 +288,7 @@ public class BulkDataFhirController {
         logger.log(Level.INFO,"PUT "+resourceType+" "+id );
         IBaseResource iBaseResource = parser( contentType ).parseResource(requestBody);
         IBaseOperationOutcome operationalOutcome = fhirServer.updateResource(iBaseResource);
-        return parser( contentType).encodeResourceToString( operationalOutcome );
+        return (operationalOutcome==null?"":parser( contentType).encodeResourceToString( operationalOutcome ));
     }
 
     private IParser parser(String contentType) {
@@ -399,5 +429,12 @@ public class BulkDataFhirController {
         ;
 
         return operationOutcome;
+    }
+
+    public void setFhirServerUrl(String fhirServerUrl) {
+        logger.info("FHIR server set to "+fhirServerUrl);
+        this.fhirServer = new FhirServer( fhirServerUrl );
+        this.fhirServer.getFhirOperationRepository().registerOperation( new PatientExportOperation(fhirServerUrl));
+        this.fhirServer.getFhirOperationRepository().registerOperation( new GroupExportOperation(fhirServerUrl));
     }
 }

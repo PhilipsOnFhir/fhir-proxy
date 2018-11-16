@@ -23,6 +23,11 @@ public class ActivityDefinitionApplyOperation extends FhirResourceInstanceOperat
     }
 
     @Override
+    public FhirOperationCall createGetOperationCall(FhirServer fhirServer, Map<String, String> queryparams) throws NotImplementedException {
+        throw new NotImplementedException();
+    }
+
+    @Override
     public FhirOperationCall createGetOperationCall(FhirServer fhirServer, String resourceId, Map<String, String> queryParams) {
         return new FhirOperationCall() {
             @Override
@@ -56,6 +61,11 @@ public class ActivityDefinitionApplyOperation extends FhirResourceInstanceOperat
                 return null;
             }
         };
+    }
+
+    @Override
+    public FhirOperationCall createPostOperationCall(FhirServer fhirServer, String resourceId, IBaseResource parseResource, Map<String, String> queryParams) throws NotImplementedException {
+        throw new NotImplementedException();
     }
 
     @Override

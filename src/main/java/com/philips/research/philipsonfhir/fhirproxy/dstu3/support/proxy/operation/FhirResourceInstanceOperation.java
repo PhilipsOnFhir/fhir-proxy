@@ -21,17 +21,11 @@ public abstract class FhirResourceInstanceOperation {
         this.operationName = operationName;
     }
 
-    public FhirOperationCall createGetOperationCall(FhirServer fhirServer, Map<String, String> queryparams) throws NotImplementedException {
-        throw new NotImplementedException();
-    }
+    public abstract FhirOperationCall createGetOperationCall(FhirServer fhirServer, Map<String, String> queryparams) throws NotImplementedException;
 
-    public FhirOperationCall createGetOperationCall(FhirServer fhirServer, String resourceId, Map<String, String> queryparams) throws NotImplementedException {
-        throw new NotImplementedException();
-    }
+    public abstract FhirOperationCall createGetOperationCall(FhirServer fhirServer, String resourceId, Map<String, String> queryparams) throws NotImplementedException;
 
-    public FhirOperationCall createPostOperationCall(FhirServer fhirServer, String resourceId, IBaseResource parseResource, Map<String, String> queryParams) throws NotImplementedException {
-        throw new NotImplementedException();
-    }
+    public abstract FhirOperationCall createPostOperationCall(FhirServer fhirServer, String resourceId, IBaseResource parseResource, Map<String, String> queryParams) throws NotImplementedException ;
 
     protected void populateParameter(Parameters parameters, String name, boolean mandatory, Enumerations.FHIRAllTypes base, Map<String, String> queryParams ) throws FHIRException, NotImplementedException {
         if (queryParams.containsKey(name)){

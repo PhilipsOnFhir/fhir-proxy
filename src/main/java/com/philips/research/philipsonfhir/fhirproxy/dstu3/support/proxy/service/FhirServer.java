@@ -63,6 +63,13 @@ public class FhirServer implements IFhirServer {
         String url = getUrl( resourceType, resourceId, null, queryParams );
         logger.info( "GET " + fhirUrl + url );
 
+        FhirOperationCall operation =
+                fhirOperationRepository.doGetOperation( this, resourceType, resourceId, queryParams );
+
+        if ( operation!=null ){
+            return  operation.getResult();
+        }
+
         IBaseResource iBaseResource = null;
         if ( resourceId.startsWith("$") ){
             try {
@@ -100,7 +107,12 @@ public class FhirServer implements IFhirServer {
     private Parameters getParameters(Map<String, String> queryParams) {
         Parameters parameters = new Parameters();
         if ( queryParams != null ) {
-            parameters = getParameters(queryParams);
+            queryParams.entrySet().stream().
+                    forEach( stringStringEntry -> parameters.addParameter( new Parameters.ParametersParameterComponent()
+                            .setName(stringStringEntry.getKey())
+                            .setValue(new StringType( stringStringEntry.getValue()) )
+                    ));
+//            parameters = getParameters(queryParams);
         }
         return parameters;
     }
