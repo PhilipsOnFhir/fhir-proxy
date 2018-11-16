@@ -90,27 +90,27 @@ public class ContextServerApplicationTest {
         return sessionId;
     }
 
-    @Test
-    public void initializeServerTest(){
-        String sessionId = "";
-        String fhirUrl = "http://localhost:" + port + "/hapi";
-        sessionId = createSession( fhirUrl );
-        String contextUrl = "http://localhost:" + port + "/context/"+sessionId+"/fhir";
-
-        IGenericClient hapiClient = ourCtx.newRestfulGenericClient( fhirUrl );
-        {
-            Bundle hapiBundle = hapiClient.search().forResource(Patient.class).returnBundle(Bundle.class).execute();
-            assertNotNull(hapiBundle);
-            assertEquals(0, hapiBundle.getTotal());
-        }
-        IGenericClient contextClient = ourCtx.newRestfulGenericClient( contextUrl );
-        {
-            Bundle bundle = contextClient.search().forResource(Patient.class).returnBundle(Bundle.class).execute();
-            assertNotNull(bundle);
-            assertEquals(0, bundle.getTotal());
-        }
-
-    }
+//    @Test
+//    public void initializeServerTest(){
+//        String sessionId = "";
+//        String fhirUrl = "http://localhost:" + port + "/hapi";
+//        sessionId = createSession( fhirUrl );
+//        String contextUrl = "http://localhost:" + port + "/context/"+sessionId+"/fhir";
+//
+//        IGenericClient hapiClient = ourCtx.newRestfulGenericClient( fhirUrl );
+//        {
+//            Bundle hapiBundle = hapiClient.search().forResource(Patient.class).returnBundle(Bundle.class).execute();
+//            assertNotNull(hapiBundle);
+//            assertEquals(0, hapiBundle.getTotal());
+//        }
+//        IGenericClient contextClient = ourCtx.newRestfulGenericClient( contextUrl );
+//        {
+//            Bundle bundle = contextClient.search().forResource(Patient.class).returnBundle(Bundle.class).execute();
+//            assertNotNull(bundle);
+//            assertEquals(0, bundle.getTotal());
+//        }
+//
+//    }
 
     @Test
     public void createResourceTest(){
