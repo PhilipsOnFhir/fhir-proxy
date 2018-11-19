@@ -50,6 +50,16 @@ public class CarePlanToCard {
             for (RequestGroup.RequestGroupActionComponent action : requestGroup.getAction()) {
                 Card card = new Card();
                 card.setIndicator( "info" ); //TODO - r4 priority field
+
+                Source source = new Source();
+                source.setLabel( carePlan.getTitle() );
+                if ( carePlan.hasDefinition() && !carePlan.getDefinition().isEmpty() ){
+                    source.setUrl( "http://localhost:4200/fhir/"+carePlan.getDefinition().get(0).getReference()+"?fs="+fhirServerUrl);
+                }
+
+                card.setSource(source);
+
+
                 // basic
                 if (action.hasTitle()) {
                     card.setSummary(action.getTitle());
@@ -63,23 +73,23 @@ public class CarePlanToCard {
 //                }
 
 
-                // source
-                if (action.hasDocumentation()) {
-                    // Assuming first related artifact has everything
-                    RelatedArtifact documentation = action.getDocumentationFirstRep();
-                    Source source = new Source();
-                    if (documentation.hasDisplay()) {
-                        source.setLabel(documentation.getDisplay());
-                    }
-                    if (documentation.hasUrl()) {
-                        source.setUrl(documentation.getUrl());
-                    }
-                    if (documentation.hasDocument() && documentation.getDocument().hasUrl()) {
-                        source.setIcon(documentation.getDocument().getUrl());
-                    }
-
-                    card.setSource(source);
-                }
+//                // source
+//                if (action.hasDocumentation()) {
+//                    // Assuming first related artifact has everything
+//                    RelatedArtifact documentation = action.getDocumentationFirstRep();
+//                    source = new Source();
+//                    if (documentation.hasDisplay()) {
+//                        source.setLabel(documentation.getDisplay());
+//                    }
+//                    if (documentation.hasUrl()) {
+//                        source.setUrl(documentation.getUrl());
+//                    }
+//                    if (documentation.hasDocument() && documentation.getDocument().hasUrl()) {
+//                        source.setIcon(documentation.getDocument().getUrl());
+//                    }
+//
+//                    card.setSource(source);
+//                }
 
                 // suggestions
                 // TODO - uuid

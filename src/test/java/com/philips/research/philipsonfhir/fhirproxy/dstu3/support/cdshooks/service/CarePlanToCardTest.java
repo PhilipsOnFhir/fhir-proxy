@@ -71,6 +71,7 @@ public class CarePlanToCardTest {
         assertFalse( cardList.isEmpty() );
         Card card = cardList.get( 0 );
         assertEquals( action.getTitle(), card.getSummary() );
+        assertNotNull( card.getSource() );
         assertEquals( action.getDescription(), card.getDetail() );
     }
 
