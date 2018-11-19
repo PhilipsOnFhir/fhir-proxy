@@ -1,4 +1,4 @@
-package com.philips.research.philipsonfhir.fhirproxy.dstu3.applications.bulkdata.testapp.servlet;
+package com.philips.research.philipsonfhir.fhirproxy.dstu3.applications.bulkdata.servlet;
 
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.hapi.JpaServerDemo;
 import org.springframework.web.context.WebApplicationContext;

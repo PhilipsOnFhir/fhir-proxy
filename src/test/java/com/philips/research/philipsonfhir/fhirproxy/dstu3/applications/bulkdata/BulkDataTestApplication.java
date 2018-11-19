@@ -1,4 +1,4 @@
-package com.philips.research.philipsonfhir.fhirproxy.dstu3.applications.bulkdata.testapp;
+package com.philips.research.philipsonfhir.fhirproxy.dstu3.applications.bulkdata;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

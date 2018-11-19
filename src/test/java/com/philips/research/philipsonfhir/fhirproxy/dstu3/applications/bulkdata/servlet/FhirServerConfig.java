@@ -1,4 +1,4 @@
-package com.philips.research.philipsonfhir.fhirproxy.dstu3.applications.bulkdata.testapp.servlet;
+package com.philips.research.philipsonfhir.fhirproxy.dstu3.applications.bulkdata.servlet;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;

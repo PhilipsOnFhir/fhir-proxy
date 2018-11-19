@@ -1,4 +1,4 @@
-package com.philips.research.philipsonfhir.fhirproxy.dstu3.applications.bulkdata;
+package com.philips.research.philipsonfhir.fhirproxy.dstu3.applications;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
@@ -6,7 +6,7 @@ import com.philips.research.philipsonfhir.builders.EncounterBuilder;
 import com.philips.research.philipsonfhir.builders.PatientBuilder;
 import com.philips.research.philipsonfhir.builders.PractitionerBuilder;
 import com.philips.research.philipsonfhir.builders.ProcedureBuilder;
-import com.philips.research.philipsonfhir.fhirproxy.dstu3.applications.bulkdata.testapp.BulkDataTestApplication;
+import com.philips.research.philipsonfhir.fhirproxy.dstu3.applications.bulkdata.BulkDataTestApplication;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.NotImplementedException;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.bulkdata.client.BulkDataClient;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.bulkdata.fhir.BundleRetriever;
