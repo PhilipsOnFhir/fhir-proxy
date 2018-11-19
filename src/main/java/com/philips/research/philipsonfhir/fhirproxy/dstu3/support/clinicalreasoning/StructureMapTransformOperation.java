@@ -110,6 +110,7 @@ public class StructureMapTransformOperation extends FhirResourceInstanceOperatio
 
                 Resource contentResource = optContentResource.get();
                 Resource sourceResource  = optSourceResource.get();
+
                 if ( sourceResource==null || !(sourceResource instanceof StructureMap)){
                     throw new FHIRException( "Body should contain a valid structureMap" );
                 }

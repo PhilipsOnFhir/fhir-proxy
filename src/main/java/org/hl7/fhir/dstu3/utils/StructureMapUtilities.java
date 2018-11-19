@@ -1702,7 +1702,8 @@ public class StructureMapUtilities {
                     if (!b.isResource())
                         throw new FHIRException("Rule \""+ruleId+"\": Transform engine cannot point at an element of type "+b.fhirType());
                     else {
-                        String id = b.getIdBase();
+//                        String id = b.getIdBase();
+                        String id = ((Resource)b).getIdElement().getIdPart();
                         if (id == null) {
                             id = UUID.randomUUID().toString().toLowerCase();
                             b.setIdBase(id);
