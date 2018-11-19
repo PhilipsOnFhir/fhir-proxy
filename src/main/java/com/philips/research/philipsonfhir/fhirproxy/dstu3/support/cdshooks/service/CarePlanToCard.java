@@ -43,7 +43,7 @@ public class CarePlanToCard {
         return cards;
     }
 
-    private List<Card> convert( CarePlan carePlan, RequestGroup requestGroup, String fhirServerUrl, String questionnaireServerUrl ) throws NotImplementedException, FHIRException {
+    private List<Card> convert( CarePlan carePlan, RequestGroup requestGroup, String fhirServerUrl, String questionnaireServerUrl ) throws FHIRException {
         List<Card> cards = new ArrayList<>();
 
         if (requestGroup.hasAction()) {
@@ -67,34 +67,11 @@ public class CarePlanToCard {
                 if (action.hasDescription()) {
                     card.setDetail(action.getDescription());
                 }
-                // TODO replacement for indicator in extension
-//                if (action.hasExtension()) {
-//                    card.setIndicator(action.getExtensionFirstRep().getValue().toString());
-//                }
-
-
-//                // source
-//                if (action.hasDocumentation()) {
-//                    // Assuming first related artifact has everything
-//                    RelatedArtifact documentation = action.getDocumentationFirstRep();
-//                    source = new Source();
-//                    if (documentation.hasDisplay()) {
-//                        source.setLabel(documentation.getDisplay());
-//                    }
-//                    if (documentation.hasUrl()) {
-//                        source.setUrl(documentation.getUrl());
-//                    }
-//                    if (documentation.hasDocument() && documentation.getDocument().hasUrl()) {
-//                        source.setIcon(documentation.getDocument().getUrl());
-//                    }
-//
-//                    card.setSource(source);
-//                }
 
                 // suggestions
                 // TODO - uuid
                 for ( RequestGroup.RequestGroupActionComponent subAction : action.getAction() ){
-                    if ( subAction.getType().getCode().equals("launch")){
+                    if ( subAction.hasType() && subAction.getType().getCode().equals("launch")){
                         Link link = new Link();
                         link.setType("absolute");
                         link.setLabel(
@@ -135,13 +112,18 @@ public class CarePlanToCard {
                         Suggestion suggestion = new Suggestion();
                         suggestion.setLabel(action.getLabel());
 
-                        Action suggestionAction = new Action();
-                        suggestionAction.setType(Action.ActionType.valueOf(subAction.getType().getCode()));
-                        suggestionAction.setDescription(action.getLabel() + " " + action.getTitle() + " " + action.getDescription());
-                        Resource resource = getResource(carePlan, subAction.getResource());
-                        suggestionAction.setResource(resource);
+                        if (  (!subAction.hasAction() || subAction.getAction().isEmpty()) && subAction.hasType() ){
+                            Action suggestionAction = createActionFromRequestGroupAction(carePlan, subAction);
+                            suggestion.getActions().add( suggestionAction );
+                        } else if ( subAction.hasAction() && !subAction.getAction().isEmpty() && !subAction.hasType() ) {
+                            for ( RequestGroup.RequestGroupActionComponent rqAction: subAction.getAction() ) {
+                                Action suggestionAction = createActionFromRequestGroupAction(carePlan, rqAction);
+                                suggestion.getActions().add(suggestionAction);
+                            }
+                        } else {
+                            throw new FHIRException( "error processing subaction "+subAction.getTitle()+ " "+ subAction.getDescription());
+                        }
 
-                        suggestion.getActions().add(suggestionAction);
                         card.getSuggestions().add(suggestion);
                     }
                 }
@@ -185,6 +167,20 @@ public class CarePlanToCard {
         }
 
         return cards;
+    }
+
+    private Action createActionFromRequestGroupAction( CarePlan carePlan, RequestGroup.RequestGroupActionComponent requestGroupActionAction) throws NotImplementedException {
+        Action action = new Action();
+        action.setDescription(
+                (requestGroupActionAction.hasLabel()?requestGroupActionAction.getLabel() + " ":"") +
+                (requestGroupActionAction.hasTitle()?requestGroupActionAction.getTitle() + " ":"") +
+                (requestGroupActionAction.hasDescription()?requestGroupActionAction.getDescription():"")
+        );
+        action.setType(Action.ActionType.valueOf(requestGroupActionAction.getType().getCode()));
+        Resource resource = getResource(carePlan, requestGroupActionAction.getResource());
+        action.setResource(resource);
+
+        return action;
     }
 
     private Resource getResource(CarePlan carePlan, Reference reference) throws NotImplementedException {

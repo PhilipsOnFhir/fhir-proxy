@@ -1,6 +1,7 @@
 package com.philips.research.philipsonfhir.fhirproxy.dstu3.support.cdshooks.service;
 
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.NotImplementedException;
+import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.cdshooks.model.Action;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.cdshooks.model.Card;
 import org.hl7.fhir.dstu3.model.*;
 import org.hl7.fhir.exceptions.FHIRException;
@@ -111,6 +112,53 @@ public class CarePlanToCardTest {
     }
 
     @Test
+    public void suggestionMultipleActionRequestGroup() throws FHIRException {
+        CarePlan carePlan = new CarePlan();
+        RequestGroup.RequestGroupActionComponent rootAction = new RequestGroup.RequestGroupActionComponent()
+                .setTitle( "some title" )
+                .setDescription( "description" )
+                .setSelectionBehavior( RequestGroup.ActionSelectionBehavior.ATMOSTONE );
+
+        Resource someResource1 = new Observation().setId( "resourceId1" );
+        Resource someResource2 = new Observation().setId( "resourceId2" );
+        RequestGroup.RequestGroupActionComponent suggestion1Action = new RequestGroup.RequestGroupActionComponent()
+                .setTitle( "suggestion1" )
+                .setDescription( "why suggestion is needed" )
+                .addAction( new RequestGroup.RequestGroupActionComponent()
+                        .setType( new Coding( ).setSystem( "http://hl7.org/fhir/ValueSet/action-type" ).setCode( "create" ) )
+                        .setDescription("someDescription")
+                        .setResource( new Reference(  ).setReference( "#"+someResource1.getId() ) )
+                )
+                .addAction( new RequestGroup.RequestGroupActionComponent()
+                        .setType( new Coding( ).setSystem( "http://hl7.org/fhir/ValueSet/action-type" ).setCode( "update" ) )
+                        .setResource( new Reference(  ).setReference( "#"+someResource2.getId() ) )
+                );
+
+        carePlan.addContained( someResource1 );
+        carePlan.addContained( someResource2 );
+        rootAction.addAction( suggestion1Action );
+
+        RequestGroup requestGroup = (RequestGroup) new RequestGroup()
+                .addAction( rootAction )
+                .setId( "someId" );
+        carePlan.addActivity( new CarePlan.CarePlanActivityComponent()
+                .setReference( new Reference(  ).setReference( "#"+requestGroup.getId() ) )
+        )
+                .addContained( requestGroup )
+        ;
+        List<Card> cardList = CarePlanToCard.convert( carePlan, null, null );
+
+        assertNotNull( cardList );
+        assertFalse( cardList.isEmpty() );
+        Card card = cardList.get( 0 );
+        assertEquals( rootAction.getTitle(), card.getSummary() );
+        assertEquals( rootAction.getDescription(), card.getDetail() );
+        assertFalse( card.getSuggestions().isEmpty() );
+        assertEquals( 2, card.getSuggestions().get(0).getActions().size() );
+        assertEquals("someDescription", card.getSuggestions().get(0).getActions().get(0).getDescription() );
+        assertEquals("", card.getSuggestions().get(0).getActions().get(1).getDescription() );
+    }
+    @Test
     public void linkActionRequestGroup() throws FHIRException {
         CarePlan carePlan = new CarePlan();
 
@@ -202,4 +250,6 @@ public class CarePlanToCardTest {
         assertEquals( rootAction.getAction().get(0).getTitle(), card.getLinks().get(0).getLabel() );
         assertEquals( "absolute", card.getLinks().get(0).getType());
     }
+
+
 }
