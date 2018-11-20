@@ -84,55 +84,55 @@ public class QuestionnairePopulateProcessorTest {
         checkQuestionnaire(questionnaire, questionnaireResponse);
     }
 
-    @Test
-    public void testCqifQuestionnaireInitialValues() throws FHIRException {
-        Questionnaire questionnaire = (Questionnaire) new Questionnaire()
-                .setTitle("Title")
-                .setDescription("Description")
-                .addItem(new Questionnaire.QuestionnaireItemComponent()
-                        .setLinkId("1")
-                        .setText("text1")
-                        .setInitial( new StringType("initial"))
-                )
-                .addItem(new Questionnaire.QuestionnaireItemComponent()
-                        .setLinkId("2")
-                        .setText("text1")
-                        .addItem( new Questionnaire.QuestionnaireItemComponent()
-                                .setLinkId("2.1")
-                        )
-                ).setMeta(
-                        new Meta().addProfile("http://hl7.org/fhir/StructureDefinition/cqif-questionnaire")
-                ).setId("slakdsadas");
-//        questionnaire.addExtension(
-//          new Extension()
-//            .setUrl("http://hl7.org/fhir/StructureDefinition/cqif-library")
-//            .setValue(new Reference().setReference(ResourceType.Library+"/myLibrary"))
+//    @Test
+//    public void testCqifQuestionnaireInitialValues() throws FHIRException {
+//        Questionnaire questionnaire = (Questionnaire) new Questionnaire()
+//                .setTitle("Title")
+//                .setDescription("Description")
+//                .addItem(new Questionnaire.QuestionnaireItemComponent()
+//                        .setLinkId("1")
+//                        .setText("text1")
+//                        .setInitial( new StringType("initial"))
+//                )
+//                .addItem(new Questionnaire.QuestionnaireItemComponent()
+//                        .setLinkId("2")
+//                        .setText("text1")
+//                        .addItem( new Questionnaire.QuestionnaireItemComponent()
+//                                .setLinkId("2.1")
+//                        )
+//                ).setMeta(
+//                        new Meta().addProfile("http://hl7.org/fhir/StructureDefinition/cqif-questionnaire")
+//                ).setId("slakdsadas");
+////        questionnaire.addExtension(
+////          new Extension()
+////            .setUrl("http://hl7.org/fhir/StructureDefinition/cqif-library")
+////            .setValue(new Reference().setReference(ResourceType.Library+"/myLibrary"))
+////        );
+//        Questionnaire.QuestionnaireItemComponent cqifItem = (Questionnaire.QuestionnaireItemComponent) new Questionnaire.QuestionnaireItemComponent()
+//                .setLinkId("3")
+//                .setText("text3")
+//                .addExtension(
+//                        new Extension()
+//                            .setUrl("http://hl7.org/fhir/StructureDefinition/cqif-initialValue")
+//                            .setValue(new StringType("( AgeInYears() >= 18 and AgeInYears() <= 65 )"))
+//                );
+//        questionnaire.addItem(cqifItem);
+//
+//        Parameters parameters = new Parameters().addParameter(new Parameters.ParametersParameterComponent()
+//                .setName("subject")
+//                .setValue(new Reference("PatientId"))
 //        );
-        Questionnaire.QuestionnaireItemComponent cqifItem = (Questionnaire.QuestionnaireItemComponent) new Questionnaire.QuestionnaireItemComponent()
-                .setLinkId("3")
-                .setText("text3")
-                .addExtension(
-                        new Extension()
-                            .setUrl("http://hl7.org/fhir/StructureDefinition/cqif-initialValue")
-                            .setValue(new StringType("( AgeInYears() >= 18 and AgeInYears() <= 65 )"))
-                );
-        questionnaire.addItem(cqifItem);
-
-        Parameters parameters = new Parameters().addParameter(new Parameters.ParametersParameterComponent()
-                .setName("subject")
-                .setValue(new Reference("PatientId"))
-        );
-
-        BaseFhirDataProvider baseFhirDataProvider = new FhirDataProviderStu3().setEndpoint( "http://doesNotExist" );
-
-        QuestionnairePopulateProcessor questionnairePopulateProcessor = new QuestionnairePopulateProcessor(
-                baseFhirDataProvider, questionnaire, parameters
-        );
-
-        QuestionnaireResponse questionnaireResponse = questionnairePopulateProcessor.getQuestionnaireResponse();
-
-        checkQuestionnaire(questionnaire, questionnaireResponse);
-    }
+//
+//        BaseFhirDataProvider baseFhirDataProvider = new FhirDataProviderStu3().setEndpoint( "http://doesNotExist" );
+//
+//        QuestionnairePopulateProcessor questionnairePopulateProcessor = new QuestionnairePopulateProcessor(
+//                baseFhirDataProvider, questionnaire, parameters
+//        );
+//
+//        QuestionnaireResponse questionnaireResponse = questionnairePopulateProcessor.getQuestionnaireResponse();
+//
+//        checkQuestionnaire(questionnaire, questionnaireResponse);
+//    }
 
 
     private void checkQuestionnaire(Questionnaire questionnaire, QuestionnaireResponse questionnaireResponse) {

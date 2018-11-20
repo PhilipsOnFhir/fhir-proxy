@@ -2,16 +2,15 @@ package com.philips.research.philipsonfhir.fhirproxy.dstu3.support.clinicalreaso
 
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.clinicalreasoning.processor.QuestionnairePopulateProcessor;
 import org.hl7.fhir.dstu3.model.*;
+import sun.misc.JavaSecurityProtectionDomainAccess;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 public class CqlLibrary {
     private String primaryLibrary = null;
     private String library="";
     private boolean hasCqlExpressions = false;
+    private Map<String,String> expressionMap = new TreeMap<>();
 
     public static CqlLibrary generateCqlLibrary(DomainResource instance, List<String> defineList) {
         CqlLibrary cqlLibrary;
@@ -48,6 +47,7 @@ public class CqlLibrary {
         for ( PlanDefinition.PlanDefinitionActionComponent actionComponent: planDefinition.getAction() ){
             addDynamicValuesFromAction(actionComponent, defineList );
         }
+        library+=getDefines();
     }
 
     private CqlLibrary( ActivityDefinition activityDefinition, List<String> defineList ) {
@@ -63,7 +63,8 @@ public class CqlLibrary {
         }
         int actionNo = 0;
         activityDefinition.getDynamicValue()
-            .forEach( dynamicValue -> library+= addExpression( dynamicValue.getLanguage(), dynamicValue.getExpression(), defineList ));
+            .forEach( dynamicValue -> addExpression( dynamicValue.getLanguage(), dynamicValue.getExpression(), defineList ));
+        library+=getDefines();
     }
 
     public CqlLibrary(Questionnaire questionnaire, List<String> defineList) {
@@ -82,6 +83,15 @@ public class CqlLibrary {
         for ( Questionnaire.QuestionnaireItemComponent item : questionnaire.getItem() ){
             addDynamicValuesFromItem(item, defineList );
         }
+        library+=getDefines();
+    }
+
+    private String getDefines() {
+        String expressionDefines="";
+        for ( Map.Entry<String,String> entry: this.expressionMap.entrySet() ){
+            expressionDefines+= "define "+ entry.getKey() +": "+entry.getValue()+"\n\n";
+        }
+        return expressionDefines;
     }
 
     public static List<String> getLibraries(Questionnaire questionnaire) {
@@ -90,17 +100,6 @@ public class CqlLibrary {
                 .forEach( libraryRef -> libraries.add(libraryRef.getReference().replace("Library/","")));
         return libraries;
     }
-//    private void A(Questionnaire questionnaire, List<String> defineList) {
-//        for ( Extension extension: questionnaire.getExtension()){
-//            if ( extension.getUrl().equals("http://hl7.org/fhir/StructureDefinition/cqif-questionnaire")){
-//                String libraryRef = ((Reference)extension.getValue()).getReference().replace("Library/","");
-//                library += "include "+libraryRef+"\n\n";
-//                if ( this.primaryLibrary==null && defineList!=null ){
-//                    this.primaryLibrary = libraryRef;
-//                }
-//            }
-//        }
-//    }
 
     private CqlLibrary(Measure measure, List<String> defineList) {
         library = "library Mea"+getValidString( measure.getIdElement().getIdPart() )+"\n\n";
@@ -133,10 +132,10 @@ public class CqlLibrary {
             // TODO
         }
         for( PlanDefinition.PlanDefinitionActionConditionComponent conditionComponent : actionComponent.getCondition() ){
-            library+= addExpression( conditionComponent.getLanguage(), conditionComponent.getExpression(), defineList );
+            addExpression( conditionComponent.getLanguage(), conditionComponent.getExpression(), defineList );
         }
         for( PlanDefinition.PlanDefinitionActionDynamicValueComponent dynamicValueComponent:  actionComponent.getDynamicValue()){
-            library+= addExpression( dynamicValueComponent.getLanguage(), dynamicValueComponent.getExpression(), defineList );
+            addExpression( dynamicValueComponent.getLanguage(), dynamicValueComponent.getExpression(), defineList );
         }
         for( PlanDefinition.PlanDefinitionActionComponent planDefinitionActionComponent: actionComponent.getAction() ){
             addDynamicValuesFromAction(planDefinitionActionComponent, defineList );
@@ -146,15 +145,15 @@ public class CqlLibrary {
     private void addDynamicValuesFromItem(Questionnaire.QuestionnaireItemComponent item, List<String> defineList) {
         CqifQuestionnaire.getConditionValueExpressions(item).stream()
                 .forEach( expression ->
-                        library+= addExpression( "text/cql", expression, defineList )
+                        addExpression( "text/cql", expression, defineList )
                 );
         CqifQuestionnaire.getInitialValueExpressions(item).stream()
                 .forEach( expression ->
-                        library+= addExpression( "text/cql", expression, defineList )
+                        addExpression( "text/cql", expression, defineList )
                 );
         CqifQuestionnaire.getCalculatedValueExpressions(item).stream()
                 .forEach( expression ->
-                        library+= addExpression( "text/cql", expression, defineList )
+                        addExpression( "text/cql", expression, defineList )
                 );
         for ( Questionnaire.QuestionnaireItemComponent subQuestionnaireItemComponent: item.getItem()){
             addDynamicValuesFromItem( subQuestionnaireItemComponent, defineList );
@@ -175,15 +174,17 @@ public class CqlLibrary {
         return library;
     }
 
-    private String addExpression(String language, String expression, List<String> defineList) {
+    private void addExpression(String language, String expression, List<String> defineList) {
         String result = "/* none  */ /n";
         result="";
         if ( language!=null && language.equals("text/cql")){
             String newExpression = addPrefixes( primaryLibrary, defineList, expression );
             result = "define "+ getCqlDefine(expression) +": "+newExpression+"\n\n";
             hasCqlExpressions = true;
+            this.expressionMap.put( getCqlDefine(expression), newExpression );
         }
-        return result;
+
+//        return result;
     }
 
     static String addPrefixes(String prefix, List<String> defineList, String expression) {
