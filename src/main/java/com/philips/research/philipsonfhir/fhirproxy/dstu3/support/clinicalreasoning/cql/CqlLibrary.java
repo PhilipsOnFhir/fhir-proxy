@@ -2,7 +2,6 @@ package com.philips.research.philipsonfhir.fhirproxy.dstu3.support.clinicalreaso
 
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.clinicalreasoning.processor.QuestionnairePopulateProcessor;
 import org.hl7.fhir.dstu3.model.*;
-import sun.misc.JavaSecurityProtectionDomainAccess;
 
 import java.util.*;
 
