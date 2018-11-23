@@ -7,14 +7,11 @@ import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.clinicalreason
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.proxy.controller.SampleFhirGateway;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.proxy.service.FhirServer;
 import org.hl7.fhir.exceptions.FHIRException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.context.WebServerInitializedEvent;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
+import org.springframework.context.event.EventListener;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.annotation.PostConstruct;
 
 @RestController
 @Configuration
@@ -27,10 +24,11 @@ public class MyController extends SampleFhirGateway {
 //        setFhirServer(url);
     }
 
-    @Value("${fhirserver.url}")
-    public void setUrl( String urlll ) throws FHIRException {
-        System.out.println("\n==fhirserver.url=============== " + urlll + "++++++++++++++++++");
-        setFhirServer(urlll);
+    @EventListener
+    public void onWebServerInitialized(WebServerInitializedEvent event) throws FHIRException {
+        System.out.println(event);
+        int port = event.getWebServer().getPort();
+        setFhirServer( "http://localhost:"+port+"/hapi" );
     }
 
     private void setFhirServer(String urlll) throws FHIRException {

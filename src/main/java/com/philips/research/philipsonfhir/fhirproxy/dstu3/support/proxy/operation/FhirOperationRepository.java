@@ -2,8 +2,13 @@ package com.philips.research.philipsonfhir.fhirproxy.dstu3.support.proxy.operati
 
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.NotImplementedException;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.proxy.service.FhirServer;
+import org.hl7.fhir.dstu3.model.CapabilityStatement;
+import org.hl7.fhir.dstu3.model.Reference;
+import org.hl7.fhir.dstu3.model.ResourceType;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -58,5 +63,23 @@ public class FhirOperationRepository {
             return operation.createPostOperationCall( fhirServer, parseResource, queryParams );
         }
         return null;
+    }
+
+    public List<CapabilityStatement.CapabilityStatementRestOperationComponent> getCapabilityOperations() {
+        List<CapabilityStatement.CapabilityStatementRestOperationComponent> result = new ArrayList<>();
+        for ( Map.Entry<String, Map<String,FhirResourceInstanceOperation >> resourceEntry :  this.fhirResourceInstanceOperationMap.entrySet() ) {
+            for( FhirResourceInstanceOperation fhirResourceInstanceOperation: resourceEntry.getValue().values()){
+                String opName = fhirResourceInstanceOperation.getOperationName();
+                opName = ( opName.startsWith("$")? opName.substring(1): opName );
+
+                CapabilityStatement.CapabilityStatementRestOperationComponent operationComponent =
+                        new CapabilityStatement.CapabilityStatementRestOperationComponent()
+                                .setName( opName )
+                                .setDefinition( new Reference().setReference(ResourceType.OperationDefinition.name()+"/"+fhirResourceInstanceOperation.getResourceType()+'-'+opName)
+                                );
+                result.add( operationComponent );
+            }
+        }
+        return result;
     }
 }

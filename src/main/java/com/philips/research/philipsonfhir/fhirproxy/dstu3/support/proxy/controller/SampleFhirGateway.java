@@ -26,12 +26,12 @@ import java.util.logging.Logger;
 @CrossOrigin(origins = "*")
 public class SampleFhirGateway {
     private static final String template = "Hello, %s!";
-    protected final FhirServer fhirServer;
+    protected FhirServer fhirServer = null;
     private Logger logger = Logger.getLogger(SampleFhirGateway.class.getName());
     private FhirContext myContext = FhirContext.forDstu3();
 
     public SampleFhirGateway(){
-        this( "http:localhost:9500/baseStu3" );
+//        this( "http:localhost:9500/baseStu3" );
     }
     public SampleFhirGateway(String fhirUrl) {
         this.fhirServer = new FhirServer( fhirUrl );

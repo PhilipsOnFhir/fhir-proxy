@@ -42,6 +42,7 @@ public class FhirServer implements IFhirServer {
         public CapabilityStatement getCapabilityStatement() {
         CapabilityStatement capabilityStatement =
                 ourClient.capabilities().ofType(CapabilityStatement.class).execute();
+        capabilityStatement.getRest().get(0).getOperation().addAll( this.getFhirOperationRepository().getCapabilityOperations() );
         return capabilityStatement;
     }
 
@@ -165,7 +166,7 @@ public class FhirServer implements IFhirServer {
                 url += "&" + entry.getKey() + "=" + entry.getValue();
             }
         }
-        logger.info( "GET " + fhirUrl + url );
+//        logger.info( "GET " + fhirUrl + url );
 
         return url;
     }
