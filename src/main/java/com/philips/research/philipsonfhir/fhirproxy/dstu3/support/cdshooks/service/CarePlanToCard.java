@@ -49,7 +49,7 @@ public class CarePlanToCard {
         if (requestGroup.hasAction()) {
             for (RequestGroup.RequestGroupActionComponent action : requestGroup.getAction()) {
                 Card card = new Card();
-                card.setIndicator( "info" ); //TODO - r4 priority field
+                card.setIndicator( "informational" ); //TODO - r4 priority field
 
                 Source source = new Source();
                 source.setLabel( carePlan.getTitle() );
@@ -110,8 +110,11 @@ public class CarePlanToCard {
                         card.getLinks().add(link);
                     } else {
                         Suggestion suggestion = new Suggestion();
-                        suggestion.setLabel(action.getLabel());
-
+                        suggestion.setLabel(
+                                (subAction.hasLabel()? subAction.getLabel() : (subAction.hasLabel()&&subAction.hasTitle()?" ":"")) +
+                                (subAction.hasTitle()?subAction.getTitle():(subAction.hasDescription()?" ":""))+
+                                (subAction.hasDescription()?subAction.getDescription():"")
+                        );
                         if (  (!subAction.hasAction() || subAction.getAction().isEmpty()) && subAction.hasType() ){
                             Action suggestionAction = createActionFromRequestGroupAction(carePlan, subAction);
                             suggestion.getActions().add( suggestionAction );
@@ -187,7 +190,8 @@ public class CarePlanToCard {
 
         if ( reference != null && reference.getReference().startsWith( "#" ) ) {
             Optional<Resource> optRG = carePlan.getContained().stream()
-                .filter( resource -> reference.getReference().substring( 1 ).equals( resource.getId() ) )
+//                .filter( resource -> reference.getReference().substring( 1 ).equals( resource.getId() ) )
+                .filter( resource -> reference.getReference().equals( resource.getId() ) )
                 .findFirst();
             if ( optRG.isPresent() ) {
                 return optRG.get();

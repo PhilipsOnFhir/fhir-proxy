@@ -80,7 +80,7 @@ public class ClinicalReasoningApplicationTest {
         assertTrue( optOperation.isPresent() );
         CapabilityStatement.CapabilityStatementRestOperationComponent operation = optOperation.get();
         assertTrue( operation.hasDefinition() );
-        assertEquals( operation.getDefinition().getReference(), "OperationDefinition/PlanDefinition--apply");
+        assertEquals( operation.getDefinition().getReference(), "OperationDefinition/PlanDefinition-apply");
     }
 
     private String createURLWithPort(String uri) {

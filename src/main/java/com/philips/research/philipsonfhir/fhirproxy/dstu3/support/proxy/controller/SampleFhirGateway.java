@@ -231,6 +231,29 @@ public class SampleFhirGateway {
 
     @RequestMapping (
             method = RequestMethod.POST,
+            value = "/fhir"
+    )
+    public ResponseEntity<String> postResourceType(
+            @RequestHeader(value = "Accept", defaultValue = "application/fhir+json") String accept,
+            @RequestHeader(value = "Content-Type", defaultValue = "application/fhir+json") String contentType,
+            @RequestBody  String requestBody
+
+    ) throws FHIRException, URISyntaxException {
+        logger.log(Level.INFO,"POST ");
+        try {
+            String methodOutcome = fhirServer.doPost(requestBody);
+            return ResponseEntity.ok(methodOutcome);
+        } catch( ca.uhn.fhir.rest.server.exceptions.InvalidRequestException e){
+            logger.warning(e.toString());
+            return new ResponseEntity( e.toString(), HttpStatus.valueOf(e.getStatusCode() ) );
+        } catch ( Exception e ){
+            logger.warning(e.toString());
+            return  ResponseEntity.badRequest().body(e.toString());
+        }
+    }
+
+    @RequestMapping (
+            method = RequestMethod.POST,
             value = "/fhir/{resourceType}"
     )
     public ResponseEntity<OperationOutcome> postResourceType(

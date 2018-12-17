@@ -250,6 +250,10 @@ public class FhirServer implements IFhirServer {
         return this.ourClient.create().resource(iBaseResource).execute();
     }
 
+    public String doPost(String requestBody) {
+        return this.ourClient.transaction().withBundle(requestBody).execute();
+    }
+
     @Override
     public FhirContext getCtx() {
         return ourCtx;

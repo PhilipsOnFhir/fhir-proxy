@@ -1,5 +1,6 @@
 package com.philips.research.philipsonfhir.fhirproxy.dstu3.support.cdshooks.model;
 
+import ca.uhn.fhir.context.FhirContext;
 import lombok.Getter;
 import lombok.Setter;
 import org.hl7.fhir.dstu3.model.Resource;
@@ -11,5 +12,8 @@ public class Action {
 
     ActionType type;
     String description;
-    Resource resource;
+    String resource;
+    public void setResource( Resource fhirResource ){
+        resource = (FhirContext.forDstu3().newJsonParser()).encodeResourceToString(fhirResource);
+    }
 }

@@ -24,6 +24,8 @@ public class CdsHookController {
 
     @GetMapping(PREFIX + "/cds-services")
     public CdsServices getCdsServices() throws FHIRException, NotImplementedException {
+        CdsServices cdsServices = new CdsServices();
+
         return cdsHooksService.getServices();
     }
 
