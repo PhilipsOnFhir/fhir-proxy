@@ -4,7 +4,6 @@ import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.NotImplemented
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.cdshooks.model.*;
 import org.hl7.fhir.dstu3.model.*;
 import org.hl7.fhir.exceptions.FHIRException;
-import org.omg.CORBA.IDLType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
