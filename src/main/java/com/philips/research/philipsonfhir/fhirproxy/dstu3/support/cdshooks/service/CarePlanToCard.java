@@ -190,7 +190,7 @@ public class CarePlanToCard {
         if ( reference != null && reference.getReference().startsWith( "#" ) ) {
             Optional<Resource> optRG = carePlan.getContained().stream()
 //                .filter( resource -> reference.getReference().substring( 1 ).equals( resource.getId() ) )
-                .filter( resource -> reference.getReference().equals( resource.getId() ) )
+                .filter( resource -> reference.getReference().equals( "#"+resource.getId() ) )
                 .findFirst();
             if ( optRG.isPresent() ) {
                 return optRG.get();
