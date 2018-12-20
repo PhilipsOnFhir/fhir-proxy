@@ -7,14 +7,9 @@ import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.clinicalreason
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.proxy.controller.SampleFhirGateway;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.proxy.service.FhirServer;
 import org.hl7.fhir.exceptions.FHIRException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.annotation.PostConstruct;
 
 @RestController
 @Configuration
@@ -42,8 +37,8 @@ public class MyController extends SampleFhirGateway {
 
         this.fhirServer.getFhirOperationRepository().registerOperation(new MeasureEvaluationOperation(client));
         this.fhirServer.getFhirOperationRepository().registerOperation(new StructureMapTransformOperation(url, client));
-        this.fhirServer.getFhirOperationRepository().registerOperation(new PlanDefinitionApplyOperation(url));
         this.fhirServer.getFhirOperationRepository().registerOperation(new ActivityDefinitionApplyOperation(url));
+        this.fhirServer.getFhirOperationRepository().registerOperation(new PlanDefinitionApplyOperation(url));
         this.fhirServer.getFhirOperationRepository().registerOperation(new QuestionnairePopulateOperation(url));
         System.out.println("\n==Set fhirserver=============== " + urlll + "+++++DONE+++++++++++++");
     }

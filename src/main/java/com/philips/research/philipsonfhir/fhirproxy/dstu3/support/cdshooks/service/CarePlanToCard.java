@@ -53,7 +53,8 @@ public class CarePlanToCard {
                 Source source = new Source();
                 source.setLabel( carePlan.getTitle() );
                 if ( carePlan.hasDefinition() && !carePlan.getDefinition().isEmpty() ){
-                    source.setUrl( "http://localhost:4200/fhir/"+carePlan.getDefinition().get(0).getReference()+"?fs="+fhirServerUrl);
+//                    source.setUrl( "http://localhost:4200/fhir/"+carePlan.getDefinition().get(0).getReference()+"?fs="+fhirServerUrl);
+                    source.setUrl( "http://130.145.227.171:4200/fhir/"+carePlan.getDefinition().get(0).getReference()+"?fs="+fhirServerUrl);
                 }
 
                 card.setSource(source);
@@ -190,7 +191,7 @@ public class CarePlanToCard {
         if ( reference != null && reference.getReference().startsWith( "#" ) ) {
             Optional<Resource> optRG = carePlan.getContained().stream()
 //                .filter( resource -> reference.getReference().substring( 1 ).equals( resource.getId() ) )
-                .filter( resource -> reference.getReference().equals( "#"+resource.getId() ) )
+                .filter( resource -> reference.getReference().equals( "#"+resource.getId() ) ||reference.getReference().equals( resource.getId() ) )
                 .findFirst();
             if ( optRG.isPresent() ) {
                 return optRG.get();

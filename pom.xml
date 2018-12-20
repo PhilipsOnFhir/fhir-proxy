@@ -31,30 +31,19 @@
     </properties>
 
 
- <repositories>
+    <repositories>
         <repository>
-
-			             <id>oss-sonatype</id>
-
-				                 <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-
-						             <snapshots>
-
-								                     <enabled>true</enabled>
-
-										                 </snapshots>
-
-												         </repository>
-
-													         <repository>
-
-															             <id>oss-sonatype-public</id>
-
-																                 <url>https://oss.sonatype.org/content/groups/public/</url>
-
-																		         </repository>
-
-																			     </repositories>
+            <id>oss-sonatype</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>oss-sonatype-public</id>
+            <url>https://oss.sonatype.org/content/groups/public/</url>
+        </repository>
+    </repositories>
 
 
     <dependencies>
@@ -380,7 +369,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.philips.research.philipsonfhir.fhirproxy.dstu3.applications.clinicalreasoning.ClinicalReasoningApplication</mainClass>
+                    <mainClass>com.philips.research.philipsonfhir.fhirproxy.dstu3.applications.cdshooks.CdsHooksClinicalReasoningApplication</mainClass>
                 </configuration>
             </plugin>
             <plugin>

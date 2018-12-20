@@ -211,18 +211,6 @@ public class PlanDefinitionProcessor {
         if ( planDefinitionAction.hasDocumentation() ) {
             RelatedArtifact artifact = planDefinitionAction.getDocumentationFirstRep().copy();
 
-//            RelatedArtifactBuilder artifactBuilder = new RelatedArtifactBuilder();
-//            if ( artifact.hasDisplay() ) {
-//                artifactBuilder.buildDisplay( artifact.getDisplay() );
-//            }
-//            if ( artifact.hasUrl() ) {
-//                artifactBuilder.buildUrl( artifact.getUrl() );
-//            }
-//            if ( artifact.hasDocument() && artifact.getDocument().hasUrl() ) {
-//                AttachmentBuilder attachmentBuilder = new AttachmentBuilder();
-//                attachmentBuilder.buildUrl( artifact.getDocument().getUrl() );
-//                artifactBuilder.buildDocument( attachmentBuilder.build() );
-//            }
             requestGroupAction.setDocumentation( Collections.singletonList( artifact ) );
         }
 
@@ -281,6 +269,7 @@ public class PlanDefinitionProcessor {
                         default:
                             result = cqlExecutionProvider.evaluateInContext(dynamicValue.getExpression());
                     }
+                    logger.info( "rocessing action of PlanDefinition - processing: "+ dynamicValue.getExpression()+" result" );
 
                     if (dynamicValue.getPath().startsWith("%action")) {
                         String newPath =
@@ -335,6 +324,7 @@ public class PlanDefinitionProcessor {
             }
 
             try {
+                logger.info( "processing action of PlanDefinition - applying ActivityDefinition: "+ activityDefinition.getId() );
                 ActivityDefinitionProcessor activityDefinitionProcessor = new ActivityDefinitionProcessor(
                     this.fhirDataProvider, activityDefinition, patientId, encounterId, practitionerId, organizationId, null, null, null, null, null
                 );
@@ -351,6 +341,7 @@ public class PlanDefinitionProcessor {
                 if ( structuredMap==null ){
                     throw new FHIRException( "StructureMap "+structureMapId+" can not be found" );
                 }
+                logger.info( "processing action of PlanDefinition - applying structuremap: "+ structuredMap.getId() );
                 resource = (Resource) structureMapTransformServer.doTransform( structuredMap, planDefinition, result  );
             }catch ( FHIRException e ) {
                 throw new RuntimeException( "Error applying StructureMap " + e.getMessage() );

@@ -152,7 +152,8 @@ public class FhirClinicalReasoningCdsHooksService {
          */
         // TODO replace questionnaireEditor
 //        return CarePlanToCard.convert(  carePlan, this.fhirServer.getUrl(), "http://localhost:4200/editor/" );
-        return CarePlanToCard.convert(  carePlan, "http://localhost:9080/fhir", "http://localhost:4200/editor/" );
+//        return CarePlanToCard.convert(  carePlan, "http://localhost:9080/fhir", "http://localhost:4200/editor/" );
+        return CarePlanToCard.convert(  carePlan, "http://130.145.227.171:9080/fhir", "http://localhost:4200/editor/" );
     }
 
 }

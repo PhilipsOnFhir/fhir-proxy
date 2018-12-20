@@ -1,7 +1,7 @@
 package com.philips.research.philipsonfhir.fhirproxy.dstu3.support.clinicalreasoning;
 
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.NotImplementedException;
-import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.clinicalreasoning.processor.ActivityDefinitionProcessor;
+import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.clinicalreasoning.processor.PlanDefinitionProcessor;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.proxy.operation.FhirOperationCall;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.proxy.operation.FhirResourceInstanceOperation;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.proxy.service.FhirServer;
@@ -15,11 +15,10 @@ import org.opencds.cqf.cql.data.fhir.FhirDataProviderStu3;
 import java.util.Map;
 
 public class PlanDefinitionApplyOperation extends FhirResourceInstanceOperation {
-
     private final String url;
 
-    public PlanDefinitionApplyOperation(String url ) {
-        super( "ActivityDefinition", "$apply" );
+    public PlanDefinitionApplyOperation(String url) {
+        super( "PlanDefinition", "$apply" );
         this.url = url;
     }
 
@@ -46,10 +45,10 @@ public class PlanDefinitionApplyOperation extends FhirResourceInstanceOperation 
                 String setting         = queryParams.get("setting");
                 String settingContext  = queryParams.get("settingContext");
 
-                ActivityDefinitionProcessor activityDefinitionProcessor = new ActivityDefinitionProcessor(
+                PlanDefinitionProcessor activityDefinitionProcessor = new PlanDefinitionProcessor(
                     baseFhirDataProvider, idType
                     , patientId, encounterId, practitionerId, organizationId, userType, userLanguage, userTaskContext, setting, settingContext );
-                return activityDefinitionProcessor.getResult();
+                return activityDefinitionProcessor.getCarePlan();
             }
 
             @Override

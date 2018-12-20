@@ -49,8 +49,8 @@ public class ContextController {
         // add clinical reasoning operations.
         fhirServer.getFhirOperationRepository().registerOperation(  new MeasureEvaluationOperation( client ) );
         fhirServer.getFhirOperationRepository().registerOperation(  new StructureMapTransformOperation( fhirServerUrl, client )  );
-        fhirServer.getFhirOperationRepository().registerOperation(  new PlanDefinitionApplyOperation( fhirServerUrl )  );
         fhirServer.getFhirOperationRepository().registerOperation(  new ActivityDefinitionApplyOperation( fhirServerUrl )  );
+        fhirServer.getFhirOperationRepository().registerOperation(  new PlanDefinitionApplyOperation( fhirServerUrl )  );
         fhirServer.getFhirOperationRepository().registerOperation(  new QuestionnairePopulateOperation( fhirServerUrl )  );
 
         return contextService.createContextSession( new FhirServer(fhirServerUrl)).getSessionId();

@@ -19,8 +19,8 @@ public class FhirRepo extends SampleFhirGateway {
 
         this.fhirServer.getFhirOperationRepository().registerOperation(  new MeasureEvaluationOperation( client ) );
         this.fhirServer.getFhirOperationRepository().registerOperation(  new StructureMapTransformOperation( url, client )  );
-        this.fhirServer.getFhirOperationRepository().registerOperation(  new PlanDefinitionApplyOperation( url )  );
         this.fhirServer.getFhirOperationRepository().registerOperation(  new ActivityDefinitionApplyOperation( url )  );
+        this.fhirServer.getFhirOperationRepository().registerOperation(  new PlanDefinitionApplyOperation( url )  );
         this.fhirServer.getFhirOperationRepository().registerOperation(  new QuestionnairePopulateOperation( url )  );
     }
 }

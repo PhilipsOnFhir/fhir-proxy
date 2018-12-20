@@ -1,7 +1,7 @@
 package com.philips.research.philipsonfhir.fhirproxy.dstu3.support.clinicalreasoning;
 
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.NotImplementedException;
-import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.clinicalreasoning.processor.PlanDefinitionProcessor;
+import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.clinicalreasoning.processor.ActivityDefinitionProcessor;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.proxy.operation.FhirOperationCall;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.proxy.operation.FhirResourceInstanceOperation;
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.proxy.service.FhirServer;
@@ -15,10 +15,11 @@ import org.opencds.cqf.cql.data.fhir.FhirDataProviderStu3;
 import java.util.Map;
 
 public class ActivityDefinitionApplyOperation extends FhirResourceInstanceOperation {
+
     private final String url;
 
-    public ActivityDefinitionApplyOperation(String url) {
-        super( "PlanDefinition", "$apply" );
+    public ActivityDefinitionApplyOperation(String url ) {
+        super( "ActivityDefinition", "$apply" );
         this.url = url;
     }
 
@@ -45,10 +46,10 @@ public class ActivityDefinitionApplyOperation extends FhirResourceInstanceOperat
                 String setting         = queryParams.get("setting");
                 String settingContext  = queryParams.get("settingContext");
 
-                PlanDefinitionProcessor activityDefinitionProcessor = new PlanDefinitionProcessor(
+                ActivityDefinitionProcessor activityDefinitionProcessor = new ActivityDefinitionProcessor(
                     baseFhirDataProvider, idType
                     , patientId, encounterId, practitionerId, organizationId, userType, userLanguage, userTaskContext, setting, settingContext );
-                return activityDefinitionProcessor.getCarePlan();
+                return activityDefinitionProcessor.getResult();
             }
 
             @Override
