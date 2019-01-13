@@ -8,5 +8,5 @@ import org.hl7.fhir.dstu3.model.Resource;
 @Setter
 public class FhirCastContext {
     String key;
-    Resource resource;
+    String resource;
 }
