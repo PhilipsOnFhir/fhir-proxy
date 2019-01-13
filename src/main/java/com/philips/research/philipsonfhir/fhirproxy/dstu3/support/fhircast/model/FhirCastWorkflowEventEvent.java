@@ -10,7 +10,8 @@ import java.util.List;
 @Setter
 public class FhirCastWorkflowEventEvent {
     String hub_topic;
-    String hub_event;
+//    String hub_event;
+    EventTypes hub_event;
     List<FhirCastContext> context = new ArrayList<>();
 
 }

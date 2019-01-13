@@ -60,7 +60,7 @@ public class FhirCastClientTest {
         Thread.sleep( 10000 );
 
         assertEquals( patient.getId(), fhirCastDrivingApplication.getCurrentPatient().getId() );
-        assertEquals( patient.getId(),  fhirCastClient1.getCurrentPatient().getId() );
+        assertEquals( "Patient/"+patient.getId(),  fhirCastClient1.getCurrentPatient().getId() );
 
         fhirCastDrivingApplication.close();
         fhirCastClient1.close();

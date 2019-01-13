@@ -5,16 +5,14 @@ import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.fhircast.contr
 import com.philips.research.philipsonfhir.fhirproxy.dstu3.support.fhircast.model.*;
 import org.hl7.fhir.dstu3.model.Patient;
 import org.hl7.fhir.exceptions.FHIRException;
+import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.logging.Logger;
 
 @Controller
@@ -27,6 +25,7 @@ public class FhirCastClient {
     String sessionId = null;
     private Patient patient = null ;
     private Logger logger = Logger.getLogger( this.getClass().getName() );
+    private Map<String, IBaseResource> context = new TreeMap<String, IBaseResource>(  );
 
     //server.port=9601","fhircast.topic=123
     @Value("${server.port}")
@@ -102,7 +101,7 @@ public class FhirCastClient {
 
     public void subscribePatientChange() {
         int port = 6840;
-        CommunicationListener communicationListener = new CommunicationListener( port );
+        CommunicationListener communicationListener = new CommunicationListener( port, this );
         new Thread( communicationListener ).start();
 //        Host: hub.example.com
 //        Authorization: Bearer i8hweunweunweofiwweoijewiweh
@@ -130,9 +129,9 @@ public class FhirCastClient {
         FhirCastWorkflowEventEvent fhirCastWorkflowEventEvent= new FhirCastWorkflowEventEvent();
         fhirCastWorkflowEventEvent.setHub_topic( this.sessionId );
         if ( this.patient ==null ){
-            fhirCastWorkflowEventEvent.setHub_event( EventTypes.OPEN_PATIENT_CHART.toString() );
+            fhirCastWorkflowEventEvent.setHub_event( EventTypes.OPEN_PATIENT_CHART );
         } else if ( !this.patient.getId().equals( patient.getId()  )) {
-            fhirCastWorkflowEventEvent.setHub_event( EventTypes.SWITCH_PATIENT_CHART.toString() );
+            fhirCastWorkflowEventEvent.setHub_event( EventTypes.SWITCH_PATIENT_CHART );
         }
         else{
             return;
@@ -158,5 +157,23 @@ public class FhirCastClient {
     }
 
 
+    public void newEvent(FhirCastWorkflowEvent fhirCastWorkflowEvent) {
+        logger.info(  "New event "+fhirCastWorkflowEvent.getEvent().getContext() );
+        switch( fhirCastWorkflowEvent.getEvent().getHub_event() ){
+            case OPEN_PATIENT_CHART:
+            case SWITCH_PATIENT_CHART:
+                FhirCastWorkflowEventEvent fhirCastWorkflowEventEvent = fhirCastWorkflowEvent.getEvent();
+                for( FhirCastContext fhirCastContext: fhirCastWorkflowEventEvent.getContext()){
+                    String resourceStr = fhirCastContext.getResource();
+                    IBaseResource resource = ourCtx.newJsonParser().parseResource( resourceStr );
+                    this.context.put( fhirCastContext.getKey(), resource);
+                }
+                break;
+        }
+        if ( this.context.containsKey( "patient" )){
+            this.patient = (Patient) this.context.get( "patient" );
+        }
+
+    }
 }
 

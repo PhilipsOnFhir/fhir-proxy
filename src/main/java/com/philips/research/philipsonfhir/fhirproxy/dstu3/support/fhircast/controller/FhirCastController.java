@@ -56,11 +56,12 @@ public class FhirCastController {
     public ResponseEntity subscribeToFhirCast(
         @PathVariable String sessionId,
 //        @RequestBody FhirCastSessionSubscribe fhirCastSessionSubscribe,
+//        @RequestBody String str,
         @RequestBody FhirCastBody fhirCastBody,
         @RequestParam Map<String, String> queryParams
     ) {
         ResponseEntity<String> responseEntity = new ResponseEntity( HttpStatus.ACCEPTED);
-
+//        FhirCastBody fhirCastBody = new FhirCastBody();
         try {
             if ( fhirCastBody.isSubscribe() ){
                 fhirCastService.subscribe(sessionId, fhirCastBody.getFhirCastSessionSubscribe() );

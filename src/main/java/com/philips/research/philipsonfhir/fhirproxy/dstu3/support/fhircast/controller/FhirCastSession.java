@@ -57,7 +57,7 @@ public class FhirCastSession {
             // send events
             logger.info( "sendEvent " + fhirCastWorkflowEvent );
             for ( FhirCastSessionSubscribe fhirCastSessionSubscribe : this.fhirCastSubscriptions.values() ) {
-                if ( fhirCastSessionSubscribe.getHub_events().contains( fhirCastWorkflowEvent.getEvent().getHub_event() ) ) {
+                if ( fhirCastSessionSubscribe.getHub_events().contains( fhirCastWorkflowEvent.getEvent().getHub_event().toString() ) ) {
 
 //                    if ( fhirCastWorkflowEvent.getId() != sessionId ) {
 //                        throw new FhirCastException( "session id mismatch" );

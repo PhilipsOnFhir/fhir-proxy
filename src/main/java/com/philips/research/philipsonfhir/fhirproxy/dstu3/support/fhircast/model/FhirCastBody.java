@@ -1,5 +1,6 @@
 package com.philips.research.philipsonfhir.fhirproxy.dstu3.support.fhircast.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,12 +8,12 @@ import lombok.Setter;
 @Setter
 public class FhirCastBody {
     // subscribe
-    String hub_callback;
-    String hub_mode;
-    String hub_topic;
-    String hub_secret;
-    String hub_events;
-    String hub_lease_seconds;
+    @JsonProperty("hub.callback")      String hub_callback;
+    @JsonProperty("hub.mode")          String hub_mode;
+    @JsonProperty("hub.topic")         String hub_topic;
+    @JsonProperty("hub.secret")        String hub_secret;
+    @JsonProperty("hub.events")        String hub_events;
+    @JsonProperty("hub.lease_seconds") String hub_lease_seconds;
 
     // event
     String timestamp;
