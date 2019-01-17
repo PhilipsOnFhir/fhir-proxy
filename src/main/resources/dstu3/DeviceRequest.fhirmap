@@ -1,0 +1,55 @@
+map "http://research.philips.com/fhir/dstu3/mapping/AdToProcedureRequest" =
+    "R3 Parameters of Activitydefinition.$apply to DeviceRequest"
+
+uses "http://hl7.org/fhir/StructureDefinition/Parameters"    as source
+uses "http://hl7.org/fhir/StructureDefinition/DeviceRequest" as target
+
+group main
+    input src: Parameters as source
+    input tgt: DeviceRequest as target
+
+    "ad.subject" : for src.parameter as p where name='subject' then {
+        do: for p.value as sbj make tgt.subject = sbj
+    }
+
+    "ad.requester.agent" : for src.parameter as p where name='practitioner' then{
+        do: for p.value as prac make tgt.requester as requester then {
+            doAlso: for prac make requester.agent=prac
+        }
+    }
+
+    "ad.requester.onBehalf" : for src.parameter as p where name='organization' then{
+        do: for p.value as org make tgt.requester as requester then {
+            doAlso: for org make requester.onBehalfOf=org
+        }
+    }
+
+    "ad.context" : for src.parameter as p where name='encounter' then {
+        do: for p.value as enc make tgt.context = enc
+    }
+
+    actded: for src.parameter as p where name='source' then {
+        do: for p.resource as ad then createActDef( ad, tgt )
+//            check ad.product.empty().not()
+//            then createActDef( ad, tgt )
+    }
+endgroup
+
+group createActDef
+    input src: ActivityDefinition as source
+    input tgt: DeviceRequest as target
+
+    "ad.product"   : for src          as vvv check product.empty()
+    "ad.dosage"    : for src          as vvv check dosage.empty()
+    "ad.basedOn"   : for src                 make tgt.definition = reference( src )
+    "ad.status"    : for src                 make tgt.status = "draft"
+//    "ad.intent"    : for src                 make tgt.intent = "order"
+    "ad.code"      : for src.code     as vvv make tgt.code = vvv
+    "ad.bodysite"  : for src          as vvv check bodysite.empty()
+//    "ad.basedOn"   : for src.id as vvv
+    "ad.occurance" : for src.timing  as vvv make tgt.occurrence = vvv
+    //"ad.occurance": for src.timing make tgt.occurrence
+
+endgroup
+
+

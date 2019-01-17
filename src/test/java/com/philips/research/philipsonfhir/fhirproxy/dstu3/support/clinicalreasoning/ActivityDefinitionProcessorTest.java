@@ -49,8 +49,8 @@ public class ActivityDefinitionProcessorTest {
     public void testReferralRequest() throws FHIRException, NotImplementedException {
         BaseFhirDataProvider baseFhirDataProvider = mock( FhirDataProviderStu3.class );
         ActivityDefinition activityDefinition = (ActivityDefinition) new ActivityDefinition()
-            .setKind( ActivityDefinition.ActivityDefinitionKind.REFERRALREQUEST )
-            .setId( "adReferralRequestTest" );
+                .setKind( ActivityDefinition.ActivityDefinitionKind.REFERRALREQUEST )
+                .setId( "adReferralRequestTest" );
 
         Coding coding = new Coding().setSystem( "http:example.com" ).setCode( "code" ).setDisplay( "display" );
         activityDefinition.setCode( new CodeableConcept().addCoding( coding ) );
@@ -59,7 +59,7 @@ public class ActivityDefinitionProcessorTest {
 
         String patientID = "Patient/test1";
         ActivityDefinitionProcessor activityDefinitionProcessor =
-            new ActivityDefinitionProcessor( baseFhirDataProvider, activityDefinition, patientID );
+                new ActivityDefinitionProcessor( baseFhirDataProvider, activityDefinition, patientID );
         IBaseResource iBaseResource = activityDefinitionProcessor.getResult();
         assertTrue( iBaseResource instanceof ReferralRequest );
         ReferralRequest referralRequest = (ReferralRequest) iBaseResource;
@@ -69,6 +69,32 @@ public class ActivityDefinitionProcessorTest {
         assertEquals( "ActivityDefinition/" + activityDefinition.getId(), referralRequest.getDefinition().get( 0 ).getReference() );
         assertEquals( coding.getSystem(), referralRequest.getType().getCodingFirstRep() .getSystem() );
         assertEquals( coding.getCode(), referralRequest.getType().getCodingFirstRep() .getCode() );
+    }
+
+    @Test
+    public void testDeviceRequest() throws FHIRException, NotImplementedException {
+        BaseFhirDataProvider baseFhirDataProvider = mock( FhirDataProviderStu3.class );
+        ActivityDefinition activityDefinition = (ActivityDefinition) new ActivityDefinition()
+                .setKind( ActivityDefinition.ActivityDefinitionKind.DEVICEREQUEST )
+                .setId( "adDeviceRequestTest" );
+
+        Coding coding = new Coding().setSystem( "http:example.com" ).setCode( "code" ).setDisplay( "display" );
+        activityDefinition.setCode( new CodeableConcept().addCoding( coding ) );
+
+        Date now = new Date();
+
+        String patientID = "Patient/test1";
+        ActivityDefinitionProcessor activityDefinitionProcessor =
+                new ActivityDefinitionProcessor( baseFhirDataProvider, activityDefinition, patientID );
+        IBaseResource iBaseResource = activityDefinitionProcessor.getResult();
+        assertTrue( iBaseResource instanceof DeviceRequest );
+        DeviceRequest deviceRequest = (DeviceRequest) iBaseResource;
+
+        assertEquals( patientID, deviceRequest.getSubject().getReference() );
+        assertEquals( DeviceRequest.DeviceRequestStatus.DRAFT, deviceRequest.getStatus() );
+        assertEquals( "ActivityDefinition/" + activityDefinition.getId(), deviceRequest.getDefinition().get( 0 ).getReference() );
+        assertEquals( coding.getSystem(), deviceRequest.getCodeCodeableConcept().getCodingFirstRep().getSystem() );
+        assertEquals( coding.getCode(), deviceRequest.getCodeCodeableConcept().getCodingFirstRep().getCode() );
     }
 
     @Test
