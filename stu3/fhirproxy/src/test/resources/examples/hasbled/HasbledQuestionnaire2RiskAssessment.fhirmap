@@ -1,0 +1,57 @@
+map "http://research.philips.com/connect/hasbled/QR2RA" =
+    "transform hasbled questionnaire to risk assessment"
+
+uses "http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse" as source
+uses "http://hl7.org/fhir/StructureDefinition/RiskAssessment"        as target
+
+group main
+    input src: QuestionnaireResponse as source
+    input tgt: RiskAssessment        as target
+
+    "basedOn"  : for src make tgt.basedOn = reference( src )
+    "status"   : for src make tgt.status  = "preliminary"
+    "code"     : for src make tgt.code as codeableConcept then {
+            "do": for src make codeableConcept.coding as coding then{
+                "code"   : for src make coding.code    = "704180000"
+                "system" : for src make coding.system  = "http://snomed.org"
+                "display": for src make coding.display = "HAS-BLED bleeding risk score"
+        }
+    }
+    "subject"      : for src.subject as vvv make tgt.subject = vvv
+    "context"      : for src.context as vvv make tgt.context = vvv
+    "occurrence"   : for src   make tgt.occurrence = evaluate( src, now() )
+//    "condition" ??  atrial fibrillation
+    "practitioner" : for src.author as vvv  make tgt.performer = vvv
+//    "reason" ?? anticoagulation in patients with atrial fibrillation
+    "prediction"   : for src make tgt.prediction as prediction then {
+        "outcome": for src make prediction.outcome = cc( "http://snomed.org", "131148009", "Bleeding" )
+
+        "verylowQualitativeRisk": for src where (item.answer.where( value=true ).count() = 0) then {
+            "qualitativeRisk": for src make prediction.qualitativeRisk = cc( "http://1hl7.org/fhir/ValueSet/risk-probability", "low", "Low likelihood" )
+            "rationale"      : for src make prediction.rationale = "Risk was 0.9% in one validation study and 1.13 bleeds per 100 patient-years in another validation study."
+        }
+        "lowQualitativeRisk": for src where (item.answer.where( value=true ).count() = 1) then {
+            "qualitativeRisk": for src make prediction.qualitativeRisk = cc( "http://1hl7.org/fhir/ValueSet/risk-probability", "low", "Low likelihood" )
+            "rationale"      : for src make prediction.rationale = "Risk was 3.4% in one validation study and 1.02 bleeds per 100 patient-years in another validation study. Anticoagulation should be considered: Patient has a relatively low risk for major bleeding (~1/100 patient-years)."
+        }
+        "mediumQualitativeRisk": for src where (item.answer.where( value=true ).count() = 2) then {
+            "qualitativeRisk": for src make prediction.qualitativeRisk = cc( "http://1hl7.org/fhir/ValueSet/risk-probability", "moderate", "Moderate likelihood" )
+            "rationale"      : for src make prediction.rationale = "Risk was 4.1% in one validation study and 1.88 bleeds per 100 patient-years in another validation study. Anticoagulation can be considered, however patient does have moderate risk for major bleeding (~2/100 patient-years)."
+        }
+        "highQualitativeRisk": for src where (item.answer.where( value=true ).count() = 3) then {
+            "qualitativeRisk": for src make prediction.qualitativeRisk = cc( "http://1hl7.org/fhir/ValueSet/risk-probability", "high", "High likelihood" )
+            "rationale"      : for src make prediction.rationale = "Risk was 5.8% in one validation study and 3.72 bleeds per 100 patient-years in another validation study. Alternatives to anticoagulation should be considered: Patient is at high risk for major bleeding."
+        }
+        "higherQualitativeRisk": for src where (item.answer.where( value=true ).count() = 4) then {
+            "qualitativeRisk": for src make prediction.qualitativeRisk = cc( "http://1hl7.org/fhir/ValueSet/risk-probability", "high", "High likelihood" )
+            "rationale"      : for src make prediction.rationale = "Risk was 8.9% in one validation study and 8.70 bleeds per 100 patient-years in another validation study. Alternatives to anticoagulation should be considered: Patient is at high risk for major bleeding."
+        }
+        "higherQualitativeRisk": for src where (item.answer.where( value=true ).count() >= 5) then {
+            "qualitativeRisk": for src make prediction.qualitativeRisk = cc( "http://1hl7.org/fhir/ValueSet/risk-probability", "high", "High likelihood" )
+            "rationale"      : for src make prediction.rationale = "Scores greater than 5 were too rare to determine risk, but are likely over 10%. Alternatives to anticoagulation should be considered: Patient is at high risk for major bleeding."
+        }
+    }
+
+endgroup
+
+

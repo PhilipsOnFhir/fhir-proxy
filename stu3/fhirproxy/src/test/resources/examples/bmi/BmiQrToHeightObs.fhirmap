@@ -1,0 +1,36 @@
+map "http://research.philips.com/connect/bmi/BmiQr2HeightObs" =
+    "transform hasbled questionnaire to height observation"
+
+uses "http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse" as source
+uses "http://hl7.org/fhir/StructureDefinition/Observation"           as target
+
+group main
+    input src: QuestionnaireResponse as source
+    input tgt: Observation           as target
+
+    "related"  : for src make tgt.related as related then {
+        "code"   : for src make related.type = "derived-from"
+        "target" : for src make related.target = reference( src )
+    }
+
+    "subject"      : for src.subject as vvv make tgt.subject = vvv
+    "practitioner" : for src.author as vvv  make tgt.performer = vvv
+    "context"      : for src.context as vvv make tgt.context = vvv
+
+    "status"   : for src make tgt.status  = "preliminary"
+    "issued"   : for src make tgt.issued = evaluate( src, now() )
+    "code"     : for src make tgt.code = cc( "http://research.philips.com/codesystem/cdsCodeSystem", "8302-2", "Heigth observation" )
+
+   // "quantity" : for src make tgt.value = evaluate( src, item.where(linkId='height').answer.value )
+    quantity : for src make tgt.value = create('Quantity') then {
+        "value" : for src make tgt.value as quantity then {
+            qvalue : for src make quantity.value = evaluate( src, item.where(linkId='height').answer.value.value )
+            qcode  : for src make quantity.code = "m"
+            qunit  : for src make quantity.unit = "m"
+            qsystem: for src make quantity.system = "http://unitsofmeasure.org"
+        }
+    }
+
+endgroup
+
+

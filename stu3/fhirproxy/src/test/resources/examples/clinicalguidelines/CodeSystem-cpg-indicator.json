@@ -1,0 +1,63 @@
+{
+  "resourceType": "CodeSystem",
+  "id": "cpg-indicator",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-codesystem"
+    ]
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><h2>CPG Indicator</h2><div><p>Indicates the urgency/importance of what this recommendation conveys</p>\n</div><p>This code system http://hl7.org/fhir/uv/cpg/CodeSystem/cpg-indicator defines the following codes:</p><table class=\"codes\"><tr><td style=\"white-space:nowrap\"><b>Code</b></td><td><b>Display</b></td><td><b>Definition</b></td></tr><tr><td style=\"white-space:nowrap\">info<a name=\"cpg-indicator-info\"> </a></td><td>Information</td><td>Indicates that the recommendation is informational</td></tr><tr><td style=\"white-space:nowrap\">warning<a name=\"cpg-indicator-warning\"> </a></td><td>Warning</td><td>Indicates that the recommendation is a warning</td></tr><tr><td style=\"white-space:nowrap\">critical<a name=\"cpg-indicator-critical\"> </a></td><td>Critical</td><td>Indicates that the recommendation is critical and the workflow should not be allowed to proceed</td></tr></table></div>"
+  },
+  "url": "http://hl7.org/fhir/uv/cpg/CodeSystem/cpg-indicator",
+  "version": "0.1.0",
+  "name": "CPG_Indicator",
+  "title": "CPG Indicator",
+  "status": "draft",
+  "experimental": false,
+  "date": "2019-05-08T00:00:00-04:00",
+  "publisher": "Health Level 7 International - Clinical Decision Support WG",
+  "contact": [
+    {
+      "telecom": [
+        {
+          "system": "url",
+          "value": "http://www.hl7.org/Special/committees/dss/index.cfm"
+        }
+      ]
+    }
+  ],
+  "description": "Indicates the urgency/importance of what this recommendation conveys",
+  "jurisdiction": [
+    {
+      "coding": [
+        {
+          "system": "http://unstats.un.org/unsd/methods/m49/m49.htm",
+          "code": "001",
+          "display": "World"
+        }
+      ]
+    }
+  ],
+  "caseSensitive": true,
+  "valueSet": "http://hl7.org/fhir/uv/cpg/ValueSet/cpg-indicator",
+  "content": "complete",
+  "concept": [
+    {
+      "code": "info",
+      "display": "Information",
+      "definition": "Indicates that the recommendation is informational"
+    },
+    {
+      "code": "warning",
+      "display": "Warning",
+      "definition": "Indicates that the recommendation is a warning"
+    },
+    {
+      "code": "critical",
+      "display": "Critical",
+      "definition": "Indicates that the recommendation is critical and the workflow should not be allowed to proceed"
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "resourceType": "ActivityDefinition",
+  "id": "ckd-risk-referral-nephrology",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: ckd-risk-referral-nephrology</p><p><b>url</b>: <a href=\"http://hl7.org/fhir/uv/cpg/ActivityDefinition/ckd-risk-referral-nephrology\">http://hl7.org/fhir/uv/cpg/ActivityDefinition/ckd-risk-referral-nephrology</a></p><p><b>version</b>: 0.1.0</p><p><b>name</b>: ReferralToNephrologist</p><p><b>title</b>: Referral to Nephrologist</p><p><b>status</b>: draft</p><p><b>date</b>: Aug 5, 2019 12:02:55 PM</p><p><b>description</b>: Create ServiceRequest to order Referral for nephrology.</p><p><b>jurisdiction</b>: World <span style=\"background: LightGoldenRodYellow\">(Details : {http://unstats.un.org/unsd/methods/m49/m49.htm code '001' = 'World', given as 'World'})</span></p><p><b>library</b>: <a href=\"Library/ckd-risk-recommendations\">Library/ckd-risk-recommendations</a></p><p><b>kind</b>: ServiceRequest</p><p><b>code</b>: Referral to nephrology service <span style=\"background: LightGoldenRodYellow\">(Details : {SNOMED CT code '306125004' = 'Referral to nephrology service', given as 'Referral to nephrology service'})</span></p><h3>Participants</h3><table class=\"grid\"><tr><td>-</td><td><b>Type</b></td></tr><tr><td>*</td><td>practitioner</td></tr></table><h3>DynamicValues</h3><table class=\"grid\"><tr><td>-</td><td><b>Path</b></td><td><b>Expression</b></td></tr><tr><td>*</td><td>reasonReference</td><td/></tr></table></div>"
+  },
+  "url": "http://hl7.org/fhir/uv/cpg/ActivityDefinition/ckd-risk-referral-nephrology",
+  "version": "0.1.0",
+  "name": "ReferralToNephrologist",
+  "title": "Referral to Nephrologist",
+  "status": "draft",
+  "date": "2019-08-05T12:02:55-04:00",
+  "description": "Create ServiceRequest to order Referral for nephrology.",
+  "jurisdiction": [
+    {
+      "coding": [
+        {
+          "system": "http://unstats.un.org/unsd/methods/m49/m49.htm",
+          "code": "001",
+          "display": "World"
+        }
+      ]
+    }
+  ],
+  "library": [
+    "Library/ckd-risk-recommendations"
+  ],
+  "kind": "ServiceRequest",
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "306125004",
+        "display": "Referral to nephrology service"
+      }
+    ]
+  },
+  "participant": [
+    {
+      "type": "practitioner"
+    }
+  ],
+  "dynamicValue": [
+    {
+      "path": "reasonReference",
+      "expression": {
+        "language": "text/cql",
+        "expression": "Chronic Kidney Disease Dx"
+      }
+    }
+  ]
+}

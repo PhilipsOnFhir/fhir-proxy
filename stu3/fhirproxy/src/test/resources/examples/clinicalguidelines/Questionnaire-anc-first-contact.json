@@ -1,0 +1,42 @@
+{
+  "resourceType": "Questionnaire",
+  "id": "anc-first-contact",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: anc-first-contact</p><p><b>url</b>: <a href=\"http://fhir.org/guides/who/anc-cds/Questionnaire/anc-first-contact\">http://fhir.org/guides/who/anc-cds/Questionnaire/anc-first-contact</a></p><p><b>version</b>: 0.1.0</p><p><b>name</b>: ANC_First_Contact</p><p><b>title</b>: Questionnaire - ANC First Contact</p><p><b>status</b>: draft</p><p><b>subjectType</b>: Patient</p><p><b>date</b>: Aug 5, 2019 12:02:55 PM</p><p><b>jurisdiction</b>: World <span style=\"background: LightGoldenRodYellow\">(Details : {http://unstats.un.org/unsd/methods/m49/m49.htm code '001' = 'World', given as 'World'})</span></p><blockquote><p><b>item</b></p><p><b>linkId</b>: name</p><p><b>text</b>: Name</p><p><b>type</b>: string</p><p><b>required</b>: true</p></blockquote><blockquote><p><b>item</b></p><p><b>linkId</b>: birthdate</p><p><b>text</b>: Birthdate</p><p><b>type</b>: date</p><p><b>required</b>: true</p></blockquote></div>"
+  },
+  "url": "http://fhir.org/guides/who/anc-cds/Questionnaire/anc-first-contact",
+  "version": "0.1.0",
+  "name": "ANC_First_Contact",
+  "title": "Questionnaire - ANC First Contact",
+  "status": "draft",
+  "subjectType": [
+    "Patient"
+  ],
+  "date": "2019-08-05T12:02:55-04:00",
+  "jurisdiction": [
+    {
+      "coding": [
+        {
+          "system": "http://unstats.un.org/unsd/methods/m49/m49.htm",
+          "code": "001",
+          "display": "World"
+        }
+      ]
+    }
+  ],
+  "item": [
+    {
+      "linkId": "name",
+      "text": "Name",
+      "type": "string",
+      "required": true
+    },
+    {
+      "linkId": "birthdate",
+      "text": "Birthdate",
+      "type": "date",
+      "required": true
+    }
+  ]
+}

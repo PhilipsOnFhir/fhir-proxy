@@ -1,0 +1,47 @@
+{
+  "resourceType": "ActivityDefinition",
+  "id": "cc-cpg-activity-edu-renal-diet",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: cc-cpg-activity-edu-renal-diet</p><p><b>url</b>: <a href=\"http://hl7.org/fhir/uv/cpg/ActivityDefinition/cc-cpg-activity-edu-renal-diet\">http://hl7.org/fhir/uv/cpg/ActivityDefinition/cc-cpg-activity-edu-renal-diet</a></p><p><b>version</b>: 0.1.0</p><p><b>name</b>: EducationRenalDiet</p><p><b>title</b>: Patient education: Renal diet</p><p><b>status</b>: active</p><p><b>experimental</b>: true</p><p><b>date</b>: Aug 5, 2019 12:02:55 PM</p><p><b>publisher</b>: Elsevier Inc</p><p><b>description</b>: Patient education: Renal diet</p><p><b>jurisdiction</b>: World <span style=\"background: LightGoldenRodYellow\">(Details : {http://unstats.un.org/unsd/methods/m49/m49.htm code '001' = 'World', given as 'World'})</span></p><p><b>relatedArtifact</b>: </p><p><b>kind</b>: ServiceRequest</p><p><b>code</b>: Diet education <span style=\"background: LightGoldenRodYellow\">(Details : {SNOMED CT code '11816003' = 'Diet education', given as 'Diet education (procedure)'})</span></p></div>"
+  },
+  "url": "http://hl7.org/fhir/uv/cpg/ActivityDefinition/cc-cpg-activity-edu-renal-diet",
+  "version": "0.1.0",
+  "name": "EducationRenalDiet",
+  "title": "Patient education: Renal diet",
+  "status": "active",
+  "experimental": true,
+  "date": "2019-08-05T12:02:55-04:00",
+  "publisher": "Elsevier Inc",
+  "description": "Patient education: Renal diet",
+  "jurisdiction": [
+    {
+      "coding": [
+        {
+          "system": "http://unstats.un.org/unsd/methods/m49/m49.htm",
+          "code": "001",
+          "display": "World"
+        }
+      ]
+    }
+  ],
+  "relatedArtifact": [
+    {
+      "type": "justification",
+      "display": "<p>Renal Diet</p>\n\n<ul>\n\t<li>Decrease protein and salt intake</li>\n</ul>\n\n<ul style=\"margin-left: 40px;\">\n\t<li>Limit protein intake to 0.8 g/kg/day in adults with or without diabetes with GFR less than 30 mL/minute/1.73 m&sup2;</li>\n</ul>\n\n<ul style=\"margin-left: 40px;\">\n\t<li>Avoid high protein intake (greater than 1.3 g/kg/day) in adults at risk for chronic kidney disease progression</li>\n</ul>\n\n<ul style=\"margin-left: 40px;\">\n\t<li>Limit salt intake to less than 2 g per day in adults</li>\n</ul>",
+      "citation": "Chronic Kidney Disease Clinical Overview. ClinicalKey. <a href='https://www.clinicalkey.com/#!/content/clinical_overview/67-s2.0-26a91efc-ff97-4e11-b49f-c70331e79cee' target='_blank'>Source</a>",
+      "url": "http://himss19.ordersetsmanager.com/evidenceviewer/#/7CBBBE9B75E10232E05352E3610A5325/7CBBBE9B75F20232E05352E3610A5325"
+    }
+  ],
+  "kind": "ServiceRequest",
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "11816003",
+        "display": "Diet education (procedure)"
+      }
+    ],
+    "text": "Diet education"
+  }
+}

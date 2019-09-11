@@ -1,0 +1,67 @@
+{
+  "resourceType": "ActivityDefinition",
+  "id": "cc-cpg-activity-referral-nephrology",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: cc-cpg-activity-referral-nephrology</p><p><b>url</b>: <a href=\"http://hl7.org/fhir/uv/cpg/ActivityDefinition/cc-cpg-activity-referral-nephrology\">http://hl7.org/fhir/uv/cpg/ActivityDefinition/cc-cpg-activity-referral-nephrology</a></p><p><b>version</b>: 0.1.0</p><p><b>name</b>: ReferralNephrology</p><p><b>title</b>: Referral: Nephrology; History: [add diagnosis, symptom(s)]; Question: [add reason for referral]</p><p><b>status</b>: active</p><p><b>experimental</b>: true</p><p><b>date</b>: Aug 5, 2019 12:02:55 PM</p><p><b>publisher</b>: Elsevier Inc</p><p><b>description</b>: Referral: Nephrology; History: [add diagnosis, symptom(s)]; Question: [add reason for referral]</p><p><b>jurisdiction</b>: World <span style=\"background: LightGoldenRodYellow\">(Details : {http://unstats.un.org/unsd/methods/m49/m49.htm code '001' = 'World', given as 'World'})</span></p><p><b>relatedArtifact</b>: </p><p><b>kind</b>: ServiceRequest</p><p><b>code</b>: Referral to nephrologist <span style=\"background: LightGoldenRodYellow\">(Details : {SNOMED CT code '306286007' = 'Referral to nephrologist', given as 'Referral to nephrologist (procedure)'})</span></p><p><b>timing</b>: </p><p><b style=\"color: maroon\">Exception generating Narrative: null</b></p></div>"
+  },
+  "url": "http://hl7.org/fhir/uv/cpg/ActivityDefinition/cc-cpg-activity-referral-nephrology",
+  "version": "0.1.0",
+  "name": "ReferralNephrology",
+  "title": "Referral: Nephrology; History: [add diagnosis, symptom(s)]; Question: [add reason for referral]",
+  "status": "active",
+  "experimental": true,
+  "date": "2019-08-05T12:02:55-04:00",
+  "publisher": "Elsevier Inc",
+  "description": "Referral: Nephrology; History: [add diagnosis, symptom(s)]; Question: [add reason for referral]",
+  "jurisdiction": [
+    {
+      "coding": [
+        {
+          "system": "http://unstats.un.org/unsd/methods/m49/m49.htm",
+          "code": "001",
+          "display": "World"
+        }
+      ]
+    }
+  ],
+  "relatedArtifact": [
+    {
+      "type": "justification",
+      "display": "<p>Refer to nephrologist for co-management of treatment plan in cases of:</p>\n\n<ul>\n\t<li>Unclear etiology of kidney disease</li>\n</ul>\n\n<ul>\n\t<li>Rapid progression of disease (GFR decline greater than 5 mL/minute/1.73 m&sup2;/year)</li>\n</ul>\n\n<ul>\n\t<li>Acute kidney injury or abrupt sustained fall in GFR</li>\n</ul>\n\n<ul>\n\t<li>GFR less than 30 mL/minute/1.73 m&sup2; (GFR categories G4-G5) to prepare for renal replacement therapy</li>\n</ul>\n\n<ul>\n\t<li>Consistent finding of significant albuminuria (albumin/creatinine ratio of 300 mg/g or more)</li>\n</ul>\n\n<ul>\n\t<li>Hypertension resistant to treatment with 4 or more antihypertensive agents</li>\n</ul>\n\n<ul>\n\t<li>Difficulty in decreasing the level of albuminuria despite institution of ACE inhibitor or angiotensin II receptor blocker therapy</li>\n</ul>\n\n<ul>\n\t<li>Persistent electrolyte abnormalities, including hyperkalemia or high serum phosphate</li>\n</ul>\n\n<ul>\n\t<li>Recurrent or extensive nephrolithiasis</li>\n</ul>\n\n<ul>\n\t<li>Hereditary kidney disease</li>\n</ul>\n\n<p>&nbsp;</p>\n\n<p>Nephrologist involvement is recommended when the cause of chronic kidney disease is not clear</p>\n\n<ul>\n\t<li>Renal biopsy may be performed to determine the cause as well as to predict disease progression and response to therapy</li>\n</ul>",
+      "citation": "Chronic Kidney Disease Clinical Overview. ClinicalKey. <a href='https://www.clinicalkey.com/#!/content/clinical_overview/67-s2.0-26a91efc-ff97-4e11-b49f-c70331e79cee' target='_blank'>Source</a>",
+      "url": "http://himss19.ordersetsmanager.com/evidenceviewer/#/7CBBBE9B75E10232E05352E3610A5325/7CBBBE9B75DA0232E05352E3610A5325"
+    }
+  ],
+  "kind": "ServiceRequest",
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "306286007",
+        "display": "Referral to nephrologist (procedure)"
+      }
+    ],
+    "text": "Referral to nephrologist"
+  },
+  "timingTiming": {
+    "_event": [
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/cqf-expression",
+            "valueExpression": {
+              "language": "text/cql",
+              "expression": "Now()"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "participant": [
+    {
+      "type": "practitioner"
+    }
+  ]
+}

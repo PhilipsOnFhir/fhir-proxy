@@ -1,0 +1,138 @@
+{
+  "resourceType": "CodeSystem",
+  "id": "cpg-common-process",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-codesystem"
+    ]
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><h2>CPG Common Process</h2><div><p>Common processes performed in providing guideline-based care, regardless of the specific guideline.</p>\n</div><p>This code system http://hl7.org/fhir/uv/cpg/CodeSystem/cpg-common-process defines the following codes:</p><table class=\"codes\"><tr><td style=\"white-space:nowrap\"><b>Code</b></td><td><b>Display</b></td><td><b>Definition</b></td></tr><tr><td style=\"white-space:nowrap\">registration<a name=\"cpg-common-process-registration\"> </a></td><td>Registration</td><td>Identifying and recording the subject of care.</td></tr><tr><td style=\"white-space:nowrap\">triage<a name=\"cpg-common-process-triage\"> </a></td><td>Triage</td><td>Performing basic triage to identify any signs that emergency care is required.</td></tr><tr><td style=\"white-space:nowrap\">local-urgent-care<a name=\"cpg-common-process-local-urgent-care\"> </a></td><td>Local Urgent Care</td><td>Providing local urgent care based on the outcome of a triage process.</td></tr><tr><td style=\"white-space:nowrap\">history-and-physical<a name=\"cpg-common-process-history-and-physical\"> </a></td><td>History and Physical</td><td>Gathering clinical history and performing and recording observations regarding the patient's health (e.g. blood pressure, temperature, etc.)</td></tr><tr><td style=\"white-space:nowrap\">provide-counseling<a name=\"cpg-common-process-provide-counseling\"> </a></td><td>Provide Counseling</td><td>Informing the subject of care about their treatment options and about how their ongoing care should be managed between visits. This is also where treatment constents are obtained and where health education is provided.</td></tr><tr><td style=\"white-space:nowrap\">diagnostic-testing<a name=\"cpg-common-process-diagnostic-testing\"> </a></td><td>Conduct Diagnostic Tests</td><td>Conducting diagnostic tests, including lab tests, collection of samples, and other diagnostic tests. Lab testing may be done locally (e.g. HIV quick test) or the samples may require lab order fulfillment workflow.</td></tr><tr><td style=\"white-space:nowrap\">determine-diagnosis<a name=\"cpg-common-process-determine-diagnosis\"> </a></td><td>Determine Diagnosis</td><td>Using available information from the patient's history, current examinations, tests, and assessments to assist in developing a diagnosis.</td></tr><tr><td style=\"white-space:nowrap\">guideline-based-care<a name=\"cpg-common-process-guideline-based-care\"> </a></td><td>Guideline-based Care</td><td>Performing and recording observations, interventions, and treatment plans recommended by specific guidelines.</td></tr><tr><td style=\"white-space:nowrap\">dispense-medications<a name=\"cpg-common-process-dispense-medications\"> </a></td><td>Dispense Medications</td><td>Administering medications, ordered by clinicians and dispensed by a pharmacy. Pharmacies may be local to the care facility or community-based, and involves supply chain transactions to support medication management.</td></tr><tr><td style=\"white-space:nowrap\">emergency-care<a name=\"cpg-common-process-emergency-care\"> </a></td><td>Emergency Care</td><td>Providing emergency care in trauma cases or as part of guildeline-based care escalation.</td></tr><tr><td style=\"white-space:nowrap\">actue-tertiary-care<a name=\"cpg-common-process-actue-tertiary-care\"> </a></td><td>Acute/Tertiary Care</td><td>Providing acute or tertiary care, either as an escalation from emergency care, or from primary care due to guideline-based referral patterns.</td></tr><tr><td style=\"white-space:nowrap\">charge-for-service<a name=\"cpg-common-process-charge-for-service\"> </a></td><td>Charge for Service</td><td>Charging for services rendered, regardless of the mechanism of coverage.</td></tr><tr><td style=\"white-space:nowrap\">discharge-referral-of-patient<a name=\"cpg-common-process-discharge-referral-of-patient\"> </a></td><td>Discharge/Referral of Patient</td><td>Discharging or referring a patient, including the movement of patients through levels of care delivery (e.g. acute to primary, primary to community, etc.) or the enrollment of patients in guideline-based care programs (e.g. HIV, maternal, diabetes, injury rehabilitiation, etc.).</td></tr><tr><td style=\"white-space:nowrap\">record-and-report<a name=\"cpg-common-process-record-and-report\"> </a></td><td>Record and Report</td><td>Recording and reporting patient-specific care management information which may be aggregated to develop reportable system management indicators at the priovider, facility, district, national, and international levels.</td></tr><tr><td style=\"white-space:nowrap\">monitor-and-follow-up-of-patient<a name=\"cpg-common-process-monitor-and-follow-up-of-patient\"> </a></td><td>Monitor and Follow-up of Patient</td><td>Monitoring and tracking progress for each patient based on guideline recommendations.</td></tr><tr><td style=\"white-space:nowrap\">alerts-reminders-education<a name=\"cpg-common-process-alerts-reminders-education\"> </a></td><td>Alerts Reminders Education</td><td>Providing alerts, reminders, and education to patients, providers, and health system managers.</td></tr></table></div>"
+  },
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/codesystem-sourceReference",
+      "valueUri": "http://www.aehin.org/Meetings/2013AeHINGeneralMeeting/AGM13Files3.aspx"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/codesystem-sourceReference",
+      "valueUri": "https://doi.org/10.1016/j.jbi.2008.05.012"
+    }
+  ],
+  "url": "http://hl7.org/fhir/uv/cpg/CodeSystem/cpg-common-process",
+  "version": "0.1.0",
+  "name": "CPG_Common_Process",
+  "title": "CPG Common Process",
+  "status": "draft",
+  "experimental": false,
+  "date": "2019-05-08T00:00:00-04:00",
+  "publisher": "Health Level 7 International - Clinical Decision Support WG",
+  "contact": [
+    {
+      "telecom": [
+        {
+          "system": "url",
+          "value": "http://www.hl7.org/Special/committees/dss/index.cfm"
+        }
+      ]
+    }
+  ],
+  "description": "Common processes performed in providing guideline-based care, regardless of the specific guideline.",
+  "jurisdiction": [
+    {
+      "coding": [
+        {
+          "system": "http://unstats.un.org/unsd/methods/m49/m49.htm",
+          "code": "001",
+          "display": "World"
+        }
+      ]
+    }
+  ],
+  "caseSensitive": true,
+  "valueSet": "http://hl7.org/fhir/uv/cpg/ValueSet/cpg-common-process",
+  "content": "complete",
+  "concept": [
+    {
+      "code": "registration",
+      "display": "Registration",
+      "definition": "Identifying and recording the subject of care."
+    },
+    {
+      "code": "triage",
+      "display": "Triage",
+      "definition": "Performing basic triage to identify any signs that emergency care is required."
+    },
+    {
+      "code": "local-urgent-care",
+      "display": "Local Urgent Care",
+      "definition": "Providing local urgent care based on the outcome of a triage process."
+    },
+    {
+      "code": "history-and-physical",
+      "display": "History and Physical",
+      "definition": "Gathering clinical history and performing and recording observations regarding the patient's health (e.g. blood pressure, temperature, etc.)"
+    },
+    {
+      "code": "provide-counseling",
+      "display": "Provide Counseling",
+      "definition": "Informing the subject of care about their treatment options and about how their ongoing care should be managed between visits. This is also where treatment constents are obtained and where health education is provided."
+    },
+    {
+      "code": "diagnostic-testing",
+      "display": "Conduct Diagnostic Tests",
+      "definition": "Conducting diagnostic tests, including lab tests, collection of samples, and other diagnostic tests. Lab testing may be done locally (e.g. HIV quick test) or the samples may require lab order fulfillment workflow."
+    },
+    {
+      "code": "determine-diagnosis",
+      "display": "Determine Diagnosis",
+      "definition": "Using available information from the patient's history, current examinations, tests, and assessments to assist in developing a diagnosis."
+    },
+    {
+      "code": "guideline-based-care",
+      "display": "Guideline-based Care",
+      "definition": "Performing and recording observations, interventions, and treatment plans recommended by specific guidelines."
+    },
+    {
+      "code": "dispense-medications",
+      "display": "Dispense Medications",
+      "definition": "Administering medications, ordered by clinicians and dispensed by a pharmacy. Pharmacies may be local to the care facility or community-based, and involves supply chain transactions to support medication management."
+    },
+    {
+      "code": "emergency-care",
+      "display": "Emergency Care",
+      "definition": "Providing emergency care in trauma cases or as part of guildeline-based care escalation."
+    },
+    {
+      "code": "actue-tertiary-care",
+      "display": "Acute/Tertiary Care",
+      "definition": "Providing acute or tertiary care, either as an escalation from emergency care, or from primary care due to guideline-based referral patterns."
+    },
+    {
+      "code": "charge-for-service",
+      "display": "Charge for Service",
+      "definition": "Charging for services rendered, regardless of the mechanism of coverage."
+    },
+    {
+      "code": "discharge-referral-of-patient",
+      "display": "Discharge/Referral of Patient",
+      "definition": "Discharging or referring a patient, including the movement of patients through levels of care delivery (e.g. acute to primary, primary to community, etc.) or the enrollment of patients in guideline-based care programs (e.g. HIV, maternal, diabetes, injury rehabilitiation, etc.)."
+    },
+    {
+      "code": "record-and-report",
+      "display": "Record and Report",
+      "definition": "Recording and reporting patient-specific care management information which may be aggregated to develop reportable system management indicators at the priovider, facility, district, national, and international levels."
+    },
+    {
+      "code": "monitor-and-follow-up-of-patient",
+      "display": "Monitor and Follow-up of Patient",
+      "definition": "Monitoring and tracking progress for each patient based on guideline recommendations."
+    },
+    {
+      "code": "alerts-reminders-education",
+      "display": "Alerts Reminders Education",
+      "definition": "Providing alerts, reminders, and education to patients, providers, and health system managers."
+    }
+  ]
+}

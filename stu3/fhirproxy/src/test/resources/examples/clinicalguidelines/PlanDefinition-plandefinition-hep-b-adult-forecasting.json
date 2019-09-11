@@ -1,0 +1,156 @@
+{
+  "resourceType": "PlanDefinition",
+  "id": "plandefinition-hep-b-adult-forecasting",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: plandefinition-hep-b-adult-forecasting</p><p><b>url</b>: <a href=\"http://example.org/fhir/uv/cpg/PlanDefinition/plandefinition-hep-b-adult-forecasting\">http://example.org/fhir/uv/cpg/PlanDefinition/plandefinition-hep-b-adult-forecasting</a></p><p><b>identifier</b>: hep-b-adult-forecasting (OFFICIAL)</p><p><b>version</b>: 0.1.0</p><p><b>name</b>: Hep_B_Adult_Forecasting</p><p><b>title</b>: Immunization Forecasting of Hepatitis B Vaccine for Adults &gt;= 18 Years of Age</p><p><b>type</b>: ECA Rule <span style=\"background: LightGoldenRodYellow\">(Details : {http://terminology.hl7.org/CodeSystem/plan-definition-type code 'eca-rule' = 'ECA Rule', given as 'ECA Rule'})</span></p><p><b>status</b>: draft</p><p><b>experimental</b>: true</p><p><b>date</b>: Jul 26, 2019 12:00:00 AM</p><p><b>publisher</b>: HL7 FHIR Clinical Guidelines Example Artifact</p><p><b>description</b>: If an adult patient has not been immunized for Hep B and is indicated for a Hep B vaccine, providers should administer according to this forecast.</p><p><b>useContext</b>: </p><p><b>jurisdiction</b>: World <span style=\"background: LightGoldenRodYellow\">(Details : {http://unstats.un.org/unsd/methods/m49/m49.htm code '001' = 'World', given as 'World'})</span></p><p><b>purpose</b>: Example artifact implementation of CDC ACIP Hep B vaccination guidelines for adults, 18 years and older, who have not yet been immunized.</p><p><b>topic</b>: Immunization Forecasting <span style=\"background: LightGoldenRodYellow\">(Details )</span></p><p><b>author</b>: , </p><p><b>relatedArtifact</b>: , , </p><p><b>library</b>: <a href=\"Library/hep-b-immunization-adult\">Library/hep-b-immunization-adult</a></p><blockquote><p><b>action</b></p><p><b>title</b>: Hep B Immunization Forecast</p><p><b>description</b>: Vaccinate Adult with specified Hep B forecast, if noted</p><p><b>documentation</b>: </p><p><b>trigger</b>: </p><h3>Conditions</h3><table class=\"grid\"><tr><td>-</td><td><b>Kind</b></td><td><b>Expression</b></td></tr><tr><td>*</td><td>applicability</td><td/></tr></table><p><b>groupingBehavior</b>: visual-group</p><p><b>selectionBehavior</b>: exactly-one</p><blockquote><p><b>dynamicValue</b></p><p><b>path</b>: action.title</p><p><b>expression</b>: </p></blockquote><blockquote><p><b>dynamicValue</b></p><p><b>path</b>: action.description</p><p><b>expression</b>: </p></blockquote><h3>Actions</h3><table class=\"grid\"><tr><td>-</td></tr><tr><td>*</td></tr><tr><td>*</td></tr><tr><td>*</td></tr><tr><td>*</td></tr></table></blockquote></div>"
+  },
+  "url": "http://example.org/fhir/uv/cpg/PlanDefinition/plandefinition-hep-b-adult-forecasting",
+  "identifier": [
+    {
+      "use": "official",
+      "value": "hep-b-adult-forecasting"
+    }
+  ],
+  "version": "0.1.0",
+  "name": "Hep_B_Adult_Forecasting",
+  "title": "Immunization Forecasting of Hepatitis B Vaccine for Adults >= 18 Years of Age",
+  "type": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/plan-definition-type",
+        "code": "eca-rule",
+        "display": "ECA Rule"
+      }
+    ]
+  },
+  "status": "draft",
+  "experimental": true,
+  "date": "2019-07-26T00:00:00-04:00",
+  "publisher": "HL7 FHIR Clinical Guidelines Example Artifact",
+  "description": "If an adult patient has not been immunized for Hep B and is indicated for a Hep B vaccine, providers should administer according to this forecast.",
+  "useContext": [
+    {
+      "code": {
+        "system": "http://terminology.hl7.org/CodeSystem/usage-context-type",
+        "code": "focus",
+        "display": "Clinical Focus"
+      },
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "384810002",
+            "display": "Immunization/vaccination management (procedure)"
+          }
+        ]
+      }
+    }
+  ],
+  "jurisdiction": [
+    {
+      "coding": [
+        {
+          "system": "http://unstats.un.org/unsd/methods/m49/m49.htm",
+          "code": "001",
+          "display": "World"
+        }
+      ]
+    }
+  ],
+  "purpose": "Example artifact implementation of CDC ACIP Hep B vaccination guidelines for adults, 18 years and older, who have not yet been immunized.",
+  "topic": [
+    {
+      "text": "Immunization Forecasting"
+    }
+  ],
+  "author": [
+    {
+      "name": "Daryl Chertcoff"
+    },
+    {
+      "name": "Bryn Rhodes"
+    }
+  ],
+  "relatedArtifact": [
+    {
+      "type": "documentation",
+      "display": "Immunization Calculation Engine - Hep B Vaccine Group - Hep B 2-dose Adult Series",
+      "url": "https://cdsframework.atlassian.net/wiki/spaces/ICE/pages/14352491/Hep+B+Vaccine+Group#HepBVaccineGroup-ImmunizationSeries:HepB2-doseAdultSeries"
+    },
+    {
+      "type": "documentation",
+      "display": "CDC MMWR Vol.67 / No.1 : Prevention of Hepatitis B Virus Infection in the United States: Recommendations of the Advisory Committee on Immunization Practices",
+      "url": "http://www.cdc.gov/mmwr/volumes/67/rr/pdfs/rr6701-H.PDF"
+    },
+    {
+      "type": "documentation",
+      "display": "April 2018 Recommendations for the use of adjuvanted hepatitis B vaccine (Heplisav-B, Dynavax)",
+      "url": "https://www.cdc.gov/mmwr/volumes/67/wr/pdfs/mm6715a5-H.pdf"
+    }
+  ],
+  "library": [
+    "Library/hep-b-immunization-adult"
+  ],
+  "action": [
+    {
+      "title": "Hep B Immunization Forecast",
+      "description": "Vaccinate Adult with specified Hep B forecast, if noted",
+      "documentation": [
+        {
+          "type": "documentation",
+          "display": "Immunization Calculation Engine - Hep B 2-dose Adult Series",
+          "url": "https://cdsframework.atlassian.net/wiki/spaces/ICE/pages/14352491/Hep+B+Vaccine+Group#HepBVaccineGroup-ImmunizationSeries:HepB2-doseAdultSeries"
+        }
+      ],
+      "trigger": [
+        {
+          "type": "named-event",
+          "name": "patient-view"
+        }
+      ],
+      "condition": [
+        {
+          "kind": "applicability",
+          "expression": {
+            "description": "Is a Hep B Adult Recommendation Available?",
+            "language": "text/cql",
+            "expression": "Patient Hep B Immunization History should be Evaluated in Adult Series"
+          }
+        }
+      ],
+      "groupingBehavior": "visual-group",
+      "selectionBehavior": "exactly-one",
+      "dynamicValue": [
+        {
+          "path": "action.title",
+          "expression": {
+            "language": "text/cql",
+            "expression": "Get Recommendation Overview"
+          }
+        },
+        {
+          "path": "action.description",
+          "expression": {
+            "language": "text/cql",
+            "expression": "Get Recommendation Detail"
+          }
+        }
+      ],
+      "action": [
+        {
+          "description": "Will Follow Recommendations Provided by This Forecast"
+        },
+        {
+          "description": "Will not immunize due to contraindication(s) or other medical risk factors"
+        },
+        {
+          "description": "Will not immunize due to patient preferences"
+        },
+        {
+          "description": "N/A - see comment (will be reviewed by medical director)"
+        }
+      ]
+    }
+  ]
+}

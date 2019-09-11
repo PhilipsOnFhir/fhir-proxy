@@ -1,0 +1,1293 @@
+{
+  "resourceType": "ImplementationGuide",
+  "id": "hl7.fhir.uv.cpg",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><h2>CPG</h2><p>The official URL for this implementation guide is: </p><pre>http://hl7.org/fhir/uv/cpg/ImplementationGuide/hl7.fhir.uv.cpg</pre><div><p>Implementation guidance for creating Clinical Practice Guidelines with formal artifacts to facilitate sharing and implementation of the guideline</p>\n</div></div>"
+  },
+  "url": "http://hl7.org/fhir/uv/cpg/ImplementationGuide/hl7.fhir.uv.cpg",
+  "version": "0.1.0",
+  "name": "CPG",
+  "title": "Clinical Practice Guidelines",
+  "status": "draft",
+  "experimental": false,
+  "date": "2019-05-08T00:00:00-04:00",
+  "publisher": "Clinical Decision Support WG",
+  "contact": [
+    {
+      "telecom": [
+        {
+          "system": "url",
+          "value": "http://www.hl7.org/Special/committees/dss/index.cfm"
+        }
+      ]
+    }
+  ],
+  "description": "Implementation guidance for creating Clinical Practice Guidelines with formal artifacts to facilitate sharing and implementation of the guideline",
+  "jurisdiction": [
+    {
+      "coding": [
+        {
+          "system": "http://unstats.un.org/unsd/methods/m49/m49.htm",
+          "code": "001",
+          "display": "World"
+        }
+      ]
+    }
+  ],
+  "packageId": "hl7.fhir.uv.cpg",
+  "license": "CC0-1.0",
+  "fhirVersion": [
+    "4.0.0"
+  ],
+  "definition": {
+    "grouping": [
+      {
+        "id": "main",
+        "name": "Main"
+      },
+      {
+        "id": "anthrax-example",
+        "name": "Anthrax PEP Example"
+      },
+      {
+        "id": "anc-example",
+        "name": "ANC Example"
+      },
+      {
+        "id": "ckd-example",
+        "name": "CKD Example"
+      },
+      {
+        "id": "hiv-example",
+        "name": "HIV Example"
+      },
+      {
+        "id": "hep-b-example",
+        "name": "HEP-B Example"
+      },
+      {
+        "id": "opg-example",
+        "name": "OPG Example"
+      },
+      {
+        "id": "activitydefinition-cpg-profile-spreadsheet.xml",
+        "name": "CPGActivityDefinition"
+      },
+      {
+        "id": "appointment-cpg-profile-spreadsheet.xml",
+        "name": "CPGAppointment"
+      },
+      {
+        "id": "codesystem-cpg-profile-spreadsheet.xml",
+        "name": "CPGCodeSystem"
+      },
+      {
+        "id": "communicationrequest-cpg-profile-spreadsheet.xml",
+        "name": "CPGCommunicationRequest"
+      },
+      {
+        "id": "devicerequest-cpg-profile-spreadsheet.xml",
+        "name": "CPGDeviceRequest"
+      },
+      {
+        "id": "immunizationrecommendation-cpg-profile-spreadsheet.xml",
+        "name": "CPGImmunizationRecommendation"
+      },
+      {
+        "id": "library-cpg-profile-spreadsheet.xml",
+        "name": "CPGLibrary"
+      },
+      {
+        "id": "medicationrequest-cpg-profile-spreadsheet.xml",
+        "name": "CPGMedicationRequest"
+      },
+      {
+        "id": "nutritionorder-cpg-profile-spreadsheet.xml",
+        "name": "CPGNutritionOrder"
+      },
+      {
+        "id": "patient-cpg-profile-spreadsheet.xml",
+        "name": "CPGPatient"
+      },
+      {
+        "id": "practitioner-cpg-profile-spreadsheet.xml",
+        "name": "CPGPractitioner"
+      },
+      {
+        "id": "practitionerrole-cpg-profile-spreadsheet.xml",
+        "name": "CPGPractitionerRole"
+      },
+      {
+        "id": "plandefinition-cpg-orderset-profile-spreadsheet.xml",
+        "name": "CPGOrderSetDefinition"
+      },
+      {
+        "id": "plandefinition-cpg-profile-spreadsheet.xml",
+        "name": "CPGPlanDefinition"
+      },
+      {
+        "id": "plandefinition-cpg-protocol-profile-spreadsheet.xml",
+        "name": "CPGProtocolDefinition"
+      },
+      {
+        "id": "plandefinition-cpg-recommendation-profile-spreadsheet.xml",
+        "name": "CPGRecommendationDefinition"
+      },
+      {
+        "id": "plandefinition-cpg-workflow-profile-spreadsheet.xml",
+        "name": "CPGWorkflowDefinition"
+      },
+      {
+        "id": "servicerequest-cpg-profile-spreadsheet.xml",
+        "name": "CPGServiceRequest"
+      },
+      {
+        "id": "valueset-cpg-profile-spreadsheet.xml",
+        "name": "CPGValueSet"
+      },
+      {
+        "id": "valueset-cpg-expressionbased-profile-spreadsheet.xml",
+        "name": "CPGExpressionBasedValueSet"
+      }
+    ],
+    "resource": [
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "CapabilityStatement"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "CapabilityStatement-cpg-patient-registry.html"
+          }
+        ],
+        "reference": {
+          "reference": "CapabilityStatement/cpg-patient-registry"
+        },
+        "groupingId": "main"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "CodeSystem"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "CodeSystem-cpg-indicator.html"
+          }
+        ],
+        "reference": {
+          "reference": "CodeSystem/cpg-indicator"
+        },
+        "groupingId": "main"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "CodeSystem"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "CodeSystem-cpg-common-persona.html"
+          }
+        ],
+        "reference": {
+          "reference": "CodeSystem/cpg-common-persona"
+        },
+        "groupingId": "main"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "CodeSystem"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "CodeSystem-cpg-common-process.html"
+          }
+        ],
+        "reference": {
+          "reference": "CodeSystem/cpg-common-process"
+        },
+        "groupingId": "main"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "CodeSystem"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "CodeSystem-cpg-recommendation-direction.html"
+          }
+        ],
+        "reference": {
+          "reference": "CodeSystem/cpg-recommendation-direction"
+        },
+        "groupingId": "main"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "PlanDefinition"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "PlanDefinition-cpg-common-pathway.html"
+          }
+        ],
+        "reference": {
+          "reference": "PlanDefinition/cpg-common-pathway"
+        },
+        "groupingId": "main"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "PlanDefinition"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "PlanDefinition-cpg-common-registration.html"
+          }
+        ],
+        "reference": {
+          "reference": "PlanDefinition/cpg-common-registration"
+        },
+        "groupingId": "main"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "Questionnaire"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "Questionnaire-cpg-common-identity.html"
+          }
+        ],
+        "reference": {
+          "reference": "Questionnaire/cpg-common-identity"
+        },
+        "groupingId": "main"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "Questionnaire"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "Questionnaire-cpg-common-patient-profile.html"
+          }
+        ],
+        "reference": {
+          "reference": "Questionnaire/cpg-common-patient-profile"
+        },
+        "groupingId": "main"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "StructureDefinition:resource"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "StructureDefinition-cpg-activitydefinition.html"
+          }
+        ],
+        "reference": {
+          "reference": "StructureDefinition/cpg-activitydefinition"
+        },
+        "groupingId": "main"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "StructureDefinition:resource"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "StructureDefinition-cpg-appointment.html"
+          }
+        ],
+        "reference": {
+          "reference": "StructureDefinition/cpg-appointment"
+        },
+        "groupingId": "main"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "StructureDefinition:resource"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "StructureDefinition-cpg-codesystem.html"
+          }
+        ],
+        "reference": {
+          "reference": "StructureDefinition/cpg-codesystem"
+        },
+        "groupingId": "main"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "StructureDefinition:resource"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "StructureDefinition-cpg-communicationrequest.html"
+          }
+        ],
+        "reference": {
+          "reference": "StructureDefinition/cpg-communicationrequest"
+        },
+        "groupingId": "main"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "StructureDefinition:resource"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "StructureDefinition-cpg-devicerequest.html"
+          }
+        ],
+        "reference": {
+          "reference": "StructureDefinition/cpg-devicerequest"
+        },
+        "groupingId": "main"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "StructureDefinition:extension"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "StructureDefinition-cpg-directionOfRecommendation.html"
+          }
+        ],
+        "reference": {
+          "reference": "StructureDefinition/cpg-directionOfRecommendation"
+        },
+        "groupingId": "main"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "StructureDefinition:resource"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "StructureDefinition-cpg-expressionbasedvalueset.html"
+          }
+        ],
+        "reference": {
+          "reference": "StructureDefinition/cpg-expressionbasedvalueset"
+        },
+        "groupingId": "main"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "StructureDefinition:resource"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "StructureDefinition-cpg-immunizationrecommendation.html"
+          }
+        ],
+        "reference": {
+          "reference": "StructureDefinition/cpg-immunizationrecommendation"
+        },
+        "groupingId": "main"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "StructureDefinition:resource"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "StructureDefinition-cpg-library.html"
+          }
+        ],
+        "reference": {
+          "reference": "StructureDefinition/cpg-library"
+        },
+        "groupingId": "main"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "StructureDefinition:resource"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "StructureDefinition-cpg-medicationrequest.html"
+          }
+        ],
+        "reference": {
+          "reference": "StructureDefinition/cpg-medicationrequest"
+        },
+        "groupingId": "main"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "StructureDefinition:resource"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "StructureDefinition-cpg-nutritionorder.html"
+          }
+        ],
+        "reference": {
+          "reference": "StructureDefinition/cpg-nutritionorder"
+        },
+        "groupingId": "main"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "StructureDefinition:resource"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "StructureDefinition-cpg-ordersetdefinition.html"
+          }
+        ],
+        "reference": {
+          "reference": "StructureDefinition/cpg-ordersetdefinition"
+        },
+        "groupingId": "main"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "StructureDefinition:extension"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "StructureDefinition-cpg-participantCapabilityStatement.html"
+          }
+        ],
+        "reference": {
+          "reference": "StructureDefinition/cpg-participantCapabilityStatement"
+        },
+        "groupingId": "main"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "StructureDefinition:resource"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "StructureDefinition-cpg-patient.html"
+          }
+        ],
+        "reference": {
+          "reference": "StructureDefinition/cpg-patient"
+        },
+        "groupingId": "main"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "StructureDefinition:resource"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "StructureDefinition-cpg-plandefinition.html"
+          }
+        ],
+        "reference": {
+          "reference": "StructureDefinition/cpg-plandefinition"
+        },
+        "groupingId": "main"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "StructureDefinition:resource"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "StructureDefinition-cpg-practitioner.html"
+          }
+        ],
+        "reference": {
+          "reference": "StructureDefinition/cpg-practitioner"
+        },
+        "groupingId": "main"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "StructureDefinition:resource"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "StructureDefinition-cpg-practitionerrole.html"
+          }
+        ],
+        "reference": {
+          "reference": "StructureDefinition/cpg-practitionerrole"
+        },
+        "groupingId": "main"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "StructureDefinition:resource"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "StructureDefinition-cpg-protocoldefinition.html"
+          }
+        ],
+        "reference": {
+          "reference": "StructureDefinition/cpg-protocoldefinition"
+        },
+        "groupingId": "main"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "StructureDefinition:resource"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "StructureDefinition-cpg-recommendationdefinition.html"
+          }
+        ],
+        "reference": {
+          "reference": "StructureDefinition/cpg-recommendationdefinition"
+        },
+        "groupingId": "main"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "StructureDefinition:resource"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "StructureDefinition-cpg-servicerequest.html"
+          }
+        ],
+        "reference": {
+          "reference": "StructureDefinition/cpg-servicerequest"
+        },
+        "groupingId": "main"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "StructureDefinition:resource"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "StructureDefinition-cpg-valueset.html"
+          }
+        ],
+        "reference": {
+          "reference": "StructureDefinition/cpg-valueset"
+        },
+        "groupingId": "main"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "StructureDefinition:resource"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "StructureDefinition-cpg-workflowdefinition.html"
+          }
+        ],
+        "reference": {
+          "reference": "StructureDefinition/cpg-workflowdefinition"
+        },
+        "groupingId": "main"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "ValueSet"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "ValueSet-cpg-recommendation-direction.html"
+          }
+        ],
+        "reference": {
+          "reference": "ValueSet/cpg-recommendation-direction"
+        }
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "ValueSet"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "ValueSet-cpg-indicator.html"
+          }
+        ],
+        "reference": {
+          "reference": "ValueSet/cpg-indicator"
+        },
+        "groupingId": "main"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "ValueSet"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "ValueSet-cpg-common-persona.html"
+          }
+        ],
+        "reference": {
+          "reference": "ValueSet/cpg-common-persona"
+        },
+        "groupingId": "main"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "ValueSet"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "ValueSet-cpg-common-process.html"
+          }
+        ],
+        "reference": {
+          "reference": "ValueSet/cpg-common-process"
+        },
+        "groupingId": "main"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "Library"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "Library-anc-common.html"
+          }
+        ],
+        "reference": {
+          "reference": "Library/anc-common"
+        },
+        "exampleCanonical": "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-library"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "Library"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "Library-anc-recommendation-a2.html"
+          }
+        ],
+        "reference": {
+          "reference": "Library/anc-recommendation-a2"
+        },
+        "exampleCanonical": "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-library",
+        "groupingId": "anc-example"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "PlanDefinition"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "PlanDefinition-anc-contact-schedule.html"
+          }
+        ],
+        "reference": {
+          "reference": "PlanDefinition/anc-contact-schedule"
+        },
+        "exampleCanonical": "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-plandefinition",
+        "groupingId": "anc-example"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "PlanDefinition"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "PlanDefinition-anc-contact.html"
+          }
+        ],
+        "reference": {
+          "reference": "PlanDefinition/anc-contact"
+        },
+        "exampleCanonical": "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-plandefinition",
+        "groupingId": "anc-example"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "PlanDefinition"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "PlanDefinition-anc-recommendation-a2.html"
+          }
+        ],
+        "reference": {
+          "reference": "PlanDefinition/anc-recommendation-a2"
+        },
+        "exampleCanonical": "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-plandefinition",
+        "groupingId": "anc-example"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "Questionnaire"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "Questionnaire-anc-every-contact.html"
+          }
+        ],
+        "reference": {
+          "reference": "Questionnaire/anc-every-contact"
+        },
+        "exampleBoolean": true,
+        "groupingId": "anc-example"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "Questionnaire"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "Questionnaire-anc-first-contact.html"
+          }
+        ],
+        "reference": {
+          "reference": "Questionnaire/anc-first-contact"
+        },
+        "exampleBoolean": true,
+        "groupingId": "anc-example"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "ActivityDefinition"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "ActivityDefinition-cc-cpg-activity-edu-hypertension.html"
+          }
+        ],
+        "reference": {
+          "reference": "ActivityDefinition/cc-cpg-activity-edu-hypertension"
+        },
+        "exampleCanonical": "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-activitydefinition",
+        "groupingId": "ckd-example"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "ActivityDefinition"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "ActivityDefinition-cc-cpg-activity-edu-renal-diet.html"
+          }
+        ],
+        "reference": {
+          "reference": "ActivityDefinition/cc-cpg-activity-edu-renal-diet"
+        },
+        "exampleCanonical": "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-activitydefinition",
+        "groupingId": "ckd-example"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "ActivityDefinition"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "ActivityDefinition-cc-cpg-activity-lab-creatinine.html"
+          }
+        ],
+        "reference": {
+          "reference": "ActivityDefinition/cc-cpg-activity-lab-creatinine"
+        },
+        "exampleCanonical": "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-activitydefinition",
+        "groupingId": "ckd-example"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "ActivityDefinition"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "ActivityDefinition-cc-cpg-activity-lab-metabolic.html"
+          }
+        ],
+        "reference": {
+          "reference": "ActivityDefinition/cc-cpg-activity-lab-metabolic"
+        },
+        "exampleCanonical": "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-activitydefinition",
+        "groupingId": "ckd-example"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "ActivityDefinition"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "ActivityDefinition-cc-cpg-activity-referral-dietition.html"
+          }
+        ],
+        "reference": {
+          "reference": "ActivityDefinition/cc-cpg-activity-referral-dietition"
+        },
+        "exampleCanonical": "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-activitydefinition",
+        "groupingId": "ckd-example"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "ActivityDefinition"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "ActivityDefinition-cc-cpg-activity-referral-nephrology.html"
+          }
+        ],
+        "reference": {
+          "reference": "ActivityDefinition/cc-cpg-activity-referral-nephrology"
+        },
+        "exampleCanonical": "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-activitydefinition",
+        "groupingId": "ckd-example"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "ActivityDefinition"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "ActivityDefinition-cc-cpg-activity-ultrasound-renal.html"
+          }
+        ],
+        "reference": {
+          "reference": "ActivityDefinition/cc-cpg-activity-ultrasound-renal"
+        },
+        "exampleCanonical": "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-activitydefinition",
+        "groupingId": "ckd-example"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "PlanDefinition"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "PlanDefinition-cc-cpg-plan-ckd.html"
+          }
+        ],
+        "reference": {
+          "reference": "PlanDefinition/cc-cpg-plan-ckd"
+        },
+        "exampleCanonical": "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-ordersetdefinition",
+        "groupingId": "ckd-example"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "ActivityDefinition"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "ActivityDefinition-ckd-risk-referral-nephrology.html"
+          }
+        ],
+        "reference": {
+          "reference": "ActivityDefinition/ckd-risk-referral-nephrology"
+        },
+        "exampleCanonical": "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-activitydefinition",
+        "groupingId": "ckd-example"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "ActivityDefinition"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "ActivityDefinition-ckd-risk-renal-lab-order.html"
+          }
+        ],
+        "reference": {
+          "reference": "ActivityDefinition/ckd-risk-renal-lab-order"
+        },
+        "exampleCanonical": "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-activitydefinition",
+        "groupingId": "ckd-example"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "Library"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "Library-ckd-risk-recommendations.html"
+          }
+        ],
+        "reference": {
+          "reference": "Library/ckd-risk-recommendations"
+        },
+        "exampleCanonical": "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-library",
+        "groupingId": "ckd-example"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "PlanDefinition"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "PlanDefinition-ckd-risk-screening.html"
+          }
+        ],
+        "reference": {
+          "reference": "PlanDefinition/ckd-risk-screening"
+        },
+        "exampleCanonical": "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-recommendationdefinition",
+        "groupingId": "ckd-example"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "ValueSet"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "ValueSet-ckd-valueset-ckd.html"
+          }
+        ],
+        "reference": {
+          "reference": "ValueSet/ckd-valueset-ckd"
+        },
+        "exampleCanonical": "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-expressionbasedvalueset",
+        "groupingId": "ckd-example"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "ValueSet"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "ValueSet-ckd-valueset-creatinine.html"
+          }
+        ],
+        "reference": {
+          "reference": "ValueSet/ckd-valueset-creatinine"
+        },
+        "exampleCanonical": "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-valueset",
+        "groupingId": "ckd-example"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "ValueSet"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "ValueSet-ckd-valueset-diabetes.html"
+          }
+        ],
+        "reference": {
+          "reference": "ValueSet/ckd-valueset-diabetes"
+        },
+        "exampleCanonical": "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-expressionbasedvalueset",
+        "groupingId": "ckd-example"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "ValueSet"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "ValueSet-ckd-valueset-egfr.html"
+          }
+        ],
+        "reference": {
+          "reference": "ValueSet/ckd-valueset-egfr"
+        },
+        "exampleCanonical": "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-valueset",
+        "groupingId": "ckd-example"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "ValueSet"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "ValueSet-ckd-valueset-uacr.html"
+          }
+        ],
+        "reference": {
+          "reference": "ValueSet/ckd-valueset-uacr"
+        },
+        "exampleCanonical": "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-valueset",
+        "groupingId": "ckd-example"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "PlanDefinition"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "PlanDefinition-va-ckd-protocol.html"
+          }
+        ],
+        "reference": {
+          "reference": "PlanDefinition/va-ckd-protocol"
+        },
+        "exampleCanonical": "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-protocoldefinition",
+        "groupingId": "ckd-example"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "PlanDefinition"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "PlanDefinition-va-ckd-recommendations.html"
+          }
+        ],
+        "reference": {
+          "reference": "PlanDefinition/va-ckd-recommendations"
+        },
+        "exampleCanonical": "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-recommendationdefinition",
+        "groupingId": "ckd-example"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "Library"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "Library-library-hep-b-adult-forecasting.html"
+          }
+        ],
+        "reference": {
+          "reference": "Library/library-hep-b-adult-forecasting"
+        },
+        "exampleCanonical": "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-library",
+        "groupingId": "hep-b-example"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "PlanDefinition"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "PlanDefinition-plandefinition-hep-b-adult-forecasting.html"
+          }
+        ],
+        "reference": {
+          "reference": "PlanDefinition/plandefinition-hep-b-adult-forecasting"
+        },
+        "exampleCanonical": "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-recommendationdefinition",
+        "groupingId": "hep-b-example"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "ActivityDefinition"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "ActivityDefinition-opioidcds-riskassessment-request.html"
+          }
+        ],
+        "reference": {
+          "reference": "ActivityDefinition/opioidcds-riskassessment-request"
+        },
+        "exampleCanonical": "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-activitydefinition",
+        "groupingId": "opg-example"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "Library"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "Library-omtklogic.html"
+          }
+        ],
+        "reference": {
+          "reference": "Library/omtklogic"
+        },
+        "exampleCanonical": "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-library",
+        "groupingId": "opg-example"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "Library"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "Library-opioidcds-r4-common.html"
+          }
+        ],
+        "reference": {
+          "reference": "Library/opioidcds-r4-common"
+        },
+        "exampleCanonical": "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-library",
+        "groupingId": "opg-example"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "Library"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "Library-opioidcds-r4-recommendation-05.html"
+          }
+        ],
+        "reference": {
+          "reference": "Library/opioidcds-r4-recommendation-05"
+        },
+        "exampleCanonical": "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-library",
+        "groupingId": "opg-example"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "PlanDefinition"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "PlanDefinition-opioidcds-r4-recommendation-05.html"
+          }
+        ],
+        "reference": {
+          "reference": "PlanDefinition/opioidcds-r4-recommendation-05"
+        },
+        "exampleCanonical": "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-plandefinition",
+        "groupingId": "opg-example"
+      },
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/tools/StructureDefinition/resource-information",
+            "valueString": "ValueSet"
+          },
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/implementationguide-page",
+            "valueUri": "ValueSet-opioids-with-ambulatory-abuse-potential.html"
+          }
+        ],
+        "reference": {
+          "reference": "ValueSet/opioids-with-ambulatory-abuse-potential"
+        },
+        "exampleCanonical": "http://hl7.org/fhir/uv/cpg/StructureDefinition/cpg-expressionbasedvalueset",
+        "groupingId": "opg-example"
+      }
+    ]
+  }
+}

@@ -1,0 +1,114 @@
+{
+  "resourceType": "Library",
+  "id": "library-hep-b-adult-forecasting",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: library-hep-b-adult-forecasting</p><p><b>url</b>: <a href=\"http://example.org/fhir/uv/cpg/Library/library-hep-b-adult-forecasting\">http://example.org/fhir/uv/cpg/Library/library-hep-b-adult-forecasting</a></p><p><b>identifier</b>: library-hep-b-adult-forecasting (OFFICIAL)</p><p><b>version</b>: 0.1.0</p><p><b>name</b>: HepBAdultForecasting</p><p><b>title</b>: Library - Logic for Immunization Forecasting of Hepatitis B Vaccine for Adults &gt;= 18 Years of Age</p><p><b>status</b>: active</p><p><b>experimental</b>: true</p><p><b>type</b>: Logic Library <span style=\"background: LightGoldenRodYellow\">(Details : {http://terminology.hl7.org/CodeSystem/library-type code 'logic-library' = 'Logic Library', given as 'Logic Library'})</span></p><p><b>date</b>: Jul 26, 2019 2:15:00 PM</p><p><b>publisher</b>: HL7 FHIR Clinical Guidelines Example Artifact</p><p><b>description</b>: If an adult patient has not been immunized for Hep B and is indicated for a Hep B vaccine, providers should administer according to this forecast.</p><p><b>useContext</b>: </p><p><b>jurisdiction</b>: World <span style=\"background: LightGoldenRodYellow\">(Details : {http://unstats.un.org/unsd/methods/m49/m49.htm code '001' = 'World', given as 'World'})</span></p><p><b>purpose</b>: Example artifact implementation of CDC ACIP Hep B vaccination guidelines for adults, 18 years and older, who have not yet been immunized.</p><p><b>topic</b>: Hepatitus B Adult Immunization Forecasting <span style=\"background: LightGoldenRodYellow\">(Details )</span></p><p><b>author</b>: , </p><p><b>relatedArtifact</b>: , , </p><p><b>dataRequirement</b>: </p><p><b>content</b>: </p></div>"
+  },
+  "url": "http://example.org/fhir/uv/cpg/Library/library-hep-b-adult-forecasting",
+  "identifier": [
+    {
+      "use": "official",
+      "value": "library-hep-b-adult-forecasting"
+    }
+  ],
+  "version": "0.1.0",
+  "name": "HepBAdultForecasting",
+  "title": "Library - Logic for Immunization Forecasting of Hepatitis B Vaccine for Adults >= 18 Years of Age",
+  "status": "active",
+  "experimental": true,
+  "type": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/library-type",
+        "code": "logic-library",
+        "display": "Logic Library"
+      }
+    ]
+  },
+  "date": "2019-07-26T14:15:00-04:00",
+  "publisher": "HL7 FHIR Clinical Guidelines Example Artifact",
+  "description": "If an adult patient has not been immunized for Hep B and is indicated for a Hep B vaccine, providers should administer according to this forecast.",
+  "useContext": [
+    {
+      "code": {
+        "system": "http://terminology.hl7.org/CodeSystem/usage-context-type",
+        "code": "focus",
+        "display": "Clinical Focus"
+      },
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "384810002",
+            "display": "Immunization/vaccination management (procedure)"
+          }
+        ]
+      }
+    }
+  ],
+  "jurisdiction": [
+    {
+      "coding": [
+        {
+          "system": "http://unstats.un.org/unsd/methods/m49/m49.htm",
+          "code": "001",
+          "display": "World"
+        }
+      ]
+    }
+  ],
+  "purpose": "Example artifact implementation of CDC ACIP Hep B vaccination guidelines for adults, 18 years and older, who have not yet been immunized.",
+  "topic": [
+    {
+      "text": "Hepatitus B Adult Immunization Forecasting"
+    }
+  ],
+  "author": [
+    {
+      "name": "Daryl Chertcoff"
+    },
+    {
+      "name": "Bryn Rhodes"
+    }
+  ],
+  "relatedArtifact": [
+    {
+      "type": "documentation",
+      "display": "Immunization Calculation Engine - Hep B Vaccine Group - Hep B 2-dose Adult Series",
+      "url": "https://cdsframework.atlassian.net/wiki/spaces/ICE/pages/14352491/Hep+B+Vaccine+Group#HepBVaccineGroup-ImmunizationSeries:HepB2-doseAdultSeries"
+    },
+    {
+      "type": "documentation",
+      "display": "CDC MMWR Vol.67 / No.1 : Prevention of Hepatitis B Virus Infection in the United States: Recommendations of the Advisory Committee on Immunization Practices",
+      "url": "http://www.cdc.gov/mmwr/volumes/67/rr/pdfs/rr6701-H.PDF"
+    },
+    {
+      "type": "documentation",
+      "display": "April 2018 Recommendations for the use of adjuvanted hepatitis B vaccine (Heplisav-B, Dynavax)",
+      "url": "https://www.cdc.gov/mmwr/volumes/67/wr/pdfs/mm6715a5-H.pdf"
+    }
+  ],
+  "dataRequirement": [
+    {
+      "id": "immunuzations",
+      "type": "Immunization",
+      "codeFilter": [
+        {
+          "path": "status",
+          "code": [
+            {
+              "code": "completed"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "content": [
+    {
+      "contentType": "application/elm+xml",
+      "title": "R4 logic"
+    }
+  ]
+}

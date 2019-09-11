@@ -1,0 +1,47 @@
+{
+  "resourceType": "ActivityDefinition",
+  "id": "cc-cpg-activity-edu-hypertension",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: cc-cpg-activity-edu-hypertension</p><p><b>url</b>: <a href=\"http://hl7.org/fhir/uv/cpg/ActivityDefinition/cc-cpg-activity-edu-hypertension\">http://hl7.org/fhir/uv/cpg/ActivityDefinition/cc-cpg-activity-edu-hypertension</a></p><p><b>version</b>: 0.1.0</p><p><b>name</b>: EducationHighBloodPressure</p><p><b>title</b>: Patient education: Managing Your High Blood Pressure (Hypertension)</p><p><b>status</b>: active</p><p><b>experimental</b>: true</p><p><b>date</b>: Aug 5, 2019 12:02:55 PM</p><p><b>publisher</b>: Elsevier Inc</p><p><b>description</b>: Patient education: Managing Your High Blood Pressure (Hypertension)</p><p><b>jurisdiction</b>: World <span style=\"background: LightGoldenRodYellow\">(Details : {http://unstats.un.org/unsd/methods/m49/m49.htm code '001' = 'World', given as 'World'})</span></p><p><b>relatedArtifact</b>: </p><p><b>kind</b>: ServiceRequest</p><p><b>code</b>: Hypertension education <span style=\"background: LightGoldenRodYellow\">(Details : {SNOMED CT code '39155009' = 'Hypertension education', given as 'Hypertension education (procedure)'})</span></p></div>"
+  },
+  "url": "http://hl7.org/fhir/uv/cpg/ActivityDefinition/cc-cpg-activity-edu-hypertension",
+  "version": "0.1.0",
+  "name": "EducationHighBloodPressure",
+  "title": "Patient education: Managing Your High Blood Pressure (Hypertension)",
+  "status": "active",
+  "experimental": true,
+  "date": "2019-08-05T12:02:55-04:00",
+  "publisher": "Elsevier Inc",
+  "description": "Patient education: Managing Your High Blood Pressure (Hypertension)",
+  "jurisdiction": [
+    {
+      "coding": [
+        {
+          "system": "http://unstats.un.org/unsd/methods/m49/m49.htm",
+          "code": "001",
+          "display": "World"
+        }
+      ]
+    }
+  ],
+  "relatedArtifact": [
+    {
+      "type": "justification",
+      "display": "<p>To improve long-term outcomes, lifestyle modifications to&nbsp;lower&nbsp;blood pressure to less than 140/90 mmHg should be made for those who are NOT at high risk for cardiovascular disease.</p>\n\n<p>&nbsp;</p>\n\n<p>The modifications include:</p>\n\n<ul>\n\t<li>Weight reduction, if indicated, and maintaining a healthy weight with body mass index (BMI) of 20 to 25</li>\n</ul>\n\n<ul>\n\t<li>Reducing salt intake to 2 g per day of sodium, unless contraindicated</li>\n</ul>\n\n<ul>\n\t<li>Following a regular exercise program aiming for at least 30 minutes, 5 times a week, depending on cardiovascular tolerance</li>\n</ul>\n\n<ul>\n\t<li>Alcohol intake not more than 2 standard drinks per day for men and one standard drink per day for women</li>\n</ul>",
+      "citation": "Kidney Disease: Improving Global Outcomes (KDIGO) Blood Pressure Work Group. KDIGO clinical practice guideline for the management of blood pressure in chronic kidney disease. Kidney Int. 2012;2 (Suppl), 337-414. <a href='http://www.kdigo.org/clinical_practice_guidelines/pdf/KDIGO_BP_GL.pdf' target='_blank'>Source</a>",
+      "url": "http://himss19.ordersetsmanager.com/evidenceviewer/#/7CBBBE9B75E10232E05352E3610A5325/7CBBBE9B75F10232E05352E3610A5325"
+    }
+  ],
+  "kind": "ServiceRequest",
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "39155009",
+        "display": "Hypertension education (procedure)"
+      }
+    ],
+    "text": "Hypertension education"
+  }
+}

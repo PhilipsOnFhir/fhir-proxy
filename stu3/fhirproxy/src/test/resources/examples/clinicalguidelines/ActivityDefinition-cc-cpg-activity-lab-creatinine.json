@@ -1,0 +1,58 @@
+{
+  "resourceType": "ActivityDefinition",
+  "id": "cc-cpg-activity-lab-creatinine",
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: cc-cpg-activity-lab-creatinine</p><p><b>url</b>: <a href=\"http://hl7.org/fhir/uv/cpg/ActivityDefinition/cc-cpg-activity-lab-creatinine\">http://hl7.org/fhir/uv/cpg/ActivityDefinition/cc-cpg-activity-lab-creatinine</a></p><p><b>version</b>: 0.1.0</p><p><b>name</b>: LabCreatinineUrineRandom</p><p><b>title</b>: Lab: Creatinine, Urine Random, Once</p><p><b>status</b>: active</p><p><b>experimental</b>: true</p><p><b>date</b>: Aug 5, 2019 12:02:55 PM</p><p><b>publisher</b>: Elsevier Inc</p><p><b>description</b>: Lab: Creatinine, Urine Random, Once</p><p><b>jurisdiction</b>: World <span style=\"background: LightGoldenRodYellow\">(Details : {http://unstats.un.org/unsd/methods/m49/m49.htm code '001' = 'World', given as 'World'})</span></p><p><b>kind</b>: ServiceRequest</p><p><b>code</b>: Creatinine [Mass/volume] in Urine <span style=\"background: LightGoldenRodYellow\">(Details : {LOINC code '2161-8' = 'Creatinine [Mass/volume] in Urine', given as 'Creatinine [Mass/volume] in Urine'})</span></p><p><b>timing</b>: </p><p><b style=\"color: maroon\">Exception generating Narrative: null</b></p></div>"
+  },
+  "url": "http://hl7.org/fhir/uv/cpg/ActivityDefinition/cc-cpg-activity-lab-creatinine",
+  "version": "0.1.0",
+  "name": "LabCreatinineUrineRandom",
+  "title": "Lab: Creatinine, Urine Random, Once",
+  "status": "active",
+  "experimental": true,
+  "date": "2019-08-05T12:02:55-04:00",
+  "publisher": "Elsevier Inc",
+  "description": "Lab: Creatinine, Urine Random, Once",
+  "jurisdiction": [
+    {
+      "coding": [
+        {
+          "system": "http://unstats.un.org/unsd/methods/m49/m49.htm",
+          "code": "001",
+          "display": "World"
+        }
+      ]
+    }
+  ],
+  "kind": "ServiceRequest",
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "2161-8",
+        "display": "Creatinine [Mass/volume] in Urine"
+      }
+    ]
+  },
+  "timingTiming": {
+    "_event": [
+      {
+        "extension": [
+          {
+            "url": "http://hl7.org/fhir/StructureDefinition/cqf-expression",
+            "valueExpression": {
+              "language": "text/cql",
+              "expression": "Now()"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "participant": [
+    {
+      "type": "practitioner"
+    }
+  ]
+}
