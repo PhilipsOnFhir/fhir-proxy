@@ -1,6 +1,0 @@
-fhir_proxy.iml
-.idea/
-
-/target/
-/bulk_data_proxy.iml
-example/
